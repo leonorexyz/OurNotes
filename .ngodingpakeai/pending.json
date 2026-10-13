@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "fd5e8e41ed21f304b5c02631516bbfaa7b79b1a5",
+  "generatedForCommit": "813f0f5065f4851590afbe87e96a198ed395d209",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -64,7 +64,7 @@
     },
     {
       "path": "drizzle/0004_left_stellaris.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1467
     },
@@ -94,13 +94,13 @@
     },
     {
       "path": "drizzle/meta/0004_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 25994
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 794
     },
@@ -142,19 +142,19 @@
     },
     {
       "path": "src/app/api/auth/login/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1531
     },
     {
       "path": "src/app/api/auth/logout/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 329
     },
     {
       "path": "src/app/api/auth/me/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 967
     },
@@ -250,7 +250,7 @@
     },
     {
       "path": "src/app/api/teams/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9785
     },
@@ -262,7 +262,7 @@
     },
     {
       "path": "src/app/api/teams/[id]/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 10726
     },
@@ -286,9 +286,9 @@
     },
     {
       "path": "src/app/gacha/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 2843
+      "size": 42642
     },
     {
       "path": "src/app/globals.css",
@@ -334,7 +334,7 @@
     },
     {
       "path": "src/app/tim/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 106500
     },
@@ -429,6 +429,12 @@
       "size": 16287
     },
     {
+      "path": "src/data/gachaData.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 9857
+    },
+    {
       "path": "src/data/guidesData.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -454,19 +460,19 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 7451
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 14101
     },
     {
       "path": "src/services/authService.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2619
     },

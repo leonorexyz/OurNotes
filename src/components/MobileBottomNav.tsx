@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, Users, Layers, Sparkles, HelpCircle } from "lucide-react";
 
-export function MobileBottomNav() {
+function MobileBottomNavContent() {
   const pathname = usePathname();
 
   const navItems = [
@@ -45,5 +46,13 @@ export function MobileBottomNav() {
         })}
       </nav>
     </div>
+  );
+}
+
+export function MobileBottomNav() {
+  return (
+    <Suspense fallback={null}>
+      <MobileBottomNavContent />
+    </Suspense>
   );
 }
