@@ -371,4 +371,28 @@ export const FAQ_LIST: FaqItem[] = [
     question: "Berapa lama regenerasi 1 Live Boost (Flame) yang habis?",
     answer: "1 Flame terisi ulang secara otomatis setiap 30 menit. Flame akan berhenti beregenerasi jika sudah mencapai batas maksimal 10 flame.",
   },
+  {
+    id: "faq-7",
+    category: "Teknis & Pengaturan",
+    question: "Bagaimana cara memindahkan akun ke perangkat lain tanpa kehilangan Stars?",
+    answer: "Gunakan fitur 'Transfer ID & Password' di menu Title Screen atau Menu > Data Transfer. Simpan ID dan Password di tempat aman. Catatan penting: jika berganti dari Android ke iOS (atau sebaliknya), Paid Stars tidak dapat ditransfer, sedangkan Free Stars tetap aman.",
+  },
+  {
+    id: "faq-8",
+    category: "Gameplay",
+    question: "Apa itu Fever Time di Multi-Live dan bagaimana cara mengaktifkannya?",
+    answer: "Fever Time adalah segmen khusus di pertengahan lagu di mana poin yang didapat berlipat ganda 2x lipat. Fever Time hanya aktif jika seluruh 5 pemain di room berhasil menjaga combo sebelum Fever gauge terisi penuh (Fever Success).",
+  },
+  {
+    id: "faq-9",
+    category: "Team Building",
+    question: "Bagaimana cara membuka Special Training pada kartu Bintang 4 atau Bintang 5?",
+    answer: "Kartu harus dinaikkan hingga level dasar maksimum terlebih dahulu. Setelah itu, kumpulkan Miracle Crystal dan Shard Kristal sesuai atribut kartu di menu Member > Training > Special Training. Evolusi ini membuka artwork alternatif dan batas level +10.",
+  },
+  {
+    id: "faq-10",
+    category: "Event",
+    question: "Apa perbedaan Event Badge dengan Event Point?",
+    answer: "Event Point bertambah secara kumulatif untuk membuka milestone reward dan menentukan peringkat ranking tier. Sedangkan Event Badge adalah mata uang yang dapat kamu belanjakan secara bebas di Event Exchange Shop untuk membeli item langka seperti Miracle Crystal.",
+  },
 ];
