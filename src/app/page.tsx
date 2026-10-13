@@ -21,6 +21,7 @@ import { GuideSectionNav } from "@/components/GuideSectionNav";
 import { GuideCard } from "@/components/GuideCard";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PanduanPemulaSection } from "@/components/PanduanPemulaSection";
+import { TipsTrikSection } from "@/components/TipsTrikSection";
 import { GUIDES_DATA, GUIDE_SECTIONS, FAQ_LIST } from "@/data/guidesData";
 
 export default function HomePage() {
@@ -188,7 +189,7 @@ export default function HomePage() {
 
           {/* SECTION 2: TIPS & TRIK */}
           {(activeSection === "all" || activeSection === "tips") && (
-            <div id="tips" className="space-y-5 pt-8">
+            <div id="tips" className="space-y-6 pt-8">
               <div className="flex items-center justify-between pb-3 border-b border-border/60">
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
@@ -208,15 +209,24 @@ export default function HomePage() {
                 </span>
               </div>
 
-              {tipsGuides.length === 0 ? (
-                <p className="text-xs text-muted-foreground py-4">Tidak ada tips yang cocok dengan pencarian.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {tipsGuides.map((guide) => (
-                    <GuideCard key={guide.id} guide={guide} />
-                  ))}
-                </div>
-              )}
+              {/* Grouped & Scannable Tips Component */}
+              <TipsTrikSection />
+
+              <div className="pt-2">
+                <h4 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                  <span>Katalog Artikel Lengkap Tips & Trik</span>
+                  <span className="text-xs font-normal text-muted-foreground">• Baca topik per artikel</span>
+                </h4>
+                {tipsGuides.length === 0 ? (
+                  <p className="text-xs text-muted-foreground py-4">Tidak ada tips yang cocok dengan pencarian.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {tipsGuides.map((guide) => (
+                      <GuideCard key={guide.id} guide={guide} />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

@@ -1,136 +1,142 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "b3374fa04225847b5820145f3ebb752f3ff5f372",
+  "generatedForCommit": "abca6633a01990c3a89652bc0ee65a1f64f5e2ef",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "markdown",
       "size": 19096
     },
     {
       "path": ".codex/skills/ngodingpakeai/SKILL.md",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "markdown",
       "size": 19096
     },
     {
       "path": ".gitattributes",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": null,
       "size": 66
     },
     {
       "path": ".gitignore",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": null,
       "size": 480
     },
     {
       "path": ".ngodingpakeaiignore",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": null,
       "size": 269
     },
     {
       "path": "AGENTS.md",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "markdown",
       "size": 18850
     },
     {
       "path": "eslint.config.mjs",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "javascript",
       "size": 465
     },
     {
       "path": "next.config.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 318
     },
     {
       "path": "package-lock.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 236384
     },
     {
       "path": "package.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 564
     },
     {
       "path": "README.md",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "markdown",
       "size": 1246
     },
     {
       "path": "src/app/globals.css",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "css",
       "size": 23
     },
     {
       "path": "src/app/layout.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 466
     },
     {
       "path": "src/app/page.tsx",
-      "reason": "new",
+      "reason": "changed",
       "language": "typescript",
-      "size": 14767
+      "size": 15327
     },
     {
       "path": "src/app/panduan/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 98
     },
     {
       "path": "src/components/FaqAccordion.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4606
     },
     {
       "path": "src/components/Footer.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3364
     },
     {
       "path": "src/components/GuideCard.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4652
     },
     {
       "path": "src/components/GuideSectionNav.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4026
     },
     {
       "path": "src/components/Navbar.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5086
     },
     {
-      "path": "src/data/guidesData.ts",
+      "path": "src/components/PanduanPemulaSection.tsx",
       "reason": "new",
+      "language": "typescript",
+      "size": 31446
+    },
+    {
+      "path": "src/data/guidesData.ts",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 14783
     },
     {
       "path": "tsconfig.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 670
     }
