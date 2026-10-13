@@ -86,7 +86,51 @@ export async function seedGuides() {
       .run();
   }
 
-  // Seed Events table
+  // Seed Gachas first so events can reference relatedGachaId
+  console.log("Memulai seed jadwal gacha dan banner...");
+  for (const banner of GACHA_BANNERS_DATA) {
+    db.insert(gachas)
+      .values({
+        id: banner.id,
+        title: banner.title,
+        japaneseTitle: banner.japaneseTitle || null,
+        category: banner.category,
+        status: banner.status,
+        startAt: banner.startAt,
+        endAt: banner.endAt,
+        bannerImageBg: banner.bannerImageBg,
+        featuredCharacters: JSON.stringify(banner.featuredCharacters),
+        pickupRates: JSON.stringify(banner.pickupRates),
+        pitySystem: JSON.stringify(banner.pitySystem),
+        cost: JSON.stringify(banner.cost),
+        description: banner.description,
+        isRecommended: banner.isRecommended ? 1 : 0,
+        tags: JSON.stringify(banner.tags),
+      })
+      .onConflictDoUpdate({
+        target: gachas.id,
+        set: {
+          title: banner.title,
+          japaneseTitle: banner.japaneseTitle || null,
+          category: banner.category,
+          status: banner.status,
+          startAt: banner.startAt,
+          endAt: banner.endAt,
+          bannerImageBg: banner.bannerImageBg,
+          featuredCharacters: JSON.stringify(banner.featuredCharacters),
+          pickupRates: JSON.stringify(banner.pickupRates),
+          pitySystem: JSON.stringify(banner.pitySystem),
+          cost: JSON.stringify(banner.cost),
+          description: banner.description,
+          isRecommended: banner.isRecommended ? 1 : 0,
+          tags: JSON.stringify(banner.tags),
+        },
+      })
+      .run();
+  }
+
+  // Seed Events table (linked with gachas via relatedGachaId)
+  console.log("Memulai seed jadwal event dan turnamen...");
   const sampleEvents = [
     {
       id: "ev-1",
@@ -96,6 +140,7 @@ export async function seedGuides() {
       startAt: "2026-10-10 15:00:00",
       endAt: "2026-10-19 20:59:00",
       featuredAttribute: "Cool",
+      relatedGachaId: "gacha-kirafes-vol1",
       description: "Event Marathon bertema kolaborasi musik senja. Kumpulkan Event Point dari Solo atau Multi-Live untuk membuka cerita event eksklusif dan menukarkan badge di toko.",
       featuredCharacters: JSON.stringify([
         { name: "Kasumi Toyama", band: "Poppin'Party", bonus: "+50%" },
@@ -131,6 +176,7 @@ export async function seedGuides() {
       startAt: "2026-10-22 15:00:00",
       endAt: "2026-10-30 20:59:00",
       featuredAttribute: "Power",
+      relatedGachaId: "gacha-event-neon-beats",
       description: "Mode duel 5 pemain dengan sistem penilaian skor langsung. Center skill aktif lebih sering dan memberikan bonus poin ekstra berdasarkan posisi peringkat di room.",
       featuredCharacters: JSON.stringify([
         { name: "LAYER (Rei)", band: "RAISE A SUILEN", bonus: "+50%" },
@@ -146,6 +192,55 @@ export async function seedGuides() {
       ]),
       badgeShopHighlights: JSON.stringify([
         { item: "Power Shard Kristal x100", cost: "1.500 Badges" },
+      ]),
+    },
+    {
+      id: "ev-3",
+      name: "Nocturne Topeng Sandiwara Ave Mujica",
+      type: "Live Goals",
+      status: "Akan Datang",
+      startAt: "2026-10-25 15:00:00",
+      endAt: "2026-11-05 20:59:00",
+      featuredAttribute: "Cool",
+      relatedGachaId: "gacha-upcoming-ave-mujica",
+      description: "Selesaikan serangkaian target lagu tingkat kesulitan Expert untuk mengungkap rahasia panggung Ave Mujica.",
+      featuredCharacters: JSON.stringify([
+        { name: "Uika Misumi (Doloris)", band: "Ave Mujica", bonus: "+50%" },
+        { name: "Sayo Hikawa", band: "Roselia", bonus: "+50%" },
+      ]),
+      pointRewards: JSON.stringify([
+        { points: "200.000 Pts", reward: "★3 Uika Misumi [Persona]" },
+        { points: "400.000 Pts", reward: "Gelar 'Masquerade Invitee'" },
+      ]),
+      tierRankingRewards: JSON.stringify([
+        { rank: "Top 1 - 100", reward: "1.000 Stars & Tiket Gacha ★4" },
+      ]),
+      badgeShopHighlights: JSON.stringify([
+        { item: "Cool Shard x150", cost: "1.800 Badges" },
+      ]),
+    },
+    {
+      id: "ev-4",
+      name: "Pesta Pantai & Ombak Tropis Musim Panas",
+      type: "Marathon",
+      status: "Selesai",
+      startAt: "2026-09-15 15:00:00",
+      endAt: "2026-09-30 20:59:00",
+      featuredAttribute: "Pure",
+      relatedGachaId: "gacha-expired-summer-splash",
+      description: "Liburan musim panas penuh keceriaan bersama personil Pastel＊Palettes dan Hello, Happy World!.",
+      featuredCharacters: JSON.stringify([
+        { name: "Aya Maruyama", band: "Pastel＊Palettes", bonus: "+50%" },
+        { name: "Kokoro Tsurumaki", band: "Hello, Happy World!", bonus: "+50%" },
+      ]),
+      pointRewards: JSON.stringify([
+        { points: "150.000 Pts", reward: "★3 Aya Maruyama [Ombak Tropis]" },
+      ]),
+      tierRankingRewards: JSON.stringify([
+        { rank: "Top 1 - 500", reward: "Gelar 'Summer Pioneer', 750 Stars" },
+      ]),
+      badgeShopHighlights: JSON.stringify([
+        { item: "Tropical Float Badge", cost: "2.500 Badges" },
       ]),
     },
   ];
@@ -415,48 +510,6 @@ export async function seedGuides() {
       })
       .run();
   });
-
-  console.log("Memulai seed jadwal gacha dan banner...");
-  for (const banner of GACHA_BANNERS_DATA) {
-    db.insert(gachas)
-      .values({
-        id: banner.id,
-        title: banner.title,
-        japaneseTitle: banner.japaneseTitle || null,
-        category: banner.category,
-        status: banner.status,
-        startAt: banner.startAt,
-        endAt: banner.endAt,
-        bannerImageBg: banner.bannerImageBg,
-        featuredCharacters: JSON.stringify(banner.featuredCharacters),
-        pickupRates: JSON.stringify(banner.pickupRates),
-        pitySystem: JSON.stringify(banner.pitySystem),
-        cost: JSON.stringify(banner.cost),
-        description: banner.description,
-        isRecommended: banner.isRecommended ? 1 : 0,
-        tags: JSON.stringify(banner.tags),
-      })
-      .onConflictDoUpdate({
-        target: gachas.id,
-        set: {
-          title: banner.title,
-          japaneseTitle: banner.japaneseTitle || null,
-          category: banner.category,
-          status: banner.status,
-          startAt: banner.startAt,
-          endAt: banner.endAt,
-          bannerImageBg: banner.bannerImageBg,
-          featuredCharacters: JSON.stringify(banner.featuredCharacters),
-          pickupRates: JSON.stringify(banner.pickupRates),
-          pitySystem: JSON.stringify(banner.pitySystem),
-          cost: JSON.stringify(banner.cost),
-          description: banner.description,
-          isRecommended: banner.isRecommended ? 1 : 0,
-          tags: JSON.stringify(banner.tags),
-        },
-      })
-      .run();
-  }
 
   // Seed sample reminder
   db.insert(gachaReminders)

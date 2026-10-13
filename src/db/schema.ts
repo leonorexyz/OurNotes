@@ -27,6 +27,7 @@ export const events = sqliteTable("events", {
   pointRewards: text("point_rewards"), // JSON
   tierRankingRewards: text("tier_ranking_rewards"), // JSON
   badgeShopHighlights: text("badge_shop_highlights"), // JSON
+  relatedGachaId: text("related_gacha_id").references(() => gachas.id, { onDelete: "set null" }),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 

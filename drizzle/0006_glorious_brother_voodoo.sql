@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `related_gacha_id` text REFERENCES gachas(id);

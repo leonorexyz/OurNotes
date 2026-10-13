@@ -43,6 +43,13 @@
       "when": 1791898179568,
       "tag": "0005_flaky_lionheart",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1791898611589,
+      "tag": "0006_glorious_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }

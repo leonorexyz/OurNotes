@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "d03f3c10dbece34c03e1209621702d571e1b2a3f",
+  "generatedForCommit": "067d8e8e5030af7dc55772c0e5173d47ef7a8b8d",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -70,7 +70,7 @@
     },
     {
       "path": "drizzle/0005_flaky_lionheart.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1030
     },
@@ -106,13 +106,13 @@
     },
     {
       "path": "drizzle/meta/0005_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 32183
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 937
     },
@@ -211,6 +211,18 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 2404
+    },
+    {
+      "path": "src/app/api/gacha/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2543
+    },
+    {
+      "path": "src/app/api/gacha/[id]/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1612
     },
     {
       "path": "src/app/api/guides/route.ts",
@@ -622,13 +634,13 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9094
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16594
     },
