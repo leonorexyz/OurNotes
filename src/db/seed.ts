@@ -1,7 +1,8 @@
 import { db } from "./index";
-import { guides, events } from "./schema";
+import { guides, events, bands, characters, characterStats } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
+import { BANDS_DATA, CHARACTERS_DATA } from "../data/charactersData";
 
 export async function seedGuides() {
   await runMigrations();
@@ -144,9 +145,120 @@ export async function seedGuides() {
       .run();
   }
 
+  // Seed Bands table
+  console.log("Memulai seed data band...");
+  for (const band of BANDS_DATA) {
+    db.insert(bands)
+      .values({
+        id: band.id,
+        name: band.name,
+        japaneseName: band.japaneseName,
+        concept: band.theme,
+        description: band.description,
+        color: band.color,
+        gradient: band.theme,
+        formedYear: "2026",
+        memberCount: band.membersCount,
+      })
+      .onConflictDoUpdate({
+        target: bands.id,
+        set: {
+          name: band.name,
+          japaneseName: band.japaneseName,
+          concept: band.theme,
+          description: band.description,
+          color: band.color,
+          gradient: band.theme,
+          memberCount: band.membersCount,
+        },
+      })
+      .run();
+  }
+
+  // Seed Characters and CharacterStats tables
+  console.log("Memulai seed data karakter dan statistik...");
+  for (const char of CHARACTERS_DATA) {
+    db.insert(characters)
+      .values({
+        id: char.id,
+        bandId: char.bandId,
+        name: char.name,
+        japaneseName: char.japaneseName,
+        romaji: char.name,
+        role: char.role,
+        instrument: char.role,
+        attribute: char.attribute,
+        rarity: char.rarity,
+        birthday: "1 Januari",
+        seiyuu: "Cast Resmi",
+        bio: char.bio,
+        avatarBg: char.avatarBg,
+        cardTitle: `[Harmoni Bintang] ${char.name}`,
+      })
+      .onConflictDoUpdate({
+        target: characters.id,
+        set: {
+          bandId: char.bandId,
+          name: char.name,
+          japaneseName: char.japaneseName,
+          romaji: char.name,
+          role: char.role,
+          instrument: char.role,
+          attribute: char.attribute,
+          rarity: char.rarity,
+          bio: char.bio,
+          avatarBg: char.avatarBg,
+        },
+      })
+      .run();
+
+    db.insert(characterStats)
+      .values({
+        id: `stat-${char.id}`,
+        characterId: char.id,
+        total: char.stats.total,
+        performance: char.stats.performance,
+        technique: char.stats.technique,
+        visual: char.stats.visual,
+        hp: char.stats.hp,
+        skillName: char.skill.name,
+        skillType: char.skill.type,
+        skillBoostValue: char.skill.boostValue,
+        skillDescription: char.skill.description,
+        skillDuration: 7,
+      })
+      .onConflictDoUpdate({
+        target: characterStats.id,
+        set: {
+          total: char.stats.total,
+          performance: char.stats.performance,
+          technique: char.stats.technique,
+          visual: char.stats.visual,
+          hp: char.stats.hp,
+          skillName: char.skill.name,
+          skillType: char.skill.type,
+          skillBoostValue: char.skill.boostValue,
+          skillDescription: char.skill.description,
+          skillDuration: 7,
+        },
+      })
+      .run();
+  }
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
-  console.log(`✓ Seed berhasil! Total panduan: ${guideCount}, Total event: ${eventCount}`);
+  const bandCount = db.select().from(bands).all().length;
+  const charCount = db.select().from(characters).all().length;
+  const statCount = db.select().from(characterStats).all().length;
+
+  console.log(
+    `✓ Seed database berhasil!\n` +
+      `  • Panduan: ${guideCount}\n` +
+      `  • Event: ${eventCount}\n` +
+      `  • Band: ${bandCount}\n` +
+      `  • Karakter: ${charCount}\n` +
+      `  • Statistik: ${statCount}`
+  );
 }
 
 if (require.main === module) {
