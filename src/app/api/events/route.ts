@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { events } from "@/db/schema";
+import { events, gachas } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
@@ -8,14 +8,23 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const statusParam = searchParams.get("status");
 
-    let rows;
+    const query = db
+      .select({
+        event: events,
+        gacha: gachas,
+      })
+      .from(events)
+      .leftJoin(gachas, eq(events.relatedGachaId, gachas.id))
+      .orderBy(desc(events.startAt));
+
+    const rows = query.all();
+
+    let filteredRows = rows;
     if (statusParam && statusParam !== "all") {
-      rows = db.select().from(events).where(eq(events.status, statusParam)).all();
-    } else {
-      rows = db.select().from(events).orderBy(desc(events.startAt)).all();
+      filteredRows = rows.filter((r) => r.event.status.toLowerCase().includes(statusParam.toLowerCase()));
     }
 
-    const formattedEvents = rows.map((ev) => ({
+    const formattedEvents = filteredRows.map(({ event: ev, gacha: g }) => ({
       id: ev.id,
       name: ev.name,
       type: ev.type,
@@ -24,6 +33,16 @@ export async function GET(request: NextRequest) {
       endAt: ev.endAt,
       featuredAttribute: ev.featuredAttribute,
       description: ev.description,
+      relatedGachaId: ev.relatedGachaId,
+      relatedGacha: g
+        ? {
+            id: g.id,
+            title: g.title,
+            category: g.category,
+            status: g.status,
+            bannerImageBg: g.bannerImageBg,
+          }
+        : null,
       featuredCharacters: ev.featuredCharacters ? JSON.parse(ev.featuredCharacters) : [],
       pointRewards: ev.pointRewards ? JSON.parse(ev.pointRewards) : [],
       tierRankingRewards: ev.tierRankingRewards ? JSON.parse(ev.tierRankingRewards) : [],
