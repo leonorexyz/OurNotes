@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "abca6633a01990c3a89652bc0ee65a1f64f5e2ef",
+  "generatedForCommit": "a88052cab7c2b7a4bd848a9b287ef0087b4647db",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -84,7 +84,7 @@
       "path": "src/app/page.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 15327
+      "size": 15858
     },
     {
       "path": "src/app/panduan/page.tsx",
@@ -124,9 +124,15 @@
     },
     {
       "path": "src/components/PanduanPemulaSection.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 31446
+    },
+    {
+      "path": "src/components/TipsTrikSection.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 15628
     },
     {
       "path": "src/data/guidesData.ts",

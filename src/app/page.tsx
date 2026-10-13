@@ -22,6 +22,7 @@ import { GuideCard } from "@/components/GuideCard";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PanduanPemulaSection } from "@/components/PanduanPemulaSection";
 import { TipsTrikSection } from "@/components/TipsTrikSection";
+import { PanduanEventSection } from "@/components/PanduanEventSection";
 import { GUIDES_DATA, GUIDE_SECTIONS, FAQ_LIST } from "@/data/guidesData";
 
 export default function HomePage() {
@@ -232,7 +233,7 @@ export default function HomePage() {
 
           {/* SECTION 3: PANDUAN EVENT */}
           {(activeSection === "all" || activeSection === "event") && (
-            <div id="event" className="space-y-5 pt-8">
+            <div id="event" className="space-y-6 pt-8">
               <div className="flex items-center justify-between pb-3 border-b border-border/60">
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm">
@@ -252,15 +253,24 @@ export default function HomePage() {
                 </span>
               </div>
 
-              {eventGuides.length === 0 ? (
-                <p className="text-xs text-muted-foreground py-4">Tidak ada panduan event yang cocok dengan pencarian.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {eventGuides.map((guide) => (
-                    <GuideCard key={guide.id} guide={guide} />
-                  ))}
-                </div>
-              )}
+              {/* Event Schedule, Multipliers, and Rewards Section */}
+              <PanduanEventSection />
+
+              <div className="pt-2">
+                <h4 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
+                  <span>Katalog Artikel Lengkap Event</span>
+                  <span className="text-xs font-normal text-muted-foreground">• Baca topik per artikel</span>
+                </h4>
+                {eventGuides.length === 0 ? (
+                  <p className="text-xs text-muted-foreground py-4">Tidak ada panduan event yang cocok dengan pencarian.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {eventGuides.map((guide) => (
+                      <GuideCard key={guide.id} guide={guide} />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
