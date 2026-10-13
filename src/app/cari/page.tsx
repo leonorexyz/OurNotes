@@ -35,6 +35,7 @@ import {
 } from "@/data/searchData";
 import { BlogPost } from "@/data/blogData";
 import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
+import { SearchResultCard } from "@/components/SearchResultCard";
 
 const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
   Sparkles,
@@ -324,70 +325,7 @@ function SearchContent() {
           {searchResults.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {searchResults.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.url}
-                  className="group relative flex flex-col justify-between p-5 rounded-2xl bg-card border border-border hover:border-pink-500/50 hover:shadow-lg transition-all"
-                >
-                  <div className="space-y-2.5">
-                    {/* Header Row: Badge & Category */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-pink-600 dark:text-pink-400">
-                        {item.categoryLabel}
-                      </span>
-                      {item.badgeText && (
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                            item.badgeColor || "bg-muted text-muted-foreground border-border"
-                          }`}
-                        >
-                          {item.badgeText}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-extrabold text-base text-foreground group-hover:text-pink-600 transition-colors line-clamp-1">
-                      {item.title}
-                    </h3>
-
-                    {/* Subtitle */}
-                    {item.subtitle && (
-                      <p className="text-xs font-semibold text-muted-foreground line-clamp-1">
-                        {item.subtitle}
-                      </p>
-                    )}
-
-                    {/* Snippet */}
-                    <p className="text-xs text-muted-foreground/90 line-clamp-2 leading-relaxed">
-                      {item.snippet}
-                    </p>
-                  </div>
-
-                  {/* Footer Row: Tags & Link Prompt */}
-                  <div className="mt-4 pt-3 border-t border-border flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 flex-wrap overflow-hidden h-6">
-                      {item.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 rounded-md bg-muted text-[10px] text-muted-foreground font-medium"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                      {item.tags.length > 3 && (
-                        <span className="text-[10px] text-muted-foreground font-medium">
-                          +{item.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-1 text-xs font-bold text-pink-600 group-hover:translate-x-0.5 transition-transform shrink-0">
-                      <span>Buka</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                </Link>
+                <SearchResultCard key={item.id} item={item} searchQuery={query} />
               ))}
             </div>
           ) : (

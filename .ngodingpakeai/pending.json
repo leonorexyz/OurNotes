@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "8f14be9c116e2e94e6d8b30d087bf2d2d7b43928",
+  "generatedForCommit": "10f6e472b0376479a43ad4013dbf3649a1f5b0f2",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -316,9 +316,9 @@
     },
     {
       "path": "src/app/cari/page.tsx",
-      "reason": "new",
+      "reason": "changed",
       "language": "typescript",
-      "size": 19124
+      "size": 17701
     },
     {
       "path": "src/app/gacha/page.tsx",
@@ -382,7 +382,7 @@
     },
     {
       "path": "src/app/search/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 115
     },
@@ -486,7 +486,7 @@
       "path": "src/components/Navbar.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 5497
+      "size": 6386
     },
     {
       "path": "src/components/PanduanEventSection.tsx",
@@ -501,10 +501,22 @@
       "size": 31446
     },
     {
+      "path": "src/components/RealtimeSearchInput.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 10358
+    },
+    {
       "path": "src/components/ScrollToTop.tsx",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 1068
+    },
+    {
+      "path": "src/components/SearchCommandModal.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2676
     },
     {
       "path": "src/components/TipsTrikSection.tsx",
@@ -550,7 +562,7 @@
     },
     {
       "path": "src/data/searchData.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9494
     },
