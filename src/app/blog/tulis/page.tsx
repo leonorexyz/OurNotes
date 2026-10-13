@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   PenSquare,
   ArrowLeft,
@@ -546,6 +547,7 @@ Jelaskan konsep dasar atau strategi...
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

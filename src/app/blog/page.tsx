@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   FileText,
   ArrowLeft,
@@ -646,6 +647,7 @@ export default function BlogPage() {
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

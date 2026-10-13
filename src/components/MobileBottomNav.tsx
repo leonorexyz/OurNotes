@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Users, Layers, Sparkles, HelpCircle } from "lucide-react";
+import { BookOpen, Users, Layers, Sparkles, FileText } from "lucide-react";
 
 function MobileBottomNavContent() {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ function MobileBottomNavContent() {
     { href: "/karakter", label: "Karakter", icon: Users },
     { href: "/tim", label: "Tim", icon: Layers },
     { href: "/gacha", label: "Gacha", icon: Sparkles },
-    { href: "/#faq", label: "FAQ", icon: HelpCircle },
+    { href: "/blog", label: "Blog", icon: FileText },
   ];
 
   return (
@@ -21,7 +21,8 @@ function MobileBottomNavContent() {
       <nav className="flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href;
+          const isActive =
+            item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href);
 
           return (
             <Link

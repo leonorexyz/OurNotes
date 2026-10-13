@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "813f0f5065f4851590afbe87e96a198ed395d209",
+  "generatedForCommit": "c028c5ba8b6db16ee8c2d2b4e5c71311b6925241",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -279,16 +279,58 @@
       "size": 14612
     },
     {
-      "path": "src/app/blog/page.tsx",
+      "path": "src/app/blog/edit/[id]/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 2244
+      "size": 585
+    },
+    {
+      "path": "src/app/blog/kategori/[slug]/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8740
+    },
+    {
+      "path": "src/app/blog/page.tsx",
+      "reason": "changed",
+      "language": "typescript",
+      "size": 29597
+    },
+    {
+      "path": "src/app/blog/tag/[slug]/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8256
+    },
+    {
+      "path": "src/app/blog/tulis/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 23929
+    },
+    {
+      "path": "src/app/blog/[id]/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 11812
     },
     {
       "path": "src/app/gacha/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
-      "size": 42642
+      "size": 42970
+    },
+    {
+      "path": "src/app/gacha/pengingat/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 25977
+    },
+    {
+      "path": "src/app/gacha/[id]/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 18136
     },
     {
       "path": "src/app/globals.css",
@@ -339,6 +381,24 @@
       "size": 106500
     },
     {
+      "path": "src/components/BlogArticleActions.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8078
+    },
+    {
+      "path": "src/components/BlogCommentsSection.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 20432
+    },
+    {
+      "path": "src/components/BlogEditClient.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 21470
+    },
+    {
       "path": "src/components/CharacterCard.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -363,6 +423,30 @@
       "size": 3364
     },
     {
+      "path": "src/components/GachaCountdownTimer.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 9415
+    },
+    {
+      "path": "src/components/GachaDetailActions.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6930
+    },
+    {
+      "path": "src/components/GachaEventCalendar.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 16276
+    },
+    {
+      "path": "src/components/GachaReminderModal.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 30718
+    },
+    {
       "path": "src/components/GameGlossary.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -384,7 +468,7 @@
       "path": "src/components/MobileBottomNav.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 1729
+      "size": 1898
     },
     {
       "path": "src/components/Navbar.tsx",
@@ -423,6 +507,12 @@
       "size": 31284
     },
     {
+      "path": "src/data/blogData.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 11824
+    },
+    {
       "path": "src/data/charactersData.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -430,7 +520,7 @@
     },
     {
       "path": "src/data/gachaData.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9857
     },

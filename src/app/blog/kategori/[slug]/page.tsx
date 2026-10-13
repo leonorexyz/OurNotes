@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   FileText,
   ArrowLeft,
@@ -201,6 +202,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

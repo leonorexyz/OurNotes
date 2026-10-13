@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   Tag,
   ArrowLeft,
@@ -186,6 +187,7 @@ export default async function TagPage({ params }: TagPageProps) {
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

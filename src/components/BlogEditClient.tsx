@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   PenSquare,
   ArrowLeft,
@@ -460,6 +461,7 @@ export function BlogEditClient({ postId, defaultPost }: BlogEditClientProps) {
       </main>
 
       <Footer />
+      <MobileBottomNav />
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (

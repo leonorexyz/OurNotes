@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   BookOpen,
   Users,
@@ -16,13 +17,19 @@ import {
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isLinkActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname?.startsWith(href);
+  };
 
   const navLinks = [
-    { href: "/", label: "Panduan", icon: BookOpen, active: true },
-    { href: "/karakter", label: "Karakter", icon: Users, active: false },
-    { href: "/tim", label: "Susun Tim", icon: Layers, active: false },
-    { href: "/gacha", label: "Jadwal Gacha", icon: Sparkles, active: false },
-    { href: "/blog", label: "Blog Komunitas", icon: FileText, active: false },
+    { href: "/", label: "Panduan", icon: BookOpen },
+    { href: "/karakter", label: "Karakter", icon: Users },
+    { href: "/tim", label: "Susun Tim", icon: Layers },
+    { href: "/gacha", label: "Jadwal Gacha", icon: Sparkles },
+    { href: "/blog", label: "Blog Komunitas", icon: FileText },
   ];
 
   return (
@@ -57,12 +64,12 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
+                  isLinkActive(item.href)
                     ? "bg-pink-50 text-pink-600 dark:bg-pink-950/50 dark:text-pink-300 font-semibold shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                 }`}
               >
-                <Icon className={`h-4 w-4 ${item.active ? "text-pink-600 dark:text-pink-400" : ""}`} />
+                <Icon className={`h-4 w-4 ${isLinkActive(item.href) ? "text-pink-600 dark:text-pink-400" : ""}`} />
                 <span>{item.label}</span>
               </Link>
             );
@@ -109,7 +116,7 @@ export function Navbar() {
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${
-                  item.active
+                  isLinkActive(item.href)
                     ? "bg-pink-50 text-pink-600 dark:bg-pink-950/50 dark:text-pink-300 font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 }`}
