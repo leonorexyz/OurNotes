@@ -34,6 +34,11 @@ import {
   ArrowLeftRight,
   ChevronLeft,
   SlidersHorizontal,
+  AlertTriangle,
+  Lightbulb,
+  FileText,
+  Save,
+  Award,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
 import { RECOMMENDED_TEAMS, RecommendedTeam } from "@/data/recommendedTeamsData";
@@ -214,6 +219,185 @@ function TimBuilderContent() {
   const effectiveBP = Math.round(
     rawStats.total * (1 + (bandBonusPercent + attrBonusPercent) / 100)
   );
+
+  // Custom User Strategy Note
+  const [customTeamNote, setCustomTeamNote] = useState<string>("");
+  const [noteSavedFeedback, setNoteSavedFeedback] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("our_notes_team_custom_note");
+      if (saved) setCustomTeamNote(saved);
+    }
+  }, []);
+
+  const saveCustomNote = (val: string) => {
+    setCustomTeamNote(val);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("our_notes_team_custom_note", val);
+      setNoteSavedFeedback(true);
+      setTimeout(() => setNoteSavedFeedback(false), 2000);
+    }
+  };
+
+  // Comprehensive Synergy Score & Tactical Analysis
+  const synergyAnalysis = useMemo(() => {
+    let score = 0;
+    const notes: { type: "positive" | "warning" | "neutral" | "tip"; text: string }[] = [];
+
+    // Base score from filled slots (up to 40 pts)
+    score += activeCharacters.length * 8;
+
+    // Band synergy points (up to 25 pts)
+    if (maxBandCount === 5) {
+      score += 25;
+      notes.push({
+        type: "positive",
+        text: `Full 5 Personel ${dominantBand?.name || "Band"}: Memicu bonus sinergi instrumen band studio maksimal (+20% BP).`,
+      });
+    } else if (maxBandCount >= 3) {
+      score += 15;
+      notes.push({
+        type: "positive",
+        text: `Mayoritas ${maxBandCount} personel dari ${dominantBand?.name || "Band"}: Mendapatkan bonus sinergi band +10% BP.`,
+      });
+      notes.push({
+        type: "tip",
+        text: `Tambahkan ${5 - maxBandCount} personel lagi dari ${dominantBand?.name} untuk membuka bonus instrumen panggung penuh (+20% BP).`,
+      });
+    } else if (activeCharacters.length >= 3) {
+      notes.push({
+        type: "warning",
+        text: "Band masih tersebar (kurang dari 3 personel se-band). Sinergi band belum aktif (0% bonus).",
+      });
+    }
+
+    // Attribute synergy points (up to 25 pts)
+    if (maxAttrCount === 5) {
+      score += 25;
+      notes.push({
+        type: "positive",
+        text: `Mono-Attribute ${dominantAttr} Murni (5/5): Formasi sempurna untuk panen skor event boosted attribute (+20% BP).`,
+      });
+    } else if (maxAttrCount >= 3) {
+      score += 15;
+      notes.push({
+        type: "positive",
+        text: `Mayoritas atribut ${dominantAttr} (${maxAttrCount}/5): Mendapatkan bonus sinergi atribut +10% BP.`,
+      });
+      notes.push({
+        type: "tip",
+        text: `Lengkapi formasi menjadi 5 atribut ${dominantAttr} untuk meraih skor maksimal di event live bertema atribut ini.`,
+      });
+    } else if (activeCharacters.length >= 3) {
+      notes.push({
+        type: "warning",
+        text: "Atribut karakter masih acak. Sinergi atribut belum aktif (0% bonus).",
+      });
+    }
+
+    // Center Leader Skill evaluation (up to 10 pts)
+    if (centerChar) {
+      if (centerChar.skill.type === "Score Up") {
+        score += 10;
+        notes.push({
+          type: "positive",
+          text: `Center Slot dipegang oleh ${centerChar.name} dengan skill Score Boost (${centerChar.skill.boostValue}) — pilihan paling ideal untuk Multi-Live Fever.`,
+        });
+      } else if (centerChar.skill.type === "Recovery") {
+        score += 7;
+        notes.push({
+          type: "neutral",
+          text: `Center Slot memiliki skill Pemulihan Darah (${centerChar.skill.name}) — menjaga kelangsungan hidup di tingkat kesulitan tinggi.`,
+        });
+      } else {
+        score += 8;
+        notes.push({
+          type: "neutral",
+          text: `Center Slot memiliki skill ${centerChar.skill.type} (${centerChar.skill.name}).`,
+        });
+      }
+    } else {
+      notes.push({
+        type: "warning",
+        text: "Slot Center masih kosong. Skill Leader tidak aktif!",
+      });
+    }
+
+    // Survival Check
+    if (rawStats.hp >= 5000) {
+      notes.push({
+        type: "positive",
+        text: `Total Life tim ${rawStats.hp.toLocaleString()} HP memberikan buffer tinggi dari kegagalan live saat bermain chart Expert/Special.`,
+      });
+    }
+
+    // Rank grade determination
+    let grade = "C";
+    let gradeColor = "text-muted-foreground";
+    let gradeBg = "bg-muted text-foreground border-border";
+    if (score >= 90) {
+      grade = "SS";
+      gradeColor = "text-amber-500";
+      gradeBg = "bg-amber-500/10 text-amber-600 border-amber-500/30";
+    } else if (score >= 75) {
+      grade = "S";
+      gradeColor = "text-pink-600";
+      gradeBg = "bg-pink-500/10 text-pink-600 border-pink-500/30";
+    } else if (score >= 55) {
+      grade = "A";
+      gradeColor = "text-purple-600";
+      gradeBg = "bg-purple-500/10 text-purple-600 border-purple-500/30";
+    } else if (score >= 35) {
+      grade = "B";
+      gradeColor = "text-blue-600";
+      gradeBg = "bg-blue-500/10 text-blue-600 border-blue-500/30";
+    }
+
+    // Multi-live qualified room
+    let room = "Regular Room";
+    let roomBadge = "bg-muted text-muted-foreground border-border";
+    if (effectiveBP >= 250000) {
+      room = "Master Room (250k+)";
+      roomBadge = "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 border-amber-300 dark:border-amber-800";
+    } else if (effectiveBP >= 180000) {
+      room = "Grand Room (180k+)";
+      roomBadge = "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200 border-purple-300 dark:border-purple-800";
+    } else if (effectiveBP >= 120000) {
+      room = "Pro Room (120k+)";
+      roomBadge = "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200 border-blue-300 dark:border-blue-800";
+    }
+
+    // Area item recommendations
+    const recommendedItems: string[] = [];
+    if (dominantBand) {
+      recommendedItems.push(`Studio Instrument ${dominantBand.name} (Mic, Guitar, Bass, Drum, Keyboard)`);
+      recommendedItems.push(`Poster & Flyer ${dominantBand.name}`);
+    }
+    if (dominantAttr) {
+      recommendedItems.push(`Dekorasi Cafeteria & Kolam Tema ${dominantAttr}`);
+    }
+    if (recommendedItems.length === 0) {
+      recommendedItems.push("Pasang karakter untuk melihat rekomendasi item area studio & kafetaria");
+    }
+
+    // Projected Score range calculation in standard Multi-Live song (approx 1,000 combo)
+    const minProjectedScore = Math.round(effectiveBP * 5.8);
+    const maxProjectedScore = Math.round(effectiveBP * 8.4);
+
+    return {
+      score,
+      grade,
+      gradeColor,
+      gradeBg,
+      notes,
+      room,
+      roomBadge,
+      recommendedItems,
+      minProjectedScore,
+      maxProjectedScore,
+    };
+  }, [activeCharacters, maxBandCount, dominantBand, maxAttrCount, dominantAttr, centerChar, rawStats, effectiveBP]);
 
   // Auto Presets
   const applyPreset = (presetName: string) => {
@@ -687,6 +871,192 @@ function TimBuilderContent() {
           </div>
         </div>
       </div>
+
+      {/* Skor Sinergi & Catatan Taktis Formasi Section */}
+      <section className="space-y-6 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-2">
+              <Award className="h-6 w-6 text-pink-500" />
+              <span>Skor Sinergi & Catatan Taktis Formasi</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Evaluasi mendalam potensi formasi, proyeksi skor live, kualifikasi room Multi-Live, dan rekomendasi area item.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Card 1: Skor Sinergi & Grade */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-xs flex flex-col justify-between space-y-5">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Evaluasi Potensi Formasi
+                </span>
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${synergyAnalysis.gradeBg}`}>
+                  Grade {synergyAnalysis.grade}
+                </span>
+              </div>
+
+              {/* Score Number & Meter */}
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between">
+                  <div className="text-3xl sm:text-4xl font-black font-mono text-foreground">
+                    {synergyAnalysis.score}
+                    <span className="text-base sm:text-lg text-muted-foreground font-normal"> / 100</span>
+                  </div>
+                  <span className={`text-xs font-black ${synergyAnalysis.gradeColor}`}>
+                    {synergyAnalysis.score >= 90
+                      ? "Formasi Meta Sempurna!"
+                      : synergyAnalysis.score >= 75
+                      ? "Sinergi Sangat Bagus"
+                      : synergyAnalysis.score >= 50
+                      ? "Komposisi Cukup Seimbang"
+                      : "Perlu Peningkatan Sinergi"}
+                  </span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full h-3 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-pink-500 to-purple-600 transition-all duration-500 rounded-full"
+                    style={{ width: `${Math.min(100, synergyAnalysis.score)}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Multi-Live Room Qualifier & Projected Score */}
+              <div className="space-y-2 pt-3 border-t border-border/60 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Kualifikasi Multi-Live:</span>
+                  <span className={`px-2 py-0.5 rounded-lg text-[11px] font-bold ${synergyAnalysis.roomBadge}`}>
+                    {synergyAnalysis.room}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Estimasi Skor Song:</span>
+                  <span className="font-mono font-bold text-foreground">
+                    ~{(synergyAnalysis.minProjectedScore / 1000).toFixed(0)}k - {(synergyAnalysis.maxProjectedScore / 1000).toFixed(0)}k
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Bonus Sinergi BP:</span>
+                  <span className="font-mono font-bold text-emerald-600">
+                    +{(bandBonusPercent + attrBonusPercent)}% ({Math.round(rawStats.total * ((bandBonusPercent + attrBonusPercent) / 100)).toLocaleString()} BP)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Area Item Recommendations */}
+            <div className="p-3.5 rounded-2xl bg-muted/40 border border-border/80 space-y-2 text-xs">
+              <span className="font-bold text-foreground flex items-center gap-1.5 text-[11px]">
+                <Zap className="h-3.5 w-3.5 text-amber-500" />
+                <span>Rekomendasi Upgrade Area Item:</span>
+              </span>
+              <ul className="space-y-1 text-[11px] text-muted-foreground">
+                {synergyAnalysis.recommendedItems.map((item, i) => (
+                  <li key={i} className="flex items-start gap-1.5">
+                    <span className="text-pink-600 font-bold shrink-0">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Card 2: Catatan Taktis Otomatis Formasi */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-xs flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-amber-500" />
+                  <h3 className="font-bold text-base text-foreground">Catatan & Analisis Taktis</h3>
+                </div>
+                <span className="text-[11px] text-muted-foreground font-mono">
+                  {synergyAnalysis.notes.length} Analisis
+                </span>
+              </div>
+
+              <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                {synergyAnalysis.notes.map((note, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className={`p-3 rounded-2xl border text-xs leading-relaxed flex items-start gap-2.5 ${
+                        note.type === "positive"
+                          ? "bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50 text-emerald-900 dark:text-emerald-200"
+                          : note.type === "warning"
+                          ? "bg-amber-50/60 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/50 text-amber-900 dark:text-amber-200"
+                          : note.type === "tip"
+                          ? "bg-purple-50/60 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900/50 text-purple-900 dark:text-purple-200"
+                          : "bg-muted/40 border-border text-foreground"
+                      }`}
+                    >
+                      {note.type === "positive" ? (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                      ) : note.type === "warning" ? (
+                        <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                      ) : note.type === "tip" ? (
+                        <Lightbulb className="h-4 w-4 text-purple-600 shrink-0 mt-0.5" />
+                      ) : (
+                        <Info className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                      )}
+                      <span>{note.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <p className="text-[11px] text-muted-foreground pt-2 border-t border-border/50">
+              Catatan diperbarui secara real-time saat Anda mengganti karakter atau mengubah posisi Center.
+            </p>
+          </div>
+
+          {/* Card 3: Catatan Pribadi Pengguna */}
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-xs flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-pink-500" />
+                  <h3 className="font-bold text-base text-foreground">Catatan Formasi Pribadi</h3>
+                </div>
+                {noteSavedFeedback && (
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 animate-in fade-in">
+                    ✓ Tersimpan
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Tuliskan catatan strategi Anda, target skor lagu, atau persiapan event berikutnya. Catatan ini tersimpan di browser Anda.
+              </p>
+
+              <textarea
+                value={customTeamNote}
+                onChange={(e) => saveCustomNote(e.target.value)}
+                placeholder="Contoh: Formasi ini untuk push event tier 1000, butuh naikin level skill Center Kasumi ke level 5..."
+                className="w-full h-36 rounded-2xl border border-input bg-muted/20 p-3 text-xs focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500/30 resize-none"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs pt-2 border-t border-border/50">
+              <span className="text-[11px] text-muted-foreground">
+                {customTeamNote.length} karakter
+              </span>
+              {customTeamNote && (
+                <button
+                  onClick={() => saveCustomNote("")}
+                  className="text-[11px] text-muted-foreground hover:text-red-600 transition-colors"
+                >
+                  Hapus Catatan
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Recommended Teams Catalog Section */}
       <section className="space-y-6 pt-4 border-t border-border">
