@@ -135,11 +135,16 @@ const DEFAULT_FAVORIT_ITEMS: FavoritItem[] = [
 
 const STORAGE_FAVORIT_KEY = "ournotes_user_favorites_v1";
 
-function AkunFavoritContent() {
+interface AkunFavoritProps {
+  initialTab?: FavoritTab;
+  baseRoute?: string;
+}
+
+function AkunFavoritContent({ initialTab, baseRoute = "/akun" }: AkunFavoritProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const tabParam = (searchParams.get("tab") || "semua").toLowerCase() as FavoritTab;
+  const tabParam = (searchParams.get("tab") || initialTab || "semua").toLowerCase() as FavoritTab;
   const [activeTab, setActiveTab] = useState<FavoritTab>(tabParam);
   const [favorites, setFavorites] = useState<FavoritItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,7 +191,7 @@ function AkunFavoritContent() {
     setActiveTab(newTab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", newTab);
-    router.replace(`/akun?${params.toString()}`);
+    router.replace(`${baseRoute}?${params.toString()}`);
   };
 
   const handleDeleteFavorite = (id: string, title: string) => {
@@ -688,10 +693,10 @@ function AkunFavoritContent() {
   );
 }
 
-export function AkunFavoritLayout() {
+export function AkunFavoritLayout({ initialTab, baseRoute }: AkunFavoritProps = {}) {
   return (
     <Suspense fallback={<div className="min-h-screen bg-background" />}>
-      <AkunFavoritContent />
+      <AkunFavoritContent initialTab={initialTab} baseRoute={baseRoute} />
     </Suspense>
   );
 }

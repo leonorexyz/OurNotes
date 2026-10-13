@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function FavoritPage() {
-  return <AkunFavoritLayout />;
+  return <AkunFavoritLayout baseRoute="/favorit" />;
 }
