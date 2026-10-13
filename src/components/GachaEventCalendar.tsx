@@ -20,6 +20,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GACHA_BANNERS_DATA, GachaBanner } from "@/data/gachaData";
+import { GachaCountdownTimer } from "@/components/GachaCountdownTimer";
 
 interface RunningGameEvent {
   id: string;
@@ -373,13 +374,16 @@ export function GachaEventCalendar() {
                       ))}
                     </div>
 
-                    <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px]">
-                      <span className="text-emerald-600 font-bold">
-                        Pity: {b.pitySystem.pityThreshold} Seal
-                      </span>
+                    <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px] flex-wrap gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-emerald-600 font-bold">
+                          Pity: {b.pitySystem.pityThreshold} Seal
+                        </span>
+                        <GachaCountdownTimer targetDate={b.endAt} variant="compact" />
+                      </div>
                       <Link
                         href={`/gacha/${b.id}`}
-                        className="text-pink-600 hover:underline font-bold flex items-center gap-1"
+                        className="text-pink-600 hover:underline font-bold flex items-center gap-1 ml-auto"
                       >
                         <span>Lihat Rincian</span>
                         <ArrowRight className="h-3 w-3" />

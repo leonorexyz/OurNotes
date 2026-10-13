@@ -34,6 +34,7 @@ import {
 import { GACHA_BANNERS_DATA, GachaBanner, FeaturedGachaCharacter } from "@/data/gachaData";
 import { GachaEventCalendar } from "@/components/GachaEventCalendar";
 import { GachaReminderModal, GachaReminderManager } from "@/components/GachaReminderModal";
+import { GachaCountdownTimer } from "@/components/GachaCountdownTimer";
 
 export default function GachaPage() {
   const [viewMode, setViewMode] = useState<"banners" | "calendar">("banners");
@@ -248,6 +249,25 @@ export default function GachaPage() {
               </strong>
             </div>
           </div>
+
+          {/* Spotlight Active Banner Live Countdown */}
+          <div className="mt-6 pt-5 border-t border-pink-200/50 dark:border-pink-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/40 dark:bg-black/20 p-4 sm:p-5 rounded-2xl border border-pink-100 dark:border-pink-950">
+            <div className="space-y-1">
+              <span className="text-[10px] uppercase font-bold text-pink-600 tracking-wider flex items-center gap-1.5">
+                <Flame className="h-3.5 w-3.5 text-pink-600" />
+                Spotlight Live: {GACHA_BANNERS_DATA[0].title}
+              </span>
+              <p className="text-xs text-muted-foreground font-medium max-w-md">
+                Peluang ★4 digandakan (6.00%) — Siapkan 75.000 Stars untuk jaminan Spark 300 Seal!
+              </p>
+            </div>
+            <GachaCountdownTimer
+              targetDate={GACHA_BANNERS_DATA[0].endAt}
+              startDate={GACHA_BANNERS_DATA[0].startAt}
+              variant="banner"
+              showProgressBar={true}
+            />
+          </div>
         </div>
 
         {/* Global Toast Notice */}
@@ -429,8 +449,6 @@ export default function GachaPage() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {filteredBanners.map((banner) => {
-                const timeInfo = calculateTimeRemaining(banner.endAt);
-
                 return (
                   <article
                     key={banner.id}
@@ -500,9 +518,8 @@ export default function GachaPage() {
                             })}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 font-bold text-amber-300">
-                          <Clock className="h-3.5 w-3.5" />
-                          <span>{timeInfo.text}</span>
+                        <div className="flex items-center gap-1.5 font-bold">
+                          <GachaCountdownTimer targetDate={banner.endAt} variant="compact" />
                         </div>
                       </div>
                     </div>

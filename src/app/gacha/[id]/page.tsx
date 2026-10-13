@@ -7,6 +7,7 @@ import {
   Sparkles,
   ArrowLeft,
   Calendar,
+  Clock,
   ShieldCheck,
   Flame,
   Leaf,
@@ -21,6 +22,7 @@ import {
 import { GACHA_BANNERS_DATA } from "@/data/gachaData";
 import { CHARACTERS_DATA } from "@/data/charactersData";
 import { GachaDetailActions } from "@/components/GachaDetailActions";
+import { GachaCountdownTimer } from "@/components/GachaCountdownTimer";
 
 export function generateStaticParams() {
   return GACHA_BANNERS_DATA.map((banner) => ({
@@ -153,6 +155,27 @@ export default async function GachaDetailPage({
                 <strong className="text-emerald-300 font-bold">
                   {banner.pitySystem.pityThreshold} Seal
                 </strong>
+              </div>
+            </div>
+
+            {/* Live Countdown Timer Spotlight */}
+            <div className="pt-4 border-t border-white/20">
+              <div className="bg-black/30 backdrop-blur-xs p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-0.5">
+                  <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    Sisa Waktu Penarikan Banner
+                  </span>
+                  <p className="text-xs text-white/80">
+                    Waktu terus berjalan hingga batas akhir pemeliharaan gacha.
+                  </p>
+                </div>
+                <GachaCountdownTimer
+                  targetDate={banner.endAt}
+                  startDate={banner.startAt}
+                  variant="banner"
+                  showProgressBar={true}
+                />
               </div>
             </div>
           </div>
