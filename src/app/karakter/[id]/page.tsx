@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   ArrowLeft,
   Star,
@@ -52,7 +53,7 @@ export default async function KarakterDetailPage({
     <div className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-pink-500 selection:text-white">
       <Navbar />
 
-      <main className="flex-1 container mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+      <main className="flex-1 container mx-auto max-w-5xl px-4 py-8 pb-28 md:pb-8 sm:px-6 lg:px-8 space-y-8">
         {/* Breadcrumb Navigation & Action Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-muted-foreground pb-2">
           <div className="flex items-center gap-2">
@@ -304,6 +305,7 @@ export default async function KarakterDetailPage({
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   Users,
   Search,
@@ -166,7 +167,7 @@ function KarakterContent() {
   const comparedChars = CHARACTERS_DATA.filter((c) => compareList.includes(c.id));
 
   return (
-    <main className="flex-1 container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <main className="flex-1 container mx-auto max-w-7xl px-4 py-8 pb-32 md:pb-12 sm:px-6 lg:px-8 space-y-8">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Link href="/" className="hover:text-foreground flex items-center gap-1 font-semibold text-pink-600">
@@ -660,7 +661,7 @@ function KarakterContent() {
 
       {/* Floating Bottom Comparison Dock */}
       {compareList.length > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-2xl rounded-2xl border border-pink-500/30 bg-card/95 backdrop-blur-md p-3 sm:p-4 shadow-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-4">
+        <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl rounded-2xl border border-pink-500/30 bg-card/95 backdrop-blur-md p-3 sm:p-4 shadow-xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-4">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <div className="flex items-center -space-x-2">
               {comparedChars.map((c) => (
@@ -724,6 +725,7 @@ export default function KarakterPage() {
         <KarakterContent />
       </Suspense>
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

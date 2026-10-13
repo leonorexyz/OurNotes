@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import {
   Scale,
   ArrowLeft,
@@ -134,7 +135,7 @@ function BandingkanContent() {
   };
 
   return (
-    <main className="flex-1 container mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <main className="flex-1 container mx-auto max-w-6xl px-4 py-8 pb-28 md:pb-8 sm:px-6 lg:px-8 space-y-8">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Link href="/karakter" className="hover:text-foreground flex items-center gap-1 font-semibold text-pink-600">
@@ -689,6 +690,7 @@ export default function BandingkanPage() {
         <BandingkanContent />
       </Suspense>
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }
