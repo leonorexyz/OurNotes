@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "2e2ad81e3243f23ebff567b8879fa1498704675e",
+  "generatedForCommit": "1283e5335dd6e7f26abfbc6e177dfac925ebe499",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -94,7 +94,7 @@
     },
     {
       "path": "drizzle/0009_complete_scarlet_witch.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1261
     },
@@ -154,13 +154,13 @@
     },
     {
       "path": "drizzle/meta/0009_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 58027
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 1529
     },
@@ -232,15 +232,15 @@
     },
     {
       "path": "src/app/api/auth/login/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 1531
+      "size": 2206
     },
     {
       "path": "src/app/api/auth/logout/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 329
+      "size": 406
     },
     {
       "path": "src/app/api/auth/me/route.ts",
@@ -256,9 +256,9 @@
     },
     {
       "path": "src/app/api/auth/register/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 2479
+      "size": 3522
     },
     {
       "path": "src/app/api/auth/reset-password/route.ts",
@@ -994,13 +994,13 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16382
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 32612
     },

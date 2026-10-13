@@ -77,6 +77,8 @@ export function FavoriteButton({
         localStorage.setItem(STORAGE_FAVORIT_KEY, JSON.stringify(list));
         setIsFavorited(false);
         setToastMessage(`"${item.title}" dihapus dari favorit.`);
+
+        fetch(`/api/favorites/${item.id}`, { method: "DELETE" }).catch(() => {});
       } else {
         const newItem: FavoritItem = {
           ...item,
@@ -90,6 +92,24 @@ export function FavoriteButton({
         localStorage.setItem(STORAGE_FAVORIT_KEY, JSON.stringify(list));
         setIsFavorited(true);
         setToastMessage(`"${item.title}" disimpan ke favorit!`);
+
+        fetch("/api/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            targetType: item.type,
+            targetId: item.id,
+            title: item.title,
+            subtitle: item.subtitle,
+            categoryLabel: item.categoryLabel,
+            url: item.url,
+            badge: item.badge,
+            badgeColor: item.badgeColor,
+            avatarUrl: item.avatarUrl,
+            coverBg: item.coverBg,
+            notes: item.notes,
+          }),
+        }).catch(() => {});
       }
 
       window.dispatchEvent(new Event(FAVORITES_CHANGED_EVENT));
