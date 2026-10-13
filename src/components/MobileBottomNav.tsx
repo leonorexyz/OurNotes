@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Users, Layers, Sparkles, FileText } from "lucide-react";
+import { BookOpen, Users, Layers, Sparkles, FileText, Heart } from "lucide-react";
 
 function MobileBottomNavContent() {
   const pathname = usePathname();
@@ -14,6 +14,7 @@ function MobileBottomNavContent() {
     { href: "/tim", label: "Tim", icon: Layers },
     { href: "/gacha", label: "Gacha", icon: Sparkles },
     { href: "/blog", label: "Blog", icon: FileText },
+    { href: "/akun", label: "Akun", icon: Heart },
   ];
 
   return (

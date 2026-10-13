@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Music2,
+  Heart,
 } from "lucide-react";
 
 export function Navbar() {
@@ -48,6 +49,7 @@ export function Navbar() {
     { href: "/gacha", label: "Jadwal Gacha", icon: Sparkles },
     { href: "/blog", label: "Blog Komunitas", icon: FileText },
     { href: "/cari", label: "Pencarian", icon: Search },
+    { href: "/akun", label: "Akun & Favorit", icon: Heart },
   ];
 
   return (
@@ -107,6 +109,15 @@ export function Navbar() {
               Ctrl K
             </span>
           </button>
+
+          <Link
+            href="/akun"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-pink-500/30 bg-pink-500/10 px-3 py-1.5 text-xs font-bold text-pink-600 dark:text-pink-300 hover:bg-pink-500/20 transition-all"
+            title="Akun & Favorit"
+          >
+            <Heart className="h-3.5 w-3.5 fill-pink-500 text-pink-500" />
+            <span>Akun</span>
+          </Link>
 
           <button
             type="button"
