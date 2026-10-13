@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 export const guides = sqliteTable("guides", {
@@ -322,4 +322,48 @@ export type PopularSearchRecord = typeof popularSearches.$inferSelect;
 export type NewPopularSearchRecord = typeof popularSearches.$inferInsert;
 export type SearchLogRecord = typeof searchLogs.$inferSelect;
 export type NewSearchLogRecord = typeof searchLogs.$inferInsert;
+
+export const userProfiles = sqliteTable("user_profiles", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: "cascade" }),
+  title: text("title").default("Bintang Utama CiRCLE"),
+  bio: text("bio").default("Produser aktif CiRCLE Live House Our Notes."),
+  favoriteBand: text("favorite_band").default("Poppin'Party"),
+  favoriteCharacterId: text("favorite_character_id").default("char-kasumi-toyama"),
+  favoriteAttribute: text("favorite_attribute").default("Pure"),
+  rank: integer("rank").default(1),
+  noteSpeed: real("note_speed").default(10.0),
+  timingOffset: real("timing_offset").default(0.0),
+  tapSoundEffect: text("tap_sound_effect").default("Tambourine"),
+  showCutIn: integer("show_cut_in").default(1), // 1 or 0
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const userFavorites = sqliteTable("user_favorites", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  targetType: text("target_type").notNull(), // 'character' | 'guide' | 'band' | 'team' | 'gacha' | 'blog'
+  targetId: text("target_id").notNull(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  categoryLabel: text("category_label"),
+  url: text("url").notNull(),
+  badge: text("badge"),
+  badgeColor: text("badge_color"),
+  avatarUrl: text("avatar_url"),
+  coverBg: text("cover_bg"),
+  notes: text("notes"),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export type UserProfileRecord = typeof userProfiles.$inferSelect;
+export type NewUserProfileRecord = typeof userProfiles.$inferInsert;
+export type UserFavoriteRecord = typeof userFavorites.$inferSelect;
+export type NewUserFavoriteRecord = typeof userFavorites.$inferInsert;
+
 

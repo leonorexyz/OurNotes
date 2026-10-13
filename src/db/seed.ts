@@ -20,6 +20,8 @@ import {
   searchItems,
   popularSearches,
   searchLogs,
+  userProfiles,
+  userFavorites,
 } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
@@ -452,6 +454,105 @@ export async function seedGuides() {
         target: users.id,
         set: u,
       })
+      .run();
+  }
+
+  // Seed User Profiles
+  console.log("Memulai seed profil pengguna produser...");
+  const sampleProfiles = [
+    {
+      id: "prof-producer-1",
+      userId: "user-producer-1",
+      title: "Bintang Utama CiRCLE",
+      bio: "Produser aktif CiRCLE Live House. Fokus mengoleksi kartu Pure Poppin'Party dan mencapai All Perfect pada lagu Expert level 27+.",
+      favoriteBand: "Poppin'Party",
+      favoriteCharacterId: "char-kasumi-toyama",
+      favoriteAttribute: "Pure",
+      rank: 185,
+      noteSpeed: 10.4,
+      timingOffset: 0.0,
+      tapSoundEffect: "Tambourine",
+      showCutIn: 1,
+    },
+    {
+      id: "prof-admin-1",
+      userId: "user-admin-1",
+      title: "Live House Manager",
+      bio: "Staff admin resmi CiRCLE Live House untuk manajemen konten Our Notes.",
+      favoriteBand: "Roselia",
+      favoriteCharacterId: "char-yukina-minato",
+      favoriteAttribute: "Cool",
+      rank: 250,
+      noteSpeed: 10.8,
+      timingOffset: 0.0,
+      tapSoundEffect: "Taiko",
+      showCutIn: 1,
+    },
+  ];
+
+  for (const prof of sampleProfiles) {
+    db.insert(userProfiles)
+      .values(prof)
+      .onConflictDoUpdate({
+        target: userProfiles.userId,
+        set: prof,
+      })
+      .run();
+  }
+
+  // Seed User Favorites
+  console.log("Memulai seed favorit pengguna produser...");
+  const sampleFavorites = [
+    {
+      id: "fav-seed-1",
+      userId: "user-producer-1",
+      targetType: "character",
+      targetId: "char-kasumi-toyama",
+      title: "Kasumi Toyama",
+      subtitle: "Poppin'Party • Vokalis & Gitaris • Atribut Pure",
+      categoryLabel: "Karakter Favorit",
+      url: "/karakter/char-kasumi-toyama",
+      badge: "★4 Pure",
+      badgeColor: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
+      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      coverBg: "from-pink-500 to-rose-600",
+      notes: "Kartu leader utama untuk formasi Pure PoPiPa.",
+    },
+    {
+      id: "fav-seed-2",
+      userId: "user-producer-1",
+      targetType: "character",
+      targetId: "char-yukina-minato",
+      title: "Yukina Minato",
+      subtitle: "Roselia • Vokalis Utama • Atribut Cool",
+      categoryLabel: "Karakter Favorit",
+      url: "/karakter/char-yukina-minato",
+      badge: "★4 Cool",
+      badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+      avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+      coverBg: "from-blue-600 to-indigo-700",
+      notes: "Skor boost +130% saat perfect tap.",
+    },
+    {
+      id: "fav-seed-3",
+      userId: "user-producer-1",
+      targetType: "guide",
+      targetId: "tips-all-perfect-lagu-level-27-expert",
+      title: "Tips Mencapai All Perfect Lagu Level 27+ Expert",
+      subtitle: "Kalibrasi kecepatan 10.4, timing offset, dan teknik telunjuk",
+      categoryLabel: "Panduan Gameplay",
+      url: "/blog/tips-all-perfect-lagu-level-27-expert",
+      badge: "All Perfect",
+      badgeColor: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
+      coverBg: "from-indigo-600 via-purple-600 to-pink-600",
+      notes: "Kunci lulus lagu Teardrops dan Fire Bird.",
+    },
+  ];
+
+  for (const fav of sampleFavorites) {
+    db.insert(userFavorites)
+      .values(fav)
+      .onConflictDoNothing()
       .run();
   }
 

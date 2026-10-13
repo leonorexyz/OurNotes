@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "6b6af032066845219b349b02f1421e468912717f",
+  "generatedForCommit": "ba5007a70b93d92cef4afd4649ba8f7a4fd32407",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -213,6 +213,12 @@
       "size": 9496
     },
     {
+      "path": "src/app/api/auth/forgot-password/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1624
+    },
+    {
       "path": "src/app/api/auth/login/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -226,13 +232,13 @@
     },
     {
       "path": "src/app/api/auth/me/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2509
     },
     {
       "path": "src/app/api/auth/profile/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 390
     },
@@ -241,6 +247,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 2479
+    },
+    {
+      "path": "src/app/api/auth/reset-password/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1511
     },
     {
       "path": "src/app/api/bands/route.ts",
@@ -597,6 +609,12 @@
       "size": 2186
     },
     {
+      "path": "src/app/forgot-password/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1257
+    },
+    {
       "path": "src/app/gacha/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -651,6 +669,12 @@
       "size": 1256
     },
     {
+      "path": "src/app/lupa-password/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1255
+    },
+    {
       "path": "src/app/masuk/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -670,13 +694,13 @@
     },
     {
       "path": "src/app/profil/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 922
     },
     {
       "path": "src/app/profile/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 923
     },
@@ -685,6 +709,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 1262
+    },
+    {
+      "path": "src/app/reset-password/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1193
     },
     {
       "path": "src/app/search/page.tsx",
@@ -700,15 +730,15 @@
     },
     {
       "path": "src/components/AkunFavoritLayout.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 31636
     },
     {
       "path": "src/components/AuthFormClient.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 24840
+      "size": 24883
     },
     {
       "path": "src/components/BlogArticleActions.tsx",
@@ -757,6 +787,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 3364
+    },
+    {
+      "path": "src/components/ForgotPasswordClient.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 18450
     },
     {
       "path": "src/components/GachaCountdownTimer.tsx",
@@ -838,7 +874,7 @@
     },
     {
       "path": "src/components/ProducerProfileClient.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 28417
     },

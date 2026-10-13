@@ -64,6 +64,13 @@
       "when": 1791905839011,
       "tag": "0008_brief_the_captain",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1791908128464,
+      "tag": "0009_complete_scarlet_witch",
+      "breakpoints": true
     }
   ]
 }
