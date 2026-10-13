@@ -197,3 +197,43 @@ Hanya lakukan roll saat **Kira-Kira Festival (Kirafes)** atau **Dream Festival (
     coverImageBg: "from-teal-600 via-cyan-600 to-blue-600",
   },
 ];
+
+export const CATEGORY_MAP: Record<string, BlogPost["category"]> = {
+  "tips-gameplay": "Tips & Gameplay",
+  "meta-tim": "Meta & Tim",
+  "lore-karakter": "Lore & Karakter",
+  "gacha-stars": "Gacha & Stars",
+  "event-skor": "Event & Skor",
+};
+
+export const REVERSE_CATEGORY_MAP: Record<BlogPost["category"], string> = {
+  "Tips & Gameplay": "tips-gameplay",
+  "Meta & Tim": "meta-tim",
+  "Lore & Karakter": "lore-karakter",
+  "Gacha & Stars": "gacha-stars",
+  "Event & Skor": "event-skor",
+};
+
+export function slugifyTag(tag: string): string {
+  return tag
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function getAllUniqueTags(): { name: string; slug: string; count: number }[] {
+  const map = new Map<string, { name: string; slug: string; count: number }>();
+  BLOG_POSTS_DATA.forEach((post) => {
+    post.tags.forEach((t) => {
+      const slug = slugifyTag(t);
+      if (!map.has(slug)) {
+        map.set(slug, { name: t, slug, count: 1 });
+      } else {
+        const item = map.get(slug)!;
+        item.count += 1;
+      }
+    });
+  });
+  return Array.from(map.values());
+}
+
