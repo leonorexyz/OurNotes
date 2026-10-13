@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Star,
   Zap,
@@ -61,9 +62,10 @@ export function CharacterCard({
         </div>
 
         {/* Character Card Hero Image / Gradient Avatar */}
-        <div
+        <Link
+          href={`/karakter/${character.id}`}
           onClick={() => onSelect?.(character)}
-          className={`h-24 rounded-2xl bg-gradient-to-tr ${character.avatarBg} p-4 text-white flex flex-col justify-between shadow-xs relative overflow-hidden cursor-pointer group-hover:scale-[1.01] transition-transform`}
+          className={`h-24 rounded-2xl bg-gradient-to-tr ${character.avatarBg} p-4 text-white flex flex-col justify-between shadow-xs relative overflow-hidden cursor-pointer group-hover:scale-[1.01] transition-transform block`}
         >
           <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/10 skew-x-12 pointer-events-none" />
           <div className="text-[11px] font-mono opacity-80">{character.japaneseName}</div>
@@ -73,7 +75,7 @@ export function CharacterCard({
             </h3>
             <span className="text-[11px] font-semibold opacity-90">{character.role}</span>
           </div>
-        </div>
+        </Link>
 
         {/* Attribute & Total Power */}
         <div className="flex items-center justify-between gap-2 text-xs">
