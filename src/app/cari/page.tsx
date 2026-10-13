@@ -37,6 +37,7 @@ import { BlogPost } from "@/data/blogData";
 import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
 import { SearchResultCard } from "@/components/SearchResultCard";
 import { SearchEmptyState } from "@/components/SearchEmptyState";
+import { SearchCategoryFilter } from "@/components/SearchCategoryFilter";
 
 const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
   Sparkles,
@@ -256,38 +257,11 @@ function SearchContent() {
 
         {/* Category Tabs */}
         <section className="space-y-4">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-border">
-            {SEARCH_CATEGORIES.map((cat) => {
-              const Icon = CATEGORY_ICON_MAP[cat.iconName] || Sparkles;
-              const isSelected = selectedCategory === cat.key;
-              const count = categoryCounts[cat.key] || 0;
-
-              return (
-                <button
-                  key={cat.key}
-                  type="button"
-                  onClick={() => handleCategorySelect(cat.key)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all ${
-                    isSelected
-                      ? "bg-pink-600 text-white shadow-md shadow-pink-500/20"
-                      : "bg-card hover:bg-muted text-muted-foreground hover:text-foreground border border-border"
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  <span>{cat.label}</span>
-                  <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                      isSelected
-                        ? "bg-white/20 text-white"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          <SearchCategoryFilter
+            selectedCategory={selectedCategory}
+            categoryCounts={categoryCounts}
+            onSelectCategory={handleCategorySelect}
+          />
 
           {/* Results Summary Info Bar */}
           <div className="flex items-center justify-between text-xs text-muted-foreground">
