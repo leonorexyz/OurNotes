@@ -1,0 +1,554 @@
+{
+  ".claude/skills/ngodingpakeai/SKILL.md": {
+    "summary": "Dokumentasi panduan instruksi agent dan sinkronisasi codebase NgodingPakeAI."
+  },
+  ".codex/skills/ngodingpakeai/SKILL.md": {
+    "summary": "Dokumentasi panduan instruksi agent dan sinkronisasi codebase NgodingPakeAI."
+  },
+  ".gitattributes": {
+    "summary": "Konfigurasi Git untuk tracking file repository dan handling line-ending."
+  },
+  ".gitignore": {
+    "summary": "Konfigurasi Git untuk tracking file repository dan handling line-ending."
+  },
+  ".ngodingpakeaiignore": {
+    "summary": "Konfigurasi ignore file spesifik untuk indexing NgodingPakeAI."
+  },
+  "AGENTS.md": {
+    "summary": "Dokumentasi panduan instruksi agent dan sinkronisasi codebase NgodingPakeAI."
+  },
+  "drizzle/0000_curly_shen.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0000_curly_shen.sql)."
+  },
+  "drizzle/0001_bouncy_molecule_man.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0001_bouncy_molecule_man.sql)."
+  },
+  "drizzle/0002_solid_doctor_spectrum.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0002_solid_doctor_spectrum.sql)."
+  },
+  "drizzle/0003_fantastic_carmella_unuscione.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0003_fantastic_carmella_unuscione.sql)."
+  },
+  "drizzle/0004_left_stellaris.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0004_left_stellaris.sql)."
+  },
+  "drizzle/0005_flaky_lionheart.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0005_flaky_lionheart.sql)."
+  },
+  "drizzle/0006_glorious_brother_voodoo.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0006_glorious_brother_voodoo.sql)."
+  },
+  "drizzle/0007_supreme_karen_page.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0007_supreme_karen_page.sql)."
+  },
+  "drizzle/0008_brief_the_captain.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0008_brief_the_captain.sql)."
+  },
+  "drizzle/0009_complete_scarlet_witch.sql": {
+    "summary": "File migrasi SQL Drizzle ORM untuk skema tabel database Our Notes (0009_complete_scarlet_witch.sql)."
+  },
+  "drizzle/meta/0000_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0001_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0002_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0003_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0004_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0005_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0006_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0007_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0008_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/0009_snapshot.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle/meta/_journal.json": {
+    "summary": "Snapshot metadata skema database dan journal riwayat migrasi Drizzle ORM."
+  },
+  "drizzle.config.ts": {
+    "summary": "Konfigurasi Drizzle Kit untuk generator migrasi database SQLite better-sqlite3."
+  },
+  "eslint.config.mjs": {
+    "summary": "Modul fungsional eslint.config.mjs untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "next.config.ts": {
+    "summary": "Konfigurasi runtime Next.js 16 dengan Turbopack dan fitur Cache Components."
+  },
+  "package-lock.json": {
+    "summary": "Modul fungsional package-lock.json untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "package.json": {
+    "summary": "Konfigurasi dependencies, skrip build, db:migrate, db:seed, dan metadata proyek Next.js Our Notes."
+  },
+  "README.md": {
+    "summary": "Modul fungsional README.md untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/app/akun/page.tsx": {
+    "summary": "Halaman dashboard utama akun produser, ringkasan tim, pengingat, dan navigasi tab koleksi."
+  },
+  "src/app/api/articles/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/articles/[id]/comments/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/articles/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/auth/forgot-password/route.ts": {
+    "summary": "Endpoint POST /api/auth/forgot-password untuk mengajukan permohonan pemulihan kata sandi dan mendapatkan kode OTP."
+  },
+  "src/app/api/auth/login/route.ts": {
+    "summary": "Endpoint POST /api/auth/login untuk autentikasi produser dan penetapan cookie sesi our_notes_user_id."
+  },
+  "src/app/api/auth/logout/route.ts": {
+    "summary": "Endpoint /api/auth/logout untuk menghapus cookie sesi produser dan mengakhiri sesi login."
+  },
+  "src/app/api/auth/lupa-password/route.ts": {
+    "summary": "Modul fungsional route.ts untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/app/api/auth/me/route.ts": {
+    "summary": "Endpoint GET dan PATCH /api/auth/me untuk memeriksa status login dan memperbarui profil produser saat ini."
+  },
+  "src/app/api/auth/profile/route.ts": {
+    "summary": "Endpoint GET dan PATCH /api/profile untuk membaca dan memperbarui profil produser, nama, foto avatar, dan pengaturan."
+  },
+  "src/app/api/auth/register/route.ts": {
+    "summary": "Endpoint POST /api/auth/register untuk pendaftaran akun produser baru dan pembuatan profil awal di database."
+  },
+  "src/app/api/auth/reset-password/route.ts": {
+    "summary": "Endpoint POST /api/auth/reset-password untuk menyetel ulang kata sandi baru akun produser."
+  },
+  "src/app/api/bands/route.ts": {
+    "summary": "Endpoint RESTful untuk daftar band, genre musik, personel, dan filosofi band BanG Dream!."
+  },
+  "src/app/api/bands/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk daftar band, genre musik, personel, dan filosofi band BanG Dream!."
+  },
+  "src/app/api/blog/categories/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/categories/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/tags/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/tags/[slug]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/[id]/comments/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/blog/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/cari/counts/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/cari/filter/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/cari/popular/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/cari/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/categories/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/categories/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/characters/compare/route.ts": {
+    "summary": "Endpoint RESTful untuk data karakter BanG Dream!, filter atribut, detail kartu, dan komparasi statistik."
+  },
+  "src/app/api/characters/route.ts": {
+    "summary": "Endpoint RESTful untuk data karakter BanG Dream!, filter atribut, detail kartu, dan komparasi statistik."
+  },
+  "src/app/api/characters/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk data karakter BanG Dream!, filter atribut, detail kartu, dan komparasi statistik."
+  },
+  "src/app/api/comments/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/comments/[id]/replies/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/comments/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/events/calendar/route.ts": {
+    "summary": "Endpoint RESTful untuk kalender event, jadwal marathon, dan bonus atribut event."
+  },
+  "src/app/api/events/route.ts": {
+    "summary": "Endpoint RESTful untuk kalender event, jadwal marathon, dan bonus atribut event."
+  },
+  "src/app/api/faq/route.ts": {
+    "summary": "Endpoint RESTful untuk panduan pemula gameplay, tips rhythm game, dan tanya jawab umum FAQ."
+  },
+  "src/app/api/favorit/route.ts": {
+    "summary": "Endpoint RESTful /api/favorites untuk menambah, menghapus, mengecek status, dan melihat daftar favorit pengguna."
+  },
+  "src/app/api/favorit/[id]/route.ts": {
+    "summary": "Endpoint RESTful /api/favorites untuk menambah, menghapus, mengecek status, dan melihat daftar favorit pengguna."
+  },
+  "src/app/api/favorites/route.ts": {
+    "summary": "Endpoint RESTful /api/favorites untuk menambah, menghapus, mengecek status, dan melihat daftar favorit pengguna."
+  },
+  "src/app/api/favorites/[id]/route.ts": {
+    "summary": "Endpoint RESTful /api/favorites untuk menambah, menghapus, mengecek status, dan melihat daftar favorit pengguna."
+  },
+  "src/app/api/forgot-password/route.ts": {
+    "summary": "Modul fungsional route.ts untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/app/api/gacha/notifications/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/gacha/reminders/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/gacha/reminders/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/gacha/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/gacha/[id]/reminder/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/gacha/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk banner gacha, simulasi tarikan, sistem spark pity, dan pengingat banner."
+  },
+  "src/app/api/guides/route.ts": {
+    "summary": "Endpoint RESTful untuk panduan pemula gameplay, tips rhythm game, dan tanya jawab umum FAQ."
+  },
+  "src/app/api/guides/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk panduan pemula gameplay, tips rhythm game, dan tanya jawab umum FAQ."
+  },
+  "src/app/api/profil/route.ts": {
+    "summary": "Endpoint GET dan PATCH /api/profile untuk membaca dan memperbarui profil produser, nama, foto avatar, dan pengaturan."
+  },
+  "src/app/api/profile/route.ts": {
+    "summary": "Endpoint GET dan PATCH /api/profile untuk membaca dan memperbarui profil produser, nama, foto avatar, dan pengaturan."
+  },
+  "src/app/api/recommended-teams/route.ts": {
+    "summary": "Modul fungsional route.ts untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/app/api/reset-password/route.ts": {
+    "summary": "Modul fungsional route.ts untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/app/api/search/counts/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/search/filter/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/search/popular/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/search/route.ts": {
+    "summary": "Endpoint RESTful pencarian global gabungan, penghitungan kategori, saran pencarian populer, dan log kata kunci."
+  },
+  "src/app/api/tags/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/tags/[slug]/route.ts": {
+    "summary": "Endpoint RESTful untuk artikel blog komunitas, kategori, tag, dan sistem komentar diskusi bertingkat."
+  },
+  "src/app/api/team/slot-characters/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/team/synergy/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/characters/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/recommended/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/recommended/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/synergy/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/api/teams/[id]/route.ts": {
+    "summary": "Endpoint RESTful untuk formasi tim rekomendasi, kalkulasi BP, sinergi band, dan tim kustom pengguna."
+  },
+  "src/app/band/page.tsx": {
+    "summary": "Halaman katalog dan profil mendalam band musik BanG Dream!, kisah, diskografi, dan daftar personel."
+  },
+  "src/app/band/[id]/page.tsx": {
+    "summary": "Halaman katalog dan profil mendalam band musik BanG Dream!, kisah, diskografi, dan daftar personel."
+  },
+  "src/app/blog/edit/[id]/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/blog/kategori/[slug]/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/blog/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/blog/tag/[slug]/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/blog/tulis/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/blog/[id]/page.tsx": {
+    "summary": "Halaman komunitas blog panduan: membaca artikel, filter tag dan kategori, serta formulir tulis artikel baru."
+  },
+  "src/app/cari/page.tsx": {
+    "summary": "Halaman pencarian komprehensif cepat di seluruh konten panduan, karakter, event, lagu, dan artikel."
+  },
+  "src/app/daftar/page.tsx": {
+    "summary": "Halaman antarmuka pendaftaran (Register) produser baru dengan pemilihan band favorit dan avatar."
+  },
+  "src/app/favorit/page.tsx": {
+    "summary": "Halaman koleksi item favorit produser per kategori: karakter, band, panduan, tim, dan banner gacha."
+  },
+  "src/app/favorit/[type]/page.tsx": {
+    "summary": "Halaman koleksi item favorit produser per kategori: karakter, band, panduan, tim, dan banner gacha."
+  },
+  "src/app/forgot-password/page.tsx": {
+    "summary": "Halaman antarmuka lupa password dan alur verifikasi kode OTP untuk reset kata sandi produser."
+  },
+  "src/app/gacha/page.tsx": {
+    "summary": "Halaman jadwal banner gacha, simulasi tarikan 10x, kalkulator target stars, dan ekspor pengingat kalender .ICS."
+  },
+  "src/app/gacha/pengingat/page.tsx": {
+    "summary": "Halaman jadwal banner gacha, simulasi tarikan 10x, kalkulator target stars, dan ekspor pengingat kalender .ICS."
+  },
+  "src/app/gacha/[id]/page.tsx": {
+    "summary": "Halaman jadwal banner gacha, simulasi tarikan 10x, kalkulator target stars, dan ekspor pengingat kalender .ICS."
+  },
+  "src/app/globals.css": {
+    "summary": "Stylesheet global aplikasi dengan Tailwind CSS v4 dan variabel tema kustom BanG Dream."
+  },
+  "src/app/karakter/bandingkan/page.tsx": {
+    "summary": "Halaman katalog dan detail kartu karakter BanG Dream! lengkap dengan statistik dan tombol aksi perbandingan."
+  },
+  "src/app/karakter/page.tsx": {
+    "summary": "Halaman katalog dan detail kartu karakter BanG Dream! lengkap dengan statistik dan tombol aksi perbandingan."
+  },
+  "src/app/karakter/[id]/page.tsx": {
+    "summary": "Halaman katalog dan detail kartu karakter BanG Dream! lengkap dengan statistik dan tombol aksi perbandingan."
+  },
+  "src/app/layout.tsx": {
+    "summary": "Root layout aplikasi Next.js: konfigurasi font, tema metadata, dan struktur container halaman."
+  },
+  "src/app/login/page.tsx": {
+    "summary": "Halaman antarmuka masuk (Login) akun produser dengan pemilih demo instan dan form otentikasi."
+  },
+  "src/app/lupa-password/page.tsx": {
+    "summary": "Halaman antarmuka lupa password dan alur verifikasi kode OTP untuk reset kata sandi produser."
+  },
+  "src/app/masuk/page.tsx": {
+    "summary": "Halaman antarmuka masuk (Login) akun produser dengan pemilih demo instan dan form otentikasi."
+  },
+  "src/app/page.tsx": {
+    "summary": "Halaman beranda utama Bang Dream! Our Notes dengan hero banner, quick links, event aktif, dan rekomendasi tim."
+  },
+  "src/app/panduan/page.tsx": {
+    "summary": "Halaman panduan gameplay BanG Dream! Our Notes terstruktur untuk pemula dan pemain lanjutan."
+  },
+  "src/app/profil/page.tsx": {
+    "summary": "Halaman profil produser lengkap dengan preview kartu CiRCLE Producer Pass dan editor multi-tab."
+  },
+  "src/app/profile/page.tsx": {
+    "summary": "Halaman profil produser lengkap dengan preview kartu CiRCLE Producer Pass dan editor multi-tab."
+  },
+  "src/app/register/page.tsx": {
+    "summary": "Halaman antarmuka pendaftaran (Register) produser baru dengan pemilihan band favorit dan avatar."
+  },
+  "src/app/reset-password/page.tsx": {
+    "summary": "Halaman antarmuka lupa password dan alur verifikasi kode OTP untuk reset kata sandi produser."
+  },
+  "src/app/search/page.tsx": {
+    "summary": "Halaman pencarian komprehensif cepat di seluruh konten panduan, karakter, event, lagu, dan artikel."
+  },
+  "src/app/tim/page.tsx": {
+    "summary": "Halaman penyusun tim interaktif (team builder), kalkulator BP otomatis, dan rekomendasi tim meta."
+  },
+  "src/components/AkunFavoritLayout.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: AkunFavoritLayout untuk aplikasi Our Notes."
+  },
+  "src/components/AuthFormClient.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: AuthFormClient untuk aplikasi Our Notes."
+  },
+  "src/components/BlogArticleActions.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: BlogArticleActions untuk aplikasi Our Notes."
+  },
+  "src/components/BlogCommentsSection.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: BlogCommentsSection untuk aplikasi Our Notes."
+  },
+  "src/components/BlogEditClient.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: BlogEditClient untuk aplikasi Our Notes."
+  },
+  "src/components/CharacterCard.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: CharacterCard untuk aplikasi Our Notes."
+  },
+  "src/components/CharacterDetailActions.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: CharacterDetailActions untuk aplikasi Our Notes."
+  },
+  "src/components/FaqAccordion.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: FaqAccordion untuk aplikasi Our Notes."
+  },
+  "src/components/FavoriteButton.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: FavoriteButton untuk aplikasi Our Notes."
+  },
+  "src/components/Footer.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: Footer untuk aplikasi Our Notes."
+  },
+  "src/components/ForgotPasswordClient.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: ForgotPasswordClient untuk aplikasi Our Notes."
+  },
+  "src/components/GachaCountdownTimer.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GachaCountdownTimer untuk aplikasi Our Notes."
+  },
+  "src/components/GachaDetailActions.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GachaDetailActions untuk aplikasi Our Notes."
+  },
+  "src/components/GachaEventCalendar.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GachaEventCalendar untuk aplikasi Our Notes."
+  },
+  "src/components/GachaReminderModal.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GachaReminderModal untuk aplikasi Our Notes."
+  },
+  "src/components/GameGlossary.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GameGlossary untuk aplikasi Our Notes."
+  },
+  "src/components/GuideCard.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GuideCard untuk aplikasi Our Notes."
+  },
+  "src/components/GuideSectionNav.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: GuideSectionNav untuk aplikasi Our Notes."
+  },
+  "src/components/HeaderAccountMenu.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: HeaderAccountMenu untuk aplikasi Our Notes."
+  },
+  "src/components/MobileBottomNav.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: MobileBottomNav untuk aplikasi Our Notes."
+  },
+  "src/components/Navbar.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: Navbar untuk aplikasi Our Notes."
+  },
+  "src/components/PanduanEventSection.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: PanduanEventSection untuk aplikasi Our Notes."
+  },
+  "src/components/PanduanPemulaSection.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: PanduanPemulaSection untuk aplikasi Our Notes."
+  },
+  "src/components/PopularSearchesList.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: PopularSearchesList untuk aplikasi Our Notes."
+  },
+  "src/components/ProducerProfileClient.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: ProducerProfileClient untuk aplikasi Our Notes."
+  },
+  "src/components/RealtimeSearchInput.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: RealtimeSearchInput untuk aplikasi Our Notes."
+  },
+  "src/components/ScrollToTop.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: ScrollToTop untuk aplikasi Our Notes."
+  },
+  "src/components/SearchCategoryFilter.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: SearchCategoryFilter untuk aplikasi Our Notes."
+  },
+  "src/components/SearchCommandModal.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: SearchCommandModal untuk aplikasi Our Notes."
+  },
+  "src/components/SearchEmptyState.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: SearchEmptyState untuk aplikasi Our Notes."
+  },
+  "src/components/SearchResultCard.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: SearchResultCard untuk aplikasi Our Notes."
+  },
+  "src/components/SearchResultItemLink.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: SearchResultItemLink untuk aplikasi Our Notes."
+  },
+  "src/components/TipsTrikSection.tsx": {
+    "summary": "Komponen antarmuka pengguna interaktif: TipsTrikSection untuk aplikasi Our Notes."
+  },
+  "src/data/bandDetailsData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk bandDetailsData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/blogData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk blogData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/charactersData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk charactersData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/gachaData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk gachaData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/guidesData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk guidesData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/recommendedTeamsData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk recommendedTeamsData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/data/searchData.ts": {
+    "summary": "Dataset statis referensi BanG Dream! untuk searchData: karakter, band, tim, gacha, atau blog."
+  },
+  "src/db/index.ts": {
+    "summary": "Inisialisasi koneksi database better-sqlite3 dan binding instance Drizzle ORM."
+  },
+  "src/db/migrate.ts": {
+    "summary": "Runner migrasi otomatis Drizzle ORM dari folder drizzle ke database SQLite lokal."
+  },
+  "src/db/schema.ts": {
+    "summary": "Definisi skema tabel database SQLite: guides, characters, teams, gachas, blogs, users, user_profiles, user_favorites."
+  },
+  "src/db/seed.ts": {
+    "summary": "Skrip seeding master data panduan, karakter, band, banner gacha, blog, dan profil produser ke database."
+  },
+  "src/services/authService.ts": {
+    "summary": "Layanan autentikasi produser: getCurrentUser, requireAuth, dan validasi sesi cookie."
+  },
+  "src/services/favoriteService.ts": {
+    "summary": "Layanan database untuk menambah, menghapus, melihat, dan memeriksa status favorit pengguna."
+  },
+  "src/services/gachaNotificationService.ts": {
+    "summary": "Layanan notifikasi dan sinkronisasi pengingat jadwal banner gacha produser."
+  },
+  "src/services/passwordResetService.ts": {
+    "summary": "Layanan pemulihan kata sandi produser: pembuatan token reset, kode verifikasi OTP 6 digit, dan update sandi."
+  },
+  "src/services/searchLogService.ts": {
+    "summary": "Layanan logging riwayat kata kunci pencarian produser dan agregasi query populer."
+  },
+  "src/services/teamSynergyService.ts": {
+    "summary": "Modul fungsional teamSynergyService.ts untuk mendukung fitur aplikasi panduan BanG Dream! Our Notes."
+  },
+  "src/services/userProfileService.ts": {
+    "summary": "Layanan pengelolaan profil produser: membaca dan memperbarui nama, foto avatar, dan preferensi live rhythm."
+  },
+  "tsconfig.json": {
+    "summary": "Konfigurasi kompilasi TypeScript dan module path alias @/ untuk proyek Next.js."
+  }
+}
