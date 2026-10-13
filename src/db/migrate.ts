@@ -6,7 +6,7 @@ export async function runMigrations() {
   console.log("Menjalankan migrasi database...");
   const migrationsFolder = path.join(process.cwd(), "drizzle");
   migrate(db, { migrationsFolder });
-  console.log("✓ Migrasi tabel guides berhasil diterapkan!");
+  console.log("✓ Migrasi skema database berhasil diterapkan!");
 }
 
 if (require.main === module) {
