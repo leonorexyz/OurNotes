@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "1e9771a4d6b8e65e80703f3a7de7e836e884d8c1",
+  "generatedForCommit": "9154b20815717b460b64683fdea3943daae59241",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -45,16 +45,28 @@
       "size": 302
     },
     {
+      "path": "drizzle/0001_bouncy_molecule_man.sql",
+      "reason": "new",
+      "language": "sql",
+      "size": 410
+    },
+    {
       "path": "drizzle/meta/0000_snapshot.json",
       "reason": "needs_summary",
       "language": "json",
       "size": 2394
     },
     {
-      "path": "drizzle/meta/_journal.json",
-      "reason": "needs_summary",
+      "path": "drizzle/meta/0001_snapshot.json",
+      "reason": "new",
       "language": "json",
-      "size": 200
+      "size": 5072
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "changed",
+      "language": "json",
+      "size": 347
     },
     {
       "path": "drizzle.config.ts",
@@ -93,8 +105,14 @@
       "size": 1246
     },
     {
-      "path": "src/app/api/faq/route.ts",
+      "path": "src/app/api/events/route.ts",
       "reason": "new",
+      "language": "typescript",
+      "size": 1602
+    },
+    {
+      "path": "src/app/api/faq/route.ts",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2404
     },
@@ -244,15 +262,15 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 757
+      "size": 1613
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 2134
+      "size": 5636
     },
     {
       "path": "tsconfig.json",
