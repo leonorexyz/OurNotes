@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "c447eff75492277913f8b7d0259dc01739d81548",
+  "generatedForCommit": "cbbf485048ea7e3f8f83ab9ee7b7fe15ac37e521",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -154,9 +154,9 @@
     },
     {
       "path": "src/app/karakter/[id]/page.tsx",
-      "reason": "new",
+      "reason": "changed",
       "language": "typescript",
-      "size": 13569
+      "size": 14412
     },
     {
       "path": "src/app/layout.tsx",
@@ -184,9 +184,15 @@
     },
     {
       "path": "src/components/CharacterCard.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 6682
+    },
+    {
+      "path": "src/components/CharacterDetailActions.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 9126
     },
     {
       "path": "src/components/FaqAccordion.tsx",
