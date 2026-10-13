@@ -12,12 +12,23 @@ import {
   users,
   gachas,
   gachaReminders,
+  blogCategories,
+  blogTags,
+  blogArticles,
+  blogArticleTags,
+  blogComments,
 } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
 import { BANDS_DATA, CHARACTERS_DATA } from "../data/charactersData";
 import { RECOMMENDED_TEAMS } from "../data/recommendedTeamsData";
 import { GACHA_BANNERS_DATA } from "../data/gachaData";
+import {
+  BLOG_POSTS_DATA,
+  REVERSE_CATEGORY_MAP,
+  getAllUniqueTags,
+  slugifyTag,
+} from "../data/blogData";
 
 export async function seedGuides() {
   await runMigrations();
@@ -534,6 +545,203 @@ export async function seedGuides() {
     })
     .run();
 
+  // Seed Blog Categories
+  console.log("Memulai seed kategori blog...");
+  const blogCategoryItems = [
+    {
+      id: "tips-gameplay",
+      name: "Tips & Gameplay",
+      description: "Panduan kecepatan note, kalibrasi timing, dan strategi meraih All Perfect.",
+      icon: "Gamepad2",
+      color: "blue",
+    },
+    {
+      id: "meta-tim",
+      name: "Meta & Tim",
+      description: "Formasi komposisi kartu, sinergi atribut, dan upgrade area studio Ryuseido.",
+      icon: "Users",
+      color: "emerald",
+    },
+    {
+      id: "lore-karakter",
+      name: "Lore & Karakter",
+      description: "Evolusi musik, kisah masa lalu band, dan cerita mendalam di balik panggung.",
+      icon: "BookOpen",
+      color: "purple",
+    },
+    {
+      id: "gacha-stars",
+      name: "Gacha & Stars",
+      description: "Strategi hemat Stars, simulasi spark, dan jadwal festival Kirafes/DoriFes.",
+      icon: "Sparkles",
+      color: "amber",
+    },
+    {
+      id: "event-skor",
+      name: "Event & Skor",
+      description: "Mekanik event Marathon, VS Live, dan kalkulasi efisiensi konsumsi Live Boost.",
+      icon: "Trophy",
+      color: "rose",
+    },
+  ];
+
+  for (const cat of blogCategoryItems) {
+    db.insert(blogCategories)
+      .values(cat)
+      .onConflictDoUpdate({
+        target: blogCategories.id,
+        set: {
+          name: cat.name,
+          description: cat.description,
+          icon: cat.icon,
+          color: cat.color,
+        },
+      })
+      .run();
+  }
+
+  // Seed Blog Tags
+  console.log("Memulai seed tag blog...");
+  const uniqueTags = getAllUniqueTags();
+  for (const tag of uniqueTags) {
+    db.insert(blogTags)
+      .values({
+        id: tag.slug,
+        name: tag.name,
+        slug: tag.slug,
+      })
+      .onConflictDoUpdate({
+        target: blogTags.id,
+        set: {
+          name: tag.name,
+          slug: tag.slug,
+        },
+      })
+      .run();
+  }
+
+  // Seed Blog Articles
+  console.log("Memulai seed artikel blog...");
+  for (const post of BLOG_POSTS_DATA) {
+    const categorySlug = REVERSE_CATEGORY_MAP[post.category] || "tips-gameplay";
+    db.insert(blogArticles)
+      .values({
+        id: post.id,
+        title: post.title,
+        excerpt: post.excerpt,
+        content: post.content,
+        categoryId: categorySlug,
+        category: post.category,
+        authorId: "user-producer-1",
+        authorName: post.author.name,
+        authorAvatar: post.author.avatar,
+        authorRole: post.author.role,
+        authorBadgeColor: post.author.badgeColor,
+        publishedAt: post.publishedAt,
+        readTime: post.readTime,
+        likes: post.likes,
+        commentsCount: post.commentsCount,
+        views: post.views,
+        isFeatured: post.isFeatured ? 1 : 0,
+        coverImageBg: post.coverImageBg,
+        tags: JSON.stringify(post.tags),
+      })
+      .onConflictDoUpdate({
+        target: blogArticles.id,
+        set: {
+          title: post.title,
+          excerpt: post.excerpt,
+          content: post.content,
+          categoryId: categorySlug,
+          category: post.category,
+          authorName: post.author.name,
+          authorAvatar: post.author.avatar,
+          authorRole: post.author.role,
+          authorBadgeColor: post.author.badgeColor,
+          publishedAt: post.publishedAt,
+          readTime: post.readTime,
+          likes: post.likes,
+          commentsCount: post.commentsCount,
+          views: post.views,
+          isFeatured: post.isFeatured ? 1 : 0,
+          coverImageBg: post.coverImageBg,
+          tags: JSON.stringify(post.tags),
+        },
+      })
+      .run();
+
+    // Seed junction tags
+    for (const tagName of post.tags) {
+      const tagSlug = slugifyTag(tagName);
+      const junctionId = `at-${post.id}-${tagSlug}`;
+      db.insert(blogArticleTags)
+        .values({
+          id: junctionId,
+          articleId: post.id,
+          tagId: tagSlug,
+        })
+        .onConflictDoUpdate({
+          target: blogArticleTags.id,
+          set: {
+            articleId: post.id,
+            tagId: tagSlug,
+          },
+        })
+        .run();
+    }
+  }
+
+  // Seed Sample Comments
+  console.log("Memulai seed komentar blog...");
+  const sampleComments = [
+    {
+      id: "comment-1",
+      articleId: "tips-all-perfect-lagu-level-27-expert",
+      userId: "user-producer-1",
+      authorName: "Kasumi Fan #1",
+      authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+      authorBadge: "Top Contributor",
+      parentId: null,
+      content: "Tips kalibrasi timing offset sangat membantu! Setelah setel ke +3 di Bluetooth TWS akhirnya tembus Full Combo lagu Teardrops!",
+      likes: 12,
+    },
+    {
+      id: "comment-2",
+      articleId: "tips-all-perfect-lagu-level-27-expert",
+      userId: "user-admin-1",
+      authorName: "CiRCLE Staff Admin",
+      authorAvatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
+      authorBadge: "Staff",
+      parentId: "comment-1",
+      content: "Selamat atas FC Teardrops! Pastikan juga layar bersih dari minyak jari agar flick ganda tidak miss ya.",
+      likes: 7,
+    },
+    {
+      id: "comment-3",
+      articleId: "analisis-meta-tim-pure-poppin-party",
+      userId: "user-producer-1",
+      authorName: "Yukina Vocalist",
+      authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
+      authorBadge: "Expert",
+      parentId: null,
+      content: "Kira-kira kalau Kasumi diganti kartu Kirafes apakah sinergi stat Pure masih optimal untuk event Marathon?",
+      likes: 8,
+    },
+  ];
+
+  for (const c of sampleComments) {
+    db.insert(blogComments)
+      .values(c)
+      .onConflictDoUpdate({
+        target: blogComments.id,
+        set: {
+          content: c.content,
+          likes: c.likes,
+        },
+      })
+      .run();
+  }
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
   const bandCount = db.select().from(bands).all().length;
@@ -543,6 +751,10 @@ export async function seedGuides() {
   const savedTeamCount = db.select().from(teams).all().length;
   const gachaCount = db.select().from(gachas).all().length;
   const reminderCount = db.select().from(gachaReminders).all().length;
+  const blogCatCount = db.select().from(blogCategories).all().length;
+  const blogTagCount = db.select().from(blogTags).all().length;
+  const blogPostCount = db.select().from(blogArticles).all().length;
+  const blogCommentCount = db.select().from(blogComments).all().length;
 
   console.log(
     `✓ Seed database berhasil!\n` +
@@ -554,7 +766,11 @@ export async function seedGuides() {
       `  • Rekomendasi Tim: ${recTeamCount}\n` +
       `  • Tim Tersimpan: ${savedTeamCount}\n` +
       `  • Banner Gacha: ${gachaCount}\n` +
-      `  • Pengingat Gacha: ${reminderCount}`
+      `  • Pengingat Gacha: ${reminderCount}\n` +
+      `  • Kategori Blog: ${blogCatCount}\n` +
+      `  • Tag Blog: ${blogTagCount}\n` +
+      `  • Artikel Blog: ${blogPostCount}\n` +
+      `  • Komentar Blog: ${blogCommentCount}`
   );
 }
 

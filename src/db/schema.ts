@@ -181,6 +181,72 @@ export const gachaReminders = sqliteTable("gacha_reminders", {
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+export const blogCategories = sqliteTable("blog_categories", {
+  id: text("id").primaryKey(), // slug e.g. 'tips-gameplay'
+  name: text("name").notNull(), // 'Tips & Gameplay'
+  description: text("description"),
+  icon: text("icon"),
+  color: text("color"),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const blogTags = sqliteTable("blog_tags", {
+  id: text("id").primaryKey(), // slug e.g. 'expert'
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const blogArticles = sqliteTable("blog_articles", {
+  id: text("id").primaryKey(), // slug e.g. 'tips-all-perfect-lagu-level-27-expert'
+  title: text("title").notNull(),
+  excerpt: text("excerpt").notNull(),
+  content: text("content").notNull(),
+  categoryId: text("category_id").references(() => blogCategories.id, { onDelete: "set null" }),
+  category: text("category").notNull(), // 'Tips & Gameplay'
+  authorId: text("author_id").references(() => users.id, { onDelete: "set null" }),
+  authorName: text("author_name").notNull(),
+  authorAvatar: text("author_avatar"),
+  authorRole: text("author_role"),
+  authorBadgeColor: text("author_badge_color"),
+  publishedAt: text("published_at").notNull(),
+  readTime: text("read_time").notNull(),
+  likes: integer("likes").notNull().default(0),
+  commentsCount: integer("comments_count").notNull().default(0),
+  views: integer("views").notNull().default(0),
+  isFeatured: integer("is_featured").notNull().default(0), // 0 or 1
+  coverImageBg: text("cover_image_bg").notNull(),
+  tags: text("tags"), // JSON array
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const blogArticleTags = sqliteTable("blog_article_tags", {
+  id: text("id").primaryKey(),
+  articleId: text("article_id")
+    .notNull()
+    .references(() => blogArticles.id, { onDelete: "cascade" }),
+  tagId: text("tag_id")
+    .notNull()
+    .references(() => blogTags.id, { onDelete: "cascade" }),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const blogComments = sqliteTable("blog_comments", {
+  id: text("id").primaryKey(),
+  articleId: text("article_id")
+    .notNull()
+    .references(() => blogArticles.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+  authorName: text("author_name").notNull(),
+  authorAvatar: text("author_avatar"),
+  authorBadge: text("author_badge"),
+  parentId: text("parent_id"), // for threaded replies
+  content: text("content").notNull(),
+  likes: integer("likes").notNull().default(0),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
 export type Guide = typeof guides.$inferSelect;
 export type NewGuide = typeof guides.$inferInsert;
 export type GameEvent = typeof events.$inferSelect;
@@ -205,3 +271,13 @@ export type GachaRecord = typeof gachas.$inferSelect;
 export type NewGachaRecord = typeof gachas.$inferInsert;
 export type GachaReminderRecord = typeof gachaReminders.$inferSelect;
 export type NewGachaReminderRecord = typeof gachaReminders.$inferInsert;
+export type BlogCategoryRecord = typeof blogCategories.$inferSelect;
+export type NewBlogCategoryRecord = typeof blogCategories.$inferInsert;
+export type BlogTagRecord = typeof blogTags.$inferSelect;
+export type NewBlogTagRecord = typeof blogTags.$inferInsert;
+export type BlogArticleRecord = typeof blogArticles.$inferSelect;
+export type NewBlogArticleRecord = typeof blogArticles.$inferInsert;
+export type BlogArticleTagRecord = typeof blogArticleTags.$inferSelect;
+export type NewBlogArticleTagRecord = typeof blogArticleTags.$inferInsert;
+export type BlogCommentRecord = typeof blogComments.$inferSelect;
+export type NewBlogCommentRecord = typeof blogComments.$inferInsert;
