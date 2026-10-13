@@ -32,8 +32,10 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { GACHA_BANNERS_DATA, GachaBanner, FeaturedGachaCharacter } from "@/data/gachaData";
+import { GachaEventCalendar } from "@/components/GachaEventCalendar";
 
 export default function GachaPage() {
+  const [viewMode, setViewMode] = useState<"banners" | "calendar">("banners");
   const [statusFilter, setStatusFilter] = useState<string>("Aktif");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -263,11 +265,63 @@ export default function GachaPage() {
           </div>
         )}
 
-        {/* Filter Controls Bar */}
-        <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            {/* Status Tabs */}
-            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-muted/50 border border-border/60 overflow-x-auto text-xs">
+        {/* View Mode Switcher */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-muted/60 border border-border">
+            <button
+              onClick={() => setViewMode("banners")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                viewMode === "banners"
+                  ? "bg-pink-600 text-white shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>Daftar Banner Gacha</span>
+            </button>
+            <button
+              onClick={() => setViewMode("calendar")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                viewMode === "calendar"
+                  ? "bg-pink-600 text-white shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              }`}
+            >
+              <Calendar className="h-4 w-4" />
+              <span>Kalender Event & Gacha Berjalan</span>
+            </button>
+          </div>
+
+          {viewMode === "banners" ? (
+            <button
+              onClick={() => setViewMode("calendar")}
+              className="text-xs font-semibold text-pink-600 hover:text-pink-700 flex items-center gap-1"
+            >
+              <Calendar className="h-3.5 w-3.5" />
+              <span>Buka Tampilan Kalender Jadwal Event</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          ) : (
+            <button
+              onClick={() => setViewMode("banners")}
+              className="text-xs font-semibold text-pink-600 hover:text-pink-700 flex items-center gap-1"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Kembali ke Daftar Banner Kartu</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+
+        {viewMode === "calendar" ? (
+          <GachaEventCalendar />
+        ) : (
+          <>
+            {/* Filter Controls Bar */}
+            <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                {/* Status Tabs */}
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-muted/50 border border-border/60 overflow-x-auto text-xs">
               {["Aktif", "Akan Datang", "Selesai", "all"].map((status) => (
                 <button
                   key={status}
@@ -565,6 +619,8 @@ export default function GachaPage() {
             </div>
           )}
         </section>
+      </>
+    )}
 
         {/* Section: Panduan Pity System & Gacha Seal */}
         <section id="panduan-pity" className="rounded-3xl border border-border bg-card p-6 sm:p-8 space-y-6 shadow-xs">
