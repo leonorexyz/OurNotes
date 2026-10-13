@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "ca1746335fd5f2ddffc40e6b4236a6440f1c18f1",
+  "generatedForCommit": "2308cb7235f3b79eba8eef4742b376ef9a825166",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -69,10 +69,28 @@
       "size": 1246
     },
     {
+      "path": "src/app/blog/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2244
+    },
+    {
+      "path": "src/app/gacha/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2843
+    },
+    {
       "path": "src/app/globals.css",
       "reason": "needs_summary",
       "language": "css",
       "size": 23
+    },
+    {
+      "path": "src/app/karakter/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 4577
     },
     {
       "path": "src/app/layout.tsx",
@@ -82,9 +100,9 @@
     },
     {
       "path": "src/app/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 16409
+      "size": 16617
     },
     {
       "path": "src/app/panduan/page.tsx",
@@ -93,8 +111,14 @@
       "size": 98
     },
     {
+      "path": "src/app/tim/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 3004
+    },
+    {
       "path": "src/components/FaqAccordion.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 11562
     },
@@ -103,6 +127,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 3364
+    },
+    {
+      "path": "src/components/GameGlossary.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 8104
     },
     {
       "path": "src/components/GuideCard.tsx",
@@ -142,7 +172,7 @@
     },
     {
       "path": "src/data/guidesData.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16405
     },

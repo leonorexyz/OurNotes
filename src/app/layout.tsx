@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Bang Dream! Our Notes — Pusat Panduan Komunitas Lengkap",
@@ -8,8 +10,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="id" className="scroll-smooth">
+      <body className="min-h-screen pb-16 md:pb-0">
+        {children}
+        <MobileBottomNav />
+        <ScrollToTop />
+      </body>
     </html>
   );
 }
