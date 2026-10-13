@@ -24,6 +24,8 @@ import {
   Flame,
   HelpCircle,
   ExternalLink,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import {
   SEARCH_CATEGORIES,
@@ -36,6 +38,7 @@ import {
 import { BlogPost } from "@/data/blogData";
 import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
 import { SearchResultCard } from "@/components/SearchResultCard";
+import { SearchResultItemLink } from "@/components/SearchResultItemLink";
 import { SearchEmptyState } from "@/components/SearchEmptyState";
 import { SearchCategoryFilter } from "@/components/SearchCategoryFilter";
 
@@ -56,6 +59,7 @@ function SearchContent() {
 
   const [query, setQuery] = useState(initialQuery);
   const [selectedCategory, setSelectedCategory] = useState<SearchCategory>(initialCategory);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [userCustomArticles, setUserCustomArticles] = useState<BlogPost[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -280,29 +284,68 @@ function SearchContent() {
                 </span>
               )}
             </div>
-            {query && (
-              <button
-                type="button"
-                onClick={() => {
-                  handleQueryChange("");
-                  setSelectedCategory("all");
-                }}
-                className="text-pink-600 hover:underline font-semibold"
-              >
-                Reset Filter
-              </button>
-            )}
+            
+            <div className="flex items-center gap-3">
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleQueryChange("");
+                    setSelectedCategory("all");
+                  }}
+                  className="text-pink-600 hover:underline font-semibold"
+                >
+                  Reset Filter
+                </button>
+              )}
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center p-1 rounded-xl bg-card border border-border">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("grid")}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    viewMode === "grid"
+                      ? "bg-pink-600 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                  title="Tampilan Kartu (Grid)"
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("list")}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    viewMode === "list"
+                      ? "bg-pink-600 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                  title="Tampilan Ringkas (List)"
+                >
+                  <List className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Search Results Grid / List */}
         <section className="space-y-4">
           {searchResults.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {searchResults.map((item) => (
-                <SearchResultCard key={item.id} item={item} searchQuery={query} />
-              ))}
-            </div>
+            viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {searchResults.map((item) => (
+                  <SearchResultCard key={item.id} item={item} searchQuery={query} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {searchResults.map((item) => (
+                  <SearchResultItemLink key={item.id} item={item} searchQuery={query} />
+                ))}
+              </div>
+            )
           ) : (
             <SearchEmptyState
               query={query}
