@@ -637,10 +637,19 @@ function KarakterContent() {
               ))}
             </div>
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+              {comparedChars.length === 2 && (
+                <Link
+                  href={`/karakter/bandingkan?c1=${comparedChars[0].id}&c2=${comparedChars[1].id}`}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-pink-600 text-white text-xs font-bold hover:bg-pink-700 transition-colors shadow-xs"
+                >
+                  <Scale className="h-3.5 w-3.5" />
+                  <span>Buka Analisis Komparasi Lengkap</span>
+                </Link>
+              )}
               <button
                 onClick={() => setShowCompareModal(false)}
-                className="px-5 py-2.5 rounded-xl bg-foreground text-background text-xs font-bold hover:opacity-90 transition-opacity"
+                className="px-5 py-2.5 rounded-xl bg-foreground text-background text-xs font-bold hover:opacity-90 transition-opacity sm:ml-auto"
               >
                 Tutup
               </button>

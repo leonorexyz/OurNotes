@@ -171,10 +171,11 @@ export function CharacterDetailActions({ character }: CharacterDetailActionsProp
 
             <div className="flex justify-between items-center pt-2">
               <Link
-                href={`/karakter?compare=${character.id}&with=${targetCharId}`}
-                className="text-xs text-pink-600 hover:underline font-semibold"
+                href={`/karakter/bandingkan?c1=${character.id}&c2=${targetCharId}`}
+                className="text-xs text-pink-600 hover:text-pink-700 font-bold flex items-center gap-1"
               >
-                Buka di Mode Bandingkan Penuh
+                <span>Buka di Halaman Bandingkan Penuh</span>
+                <Scale className="h-3.5 w-3.5" />
               </Link>
               <button
                 onClick={() => setShowModal(false)}
