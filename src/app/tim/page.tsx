@@ -39,6 +39,10 @@ import {
   FileText,
   Save,
   Award,
+  Bookmark,
+  BookmarkCheck,
+  Copy,
+  Check,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
 import { RECOMMENDED_TEAMS, RecommendedTeam } from "@/data/recommendedTeamsData";
@@ -49,12 +53,46 @@ interface TeamSlot {
   character: Character | null;
 }
 
+export interface SavedUserTeam {
+  id: string;
+  name: string;
+  category: string;
+  note: string;
+  memberIds: string[];
+  centerMemberId: string;
+  effectiveBP: number;
+  totalHP: number;
+  synergyPercent: number;
+  createdAt: string;
+}
+
 const DEFAULT_SLOTS: TeamSlot[] = [
   { slotNumber: 1, isCenter: false, character: null },
   { slotNumber: 2, isCenter: false, character: null },
   { slotNumber: 3, isCenter: true, character: null }, // Center slot
   { slotNumber: 4, isCenter: false, character: null },
   { slotNumber: 5, isCenter: false, character: null },
+];
+
+const INITIAL_SAVED_TEAMS: SavedUserTeam[] = [
+  {
+    id: "saved-poppin-kirakira",
+    name: "Poppin'Party All Stars Pure",
+    category: "Mono-Band",
+    note: "Formasi andalan untuk event Pure. Kasumi Center memberikan bonus 110% Score Fever.",
+    memberIds: [
+      "char-ran-mitake",
+      "char-saya-yamabuki",
+      "char-kasumi-toyama",
+      "char-arisa-ichigaya",
+      "char-yukina-minato",
+    ],
+    centerMemberId: "char-kasumi-toyama",
+    effectiveBP: 168480,
+    totalHP: 5000,
+    synergyPercent: 20,
+    createdAt: "12 Okt 2026",
+  },
 ];
 
 function TimBuilderContent() {
@@ -86,6 +124,31 @@ function TimBuilderContent() {
   const [pickerRole, setPickerRole] = useState<string>("all");
   const [pickerRarity, setPickerRarity] = useState<string>("all");
   const [pickerSort, setPickerSort] = useState<string>("bp-desc");
+
+  // User Saved Teams states
+  const [savedTeams, setSavedTeams] = useState<SavedUserTeam[]>(INITIAL_SAVED_TEAMS);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [saveTeamName, setSaveTeamName] = useState("");
+  const [saveTeamCategory, setSaveTeamCategory] = useState("Score Attack");
+  const [saveTeamNote, setSaveTeamNote] = useState("");
+  const [copyFeedbackId, setCopyFeedbackId] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("our_notes_saved_user_teams");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setSavedTeams(parsed);
+          }
+        } catch {
+          // fallback
+        }
+      }
+    }
+  }, []);
 
   // Recommended team states
   const [selectedDetailTeam, setSelectedDetailTeam] = useState<RecommendedTeam | null>(null);
@@ -399,6 +462,86 @@ function TimBuilderContent() {
     };
   }, [activeCharacters, maxBandCount, dominantBand, maxAttrCount, dominantAttr, centerChar, rawStats, effectiveBP]);
 
+  // Saved Team Actions
+  const saveCurrentTeam = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!saveTeamName.trim()) return;
+
+    const newTeam: SavedUserTeam = {
+      id: "team-" + Date.now(),
+      name: saveTeamName.trim(),
+      category: saveTeamCategory,
+      note: saveTeamNote.trim(),
+      memberIds: slots.map((s) => s.character?.id || ""),
+      centerMemberId: centerChar?.id || "",
+      effectiveBP,
+      totalHP: rawStats.hp,
+      synergyPercent: bandBonusPercent + attrBonusPercent,
+      createdAt: new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+    };
+
+    const updated = [newTeam, ...savedTeams];
+    setSavedTeams(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("our_notes_saved_user_teams", JSON.stringify(updated));
+    }
+
+    setIsSaveModalOpen(false);
+    setSaveTeamName("");
+    setSaveTeamNote("");
+    setActionNotice(`Formasi "${newTeam.name}" berhasil disimpan!`);
+    setTimeout(() => setActionNotice(null), 3000);
+  };
+
+  const deleteSavedTeam = (teamId: string) => {
+    const updated = savedTeams.filter((t) => t.id !== teamId);
+    setSavedTeams(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("our_notes_saved_user_teams", JSON.stringify(updated));
+    }
+    setActionNotice("Formasi tim dihapus dari daftar tersimpan.");
+    setTimeout(() => setActionNotice(null), 3000);
+  };
+
+  const loadSavedTeamToSimulator = (team: SavedUserTeam) => {
+    const newSlots = [...DEFAULT_SLOTS];
+    team.memberIds.forEach((charId, idx) => {
+      const char = CHARACTERS_DATA.find((c) => c.id === charId) || null;
+      newSlots[idx] = {
+        slotNumber: idx + 1,
+        isCenter: charId === team.centerMemberId || (idx === 2 && !team.memberIds.includes(team.centerMemberId)),
+        character: char,
+      };
+    });
+    setSlots(newSlots);
+    setActionNotice(`Formasi "${team.name}" berhasil dimuat ke simulator!`);
+    setTimeout(() => setActionNotice(null), 3000);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 380, behavior: "smooth" });
+    }
+  };
+
+  const copyTeamSummary = (team: SavedUserTeam) => {
+    const memberNames = team.memberIds
+      .map((id, idx) => {
+        const char = CHARACTERS_DATA.find((c) => c.id === id);
+        return `${idx + 1}. ${char ? char.name : "Kosong"}${id === team.centerMemberId ? " (★ CENTER)" : ""}`;
+      })
+      .join("\n");
+
+    const text = `🎵 Formasi Bang Dream! Our Notes: ${team.name}\nKategori: ${team.category}\nTotal BP: ${team.effectiveBP.toLocaleString()}\nSinergi: +${team.synergyPercent}%\n\nPersonel:\n${memberNames}\n\nCatatan: ${team.note || "-"}`;
+
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopyFeedbackId(team.id);
+      setTimeout(() => setCopyFeedbackId(null), 2000);
+    }
+  };
+
   // Auto Presets
   const applyPreset = (presetName: string) => {
     const newSlots = [...DEFAULT_SLOTS];
@@ -514,7 +657,23 @@ function TimBuilderContent() {
         </div>
       </div>
 
-      {/* Team Preset Quick Controls */}
+      {/* Action Notice Toast */}
+      {actionNotice && (
+        <div className="rounded-2xl border border-pink-200 dark:border-pink-900 bg-pink-50/90 dark:bg-pink-950/70 p-3.5 text-xs text-pink-700 dark:text-pink-300 font-bold flex items-center justify-between shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-pink-600" />
+            <span>{actionNotice}</span>
+          </div>
+          <button
+            onClick={() => setActionNotice(null)}
+            className="p-1 hover:bg-pink-100 dark:hover:bg-pink-900 rounded-lg"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Team Preset & Storage Quick Controls */}
       <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-bold text-muted-foreground flex items-center gap-1.5">
@@ -547,13 +706,32 @@ function TimBuilderContent() {
           </button>
         </div>
 
-        <button
-          onClick={clearAllSlots}
-          className="inline-flex items-center gap-1 text-muted-foreground hover:text-red-600 font-semibold transition-colors ml-auto sm:ml-0"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          <span>Kosongkan Semua Slot</span>
-        </button>
+        <div className="flex items-center gap-2 ml-auto sm:ml-0 flex-wrap">
+          <button
+            onClick={() => setIsSaveModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold transition-colors shadow-2xs"
+          >
+            <Bookmark className="h-3.5 w-3.5" />
+            <span>Simpan Formasi Ini</span>
+          </button>
+
+          <a
+            href="#tim-tersimpan"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-muted/80 hover:bg-muted font-bold text-foreground transition-colors"
+          >
+            <BookmarkCheck className="h-3.5 w-3.5 text-pink-600" />
+            <span>Tim Tersimpan ({savedTeams.length})</span>
+          </a>
+
+          <button
+            onClick={clearAllSlots}
+            className="inline-flex items-center gap-1 text-muted-foreground hover:text-red-600 font-semibold transition-colors px-2 py-1.5 rounded-xl"
+            title="Kosongkan Semua Slot"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Reset</span>
+          </button>
+        </div>
       </div>
 
       {/* 5-Slot Interactive Stage */}
@@ -1056,6 +1234,171 @@ function TimBuilderContent() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Daftar Formasi Tim Tersimpan Pengguna */}
+      <section id="tim-tersimpan" className="space-y-6 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-2">
+              <Bookmark className="h-6 w-6 text-pink-600" />
+              <span>Daftar Formasi Tim Tersimpan Saya</span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300">
+                {savedTeams.length} Formasi
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Koleksi racikan tim yang Anda simpan di browser untuk rotasi cepat dan uji coba komposisi.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setIsSaveModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors shadow-xs"
+          >
+            <BookmarkCheck className="h-4 w-4" />
+            <span>+ Simpan Formasi Saat Ini</span>
+          </button>
+        </div>
+
+        {savedTeams.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-border p-12 text-center space-y-3 bg-card/50">
+            <Bookmark className="h-10 w-10 text-muted-foreground/40 mx-auto" />
+            <h3 className="font-bold text-sm text-foreground">Belum Ada Formasi Tersimpan</h3>
+            <p className="text-xs text-muted-foreground max-w-md mx-auto">
+              Susun formasi 5 karakter impianmu di atas, lalu klik tombol &quot;Simpan Formasi Saat Ini&quot; untuk menyimpannya ke koleksi pribadimu.
+            </p>
+            <button
+              onClick={() => setIsSaveModalOpen(true)}
+              className="px-4 py-2 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 font-bold text-xs hover:bg-pink-200"
+            >
+              Simpan Formasi Sekarang
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {savedTeams.map((team) => (
+              <div
+                key={team.id}
+                className="rounded-3xl border border-border bg-card p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 group"
+              >
+                <div className="space-y-3">
+                  {/* Card Header */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
+                        {team.category}
+                      </span>
+                      <h3 className="font-black text-sm sm:text-base text-foreground mt-1 group-hover:text-pink-600 transition-colors">
+                        {team.name}
+                      </h3>
+                      <span className="text-[10px] text-muted-foreground">
+                        Disimpan: {team.createdAt}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => deleteSavedTeam(team.id)}
+                      className="text-muted-foreground hover:text-red-600 p-1 rounded-lg transition-colors"
+                      title="Hapus Formasi Ini"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* 5-Member Roster Preview */}
+                  <div className="p-3 rounded-2xl bg-muted/30 border border-border/60">
+                    <div className="text-[10px] font-semibold text-muted-foreground mb-2 flex items-center justify-between">
+                      <span>Susunan Personel (5 Slot):</span>
+                      <span className="text-pink-600 font-bold">★ = Center</span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {team.memberIds.map((charId, idx) => {
+                        const char = CHARACTERS_DATA.find((c) => c.id === charId);
+                        const isCenter = charId === team.centerMemberId;
+
+                        return (
+                          <div
+                            key={idx}
+                            className="flex flex-col items-center text-center space-y-1"
+                            title={char ? `${char.name} (${char.bandName})` : "Slot Kosong"}
+                          >
+                            <div
+                              className={`h-9 w-9 rounded-xl flex items-center justify-center font-bold text-xs relative ${
+                                char
+                                  ? `bg-gradient-to-tr ${char.avatarBg} text-white shadow-2xs`
+                                  : "bg-muted text-muted-foreground border border-dashed border-border"
+                              } ${isCenter ? "ring-2 ring-pink-500" : ""}`}
+                            >
+                              {isCenter && (
+                                <Crown className="h-3 w-3 text-amber-300 absolute -top-1.5 -right-1" />
+                              )}
+                              {char ? char.name.charAt(0) : "+"}
+                            </div>
+                            <span className="text-[9px] font-medium text-foreground truncate w-full">
+                              {char ? char.name.split(" ")[0] : "Kosong"}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Team Stats Summary */}
+                  <div className="grid grid-cols-3 gap-2 text-center text-xs bg-muted/20 p-2.5 rounded-2xl font-mono">
+                    <div>
+                      <span className="text-[9px] text-muted-foreground block font-sans">BP Efektif</span>
+                      <strong className="text-pink-600 font-bold">{team.effectiveBP.toLocaleString()}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-muted-foreground block font-sans">Bonus Sinergi</span>
+                      <strong className="text-emerald-600 font-bold">+{team.synergyPercent}%</strong>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-muted-foreground block font-sans">Total Life</span>
+                      <strong className="text-foreground font-bold">{team.totalHP} HP</strong>
+                    </div>
+                  </div>
+
+                  {/* Team Note (if any) */}
+                  {team.note && (
+                    <p className="text-[11px] text-muted-foreground line-clamp-2 bg-muted/20 p-2 rounded-xl italic">
+                      &quot;{team.note}&quot;
+                    </p>
+                  )}
+                </div>
+
+                {/* Card Actions */}
+                <div className="pt-3 border-t border-border flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => copyTeamSummary(team)}
+                    className="py-2 px-3 rounded-xl border border-border hover:bg-muted text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                    title="Salin Ringkasan Formasi"
+                  >
+                    {copyFeedbackId === team.id ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                        <span className="text-emerald-600 text-[11px]">Tersalin!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span className="text-[11px]">Salin</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => loadSavedTeamToSimulator(team)}
+                    className="flex-1 py-2 px-3 rounded-xl bg-pink-50 dark:bg-pink-950/60 hover:bg-pink-100 dark:hover:bg-pink-900/60 text-pink-700 dark:text-pink-300 font-bold text-xs transition-colors text-center"
+                  >
+                    Muat ke Simulator
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Recommended Teams Catalog Section */}
@@ -1693,6 +2036,107 @@ function TimBuilderContent() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Dialog: Simpan Formasi Tim */}
+      {isSaveModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="w-full max-w-lg overflow-hidden rounded-3xl bg-card border border-border shadow-2xl animate-in zoom-in-95">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-border flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Bookmark className="h-5 w-5 text-pink-600" />
+                <h3 className="font-black text-base sm:text-lg text-foreground">
+                  Simpan Formasi Tim Saat Ini
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsSaveModalOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={saveCurrentTeam} className="p-5 space-y-4 text-xs">
+              {/* Form Input: Nama Tim */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-foreground block">
+                  Nama Formasi Tim <span className="text-pink-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={saveTeamName}
+                  onChange={(e) => setSaveTeamName(e.target.value)}
+                  placeholder="Contoh: Tim Pure PoPiPa Event Tier 1000"
+                  className="w-full rounded-xl border border-input bg-muted/20 px-3.5 py-2.5 text-xs sm:text-sm focus:border-pink-500 focus:outline-none"
+                />
+              </div>
+
+              {/* Form Input: Kategori */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-foreground block">Kategori / Tag</label>
+                <select
+                  value={saveTeamCategory}
+                  onChange={(e) => setSaveTeamCategory(e.target.value)}
+                  className="w-full rounded-xl border border-input bg-card px-3.5 py-2 text-xs"
+                >
+                  <option value="Score Attack">Score Attack (High Score Multi-Live)</option>
+                  <option value="Event Grind">Event Grind (Point Farming)</option>
+                  <option value="Survival Live">Survival Live (Healer / Full Combo Safe)</option>
+                  <option value="Mono-Band">Mono-Band (5 Personel Satu Band)</option>
+                  <option value="Eksperimen">Eksperimen / Racikan Bebas</option>
+                </select>
+              </div>
+
+              {/* Form Input: Catatan */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-foreground block">Catatan / Strategi Formasi (Opsional)</label>
+                <textarea
+                  value={saveTeamNote}
+                  onChange={(e) => setSaveTeamNote(e.target.value)}
+                  placeholder="Contoh: Fokus lagu difficulty 26 ke atas, butuh fever 100%..."
+                  className="w-full h-20 rounded-xl border border-input bg-muted/20 p-3 text-xs focus:border-pink-500 focus:outline-none resize-none"
+                />
+              </div>
+
+              {/* Snapshot Preview */}
+              <div className="p-3.5 rounded-2xl bg-muted/30 border border-border/70 space-y-2">
+                <span className="font-bold text-muted-foreground block text-[11px]">
+                  Ringkasan Yang Disimpan:
+                </span>
+                <div className="flex items-center justify-between font-mono">
+                  <span>BP Efektif: <strong className="text-pink-600 font-bold">{effectiveBP.toLocaleString()}</strong></span>
+                  <span>Sinergi: <strong className="text-emerald-600 font-bold">+{(bandBonusPercent + attrBonusPercent)}%</strong></span>
+                  <span>Life: <strong>{rawStats.hp} HP</strong></span>
+                </div>
+                <div className="text-[11px] text-muted-foreground">
+                  Center Leader: <strong>{centerChar ? centerChar.name : "Belum ditentukan"}</strong>
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="pt-2 border-t border-border flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSaveModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-bold text-xs transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={!saveTeamName.trim()}
+                  className="px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors disabled:opacity-50"
+                >
+                  Simpan Formasi
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
