@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "cfc7526516df9acdf112cee7aea9df7ac73c0937",
+  "generatedForCommit": "7fb971552d3d1912c111ba724a82a820b3cd86f2",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -22,7 +22,7 @@
     },
     {
       "path": ".gitignore",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": null,
       "size": 519
     },
@@ -40,25 +40,25 @@
     },
     {
       "path": "drizzle/0000_curly_shen.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 302
     },
     {
       "path": "drizzle/meta/0000_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 2394
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 200
     },
     {
       "path": "drizzle.config.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 207
     },
@@ -76,13 +76,13 @@
     },
     {
       "path": "package-lock.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 287037
     },
     {
       "path": "package.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 820
     },
@@ -91,6 +91,18 @@
       "reason": "needs_summary",
       "language": "markdown",
       "size": 1246
+    },
+    {
+      "path": "src/app/api/guides/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2945
+    },
+    {
+      "path": "src/app/api/guides/[id]/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 905
     },
     {
       "path": "src/app/blog/page.tsx",
@@ -214,25 +226,25 @@
     },
     {
       "path": "src/db/index.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 569
     },
     {
       "path": "src/db/migrate.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 526
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 757
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2134
     },
