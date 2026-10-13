@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "431b4b09642a124e04ca45751d3a21e66fc0932d",
+  "generatedForCommit": "8f14be9c116e2e94e6d8b30d087bf2d2d7b43928",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -286,33 +286,39 @@
     },
     {
       "path": "src/app/blog/kategori/[slug]/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 8830
     },
     {
       "path": "src/app/blog/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 29687
     },
     {
       "path": "src/app/blog/tag/[slug]/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 8346
     },
     {
       "path": "src/app/blog/tulis/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 24019
     },
     {
       "path": "src/app/blog/[id]/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 11902
+    },
+    {
+      "path": "src/app/cari/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 19124
     },
     {
       "path": "src/app/gacha/page.tsx",
@@ -375,6 +381,12 @@
       "size": 98
     },
     {
+      "path": "src/app/search/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 115
+    },
+    {
       "path": "src/app/tim/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -394,7 +406,7 @@
     },
     {
       "path": "src/components/BlogEditClient.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 21560
     },
@@ -466,7 +478,7 @@
     },
     {
       "path": "src/components/MobileBottomNav.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1955
     },
@@ -474,7 +486,7 @@
       "path": "src/components/Navbar.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 5264
+      "size": 5497
     },
     {
       "path": "src/components/PanduanEventSection.tsx",
@@ -535,6 +547,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 5843
+    },
+    {
+      "path": "src/data/searchData.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 9494
     },
     {
       "path": "src/db/index.ts",

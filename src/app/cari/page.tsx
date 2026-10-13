@@ -34,6 +34,7 @@ import {
   buildSearchIndex,
 } from "@/data/searchData";
 import { BlogPost } from "@/data/blogData";
+import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
 
 const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
   Sparkles,
@@ -186,44 +187,13 @@ function SearchContent() {
 
         {/* Search Bar Input Container */}
         <section className="max-w-3xl mx-auto space-y-4">
-          <div className="relative flex items-center shadow-lg rounded-2xl bg-card border-2 border-pink-500/30 focus-within:border-pink-500 focus-within:ring-4 focus-within:ring-pink-500/10 transition-all">
-            <div className="pl-4 text-muted-foreground">
-              <Search className="h-5 w-5 text-pink-600 dark:text-pink-400" />
-            </div>
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => handleQueryChange(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  executeSearch(query);
-                }
-              }}
-              placeholder="Ketik nama karakter, band, lagu, atau tips (tekan '/' untuk fokus)..."
-              className="w-full bg-transparent px-4 py-4 text-sm sm:text-base font-medium placeholder:text-muted-foreground/60 focus:outline-none"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => {
-                  handleQueryChange("");
-                  inputRef.current?.focus();
-                }}
-                className="p-2 mr-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-                title="Hapus pencarian"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => executeSearch(query)}
-              className="hidden sm:flex items-center gap-1.5 mr-2 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs shadow-md transition-colors"
-            >
-              <span>Cari</span>
-            </button>
-          </div>
+          <RealtimeSearchInput
+            value={query}
+            onChange={handleQueryChange}
+            onSubmitSearch={executeSearch}
+            placeholder="Ketik nama karakter, band, lagu, atau tips (tekan '/' untuk fokus)..."
+            inlineDropdown={true}
+          />
 
           {/* Quick Popular Searches / Trending Tags */}
           <div className="flex items-center gap-2 flex-wrap text-xs">

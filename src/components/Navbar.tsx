@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { SearchCommandModal } from "@/components/SearchCommandModal";
 import {
   BookOpen,
   Users,
@@ -17,7 +18,23 @@ import {
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = (document.activeElement as HTMLElement)?.tagName;
+      if (
+        (e.key === "/" || (e.ctrlKey && e.key === "k")) &&
+        !["INPUT", "TEXTAREA"].includes(activeTag)
+      ) {
+        e.preventDefault();
+        setIsSearchModalOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const isLinkActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -79,24 +96,26 @@ export function Navbar() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/cari"
+          <button
+            type="button"
+            onClick={() => setIsSearchModalOpen(true)}
             className="relative hidden lg:flex items-center w-48 xl:w-56 rounded-full border border-input bg-muted/40 py-1.5 pl-8 pr-3 text-xs text-muted-foreground hover:border-pink-500/50 hover:bg-muted/80 transition-all cursor-pointer"
           >
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <span>Cari di Our Notes...</span>
             <span className="ml-auto text-[10px] font-semibold text-muted-foreground/60 border border-border/80 px-1 rounded">
-              /
+              Ctrl K
             </span>
-          </Link>
+          </button>
 
-          <Link
-            href="/cari"
+          <button
+            type="button"
+            onClick={() => setIsSearchModalOpen(true)}
             className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-input text-muted-foreground hover:text-foreground"
             aria-label="Cari"
           >
             <Search className="h-4 w-4" />
-          </Link>
+          </button>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -107,6 +126,11 @@ export function Navbar() {
           </button>
         </div>
       </div>
+
+      <SearchCommandModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
+      />
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
