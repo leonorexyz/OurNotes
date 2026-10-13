@@ -298,7 +298,9 @@ export function AuthFormClient({ initialMode = "login" }: AuthFormClientProps) {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-semibold">
                 <label className="text-foreground">Kata Sandi</label>
-                <span className="text-pink-500 hover:underline cursor-pointer">Lupa sandi?</span>
+                <Link href="/lupa-password" className="text-pink-500 hover:underline">
+                  Lupa sandi?
+                </Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
