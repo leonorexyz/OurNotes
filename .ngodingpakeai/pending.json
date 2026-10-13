@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "c028c5ba8b6db16ee8c2d2b4e5c71311b6925241",
+  "generatedForCommit": "431b4b09642a124e04ca45751d3a21e66fc0932d",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -286,33 +286,33 @@
     },
     {
       "path": "src/app/blog/kategori/[slug]/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 8740
+      "size": 8830
     },
     {
       "path": "src/app/blog/page.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 29597
+      "size": 29687
     },
     {
       "path": "src/app/blog/tag/[slug]/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 8256
+      "size": 8346
     },
     {
       "path": "src/app/blog/tulis/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 23929
+      "size": 24019
     },
     {
       "path": "src/app/blog/[id]/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 11812
+      "size": 11902
     },
     {
       "path": "src/app/gacha/page.tsx",
@@ -394,9 +394,9 @@
     },
     {
       "path": "src/components/BlogEditClient.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 21470
+      "size": 21560
     },
     {
       "path": "src/components/CharacterCard.tsx",
@@ -466,15 +466,15 @@
     },
     {
       "path": "src/components/MobileBottomNav.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 1898
+      "size": 1955
     },
     {
       "path": "src/components/Navbar.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 5086
+      "size": 5264
     },
     {
       "path": "src/components/PanduanEventSection.tsx",

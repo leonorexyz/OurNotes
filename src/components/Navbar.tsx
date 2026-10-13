@@ -30,6 +30,7 @@ export function Navbar() {
     { href: "/tim", label: "Susun Tim", icon: Layers },
     { href: "/gacha", label: "Jadwal Gacha", icon: Sparkles },
     { href: "/blog", label: "Blog Komunitas", icon: FileText },
+    { href: "/cari", label: "Pencarian", icon: Search },
   ];
 
   return (
@@ -78,22 +79,24 @@ export function Navbar() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="relative hidden lg:block w-48 xl:w-56">
+          <Link
+            href="/cari"
+            className="relative hidden lg:flex items-center w-48 xl:w-56 rounded-full border border-input bg-muted/40 py-1.5 pl-8 pr-3 text-xs text-muted-foreground hover:border-pink-500/50 hover:bg-muted/80 transition-all cursor-pointer"
+          >
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Cari panduan..."
-              readOnly
-              onClick={() => {
-                const el = document.getElementById("search-guide-input");
-                if (el) {
-                  el.focus();
-                  el.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              className="w-full rounded-full border border-input bg-muted/40 py-1.5 pl-8 pr-3 text-xs placeholder:text-muted-foreground focus:outline-none cursor-pointer"
-            />
-          </div>
+            <span>Cari di Our Notes...</span>
+            <span className="ml-auto text-[10px] font-semibold text-muted-foreground/60 border border-border/80 px-1 rounded">
+              /
+            </span>
+          </Link>
+
+          <Link
+            href="/cari"
+            className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-input text-muted-foreground hover:text-foreground"
+            aria-label="Cari"
+          >
+            <Search className="h-4 w-4" />
+          </Link>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
