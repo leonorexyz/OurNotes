@@ -123,14 +123,21 @@ export default function BandListPage() {
                   </div>
                 </div>
 
-                {/* Card Action Link */}
-                <div className="pt-3 border-t border-border/60">
+                {/* Card Action Links */}
+                <div className="pt-3 border-t border-border/60 flex items-center gap-2">
+                  <Link
+                    href={`/band/${band.id}`}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-pink-50 dark:bg-pink-950/40 hover:bg-pink-100 dark:hover:bg-pink-900/50 text-xs font-bold text-pink-700 dark:text-pink-300 transition-colors"
+                  >
+                    <span>Detail & Roster</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                   <Link
                     href={`/karakter?band=${band.id}`}
-                    className="flex items-center justify-between w-full py-2.5 px-4 rounded-xl bg-muted/50 hover:bg-pink-50 dark:hover:bg-pink-950/40 text-xs font-bold text-foreground hover:text-pink-600 transition-colors"
+                    className="py-2.5 px-3 rounded-xl bg-muted/60 hover:bg-muted text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                    title={`Lihat kartu karakter ${band.name}`}
                   >
-                    <span>Lihat Karakter {band.name}</span>
-                    <ArrowRight className="h-4 w-4" />
+                    Katalog
                   </Link>
                 </div>
               </div>
