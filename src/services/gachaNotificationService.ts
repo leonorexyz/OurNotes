@@ -57,7 +57,7 @@ export async function evaluateGachaReminders(options?: {
     conditions.push(eq(gachaReminders.isNotified, 0));
   }
 
-  const rows = db
+  const rows = await db
     .select({
       reminderId: gachaReminders.id,
       userId: gachaReminders.userId,
@@ -218,7 +218,7 @@ export async function dispatchGachaNotifications(options?: {
     if (notif.status === "due") scheduledDueCount++;
 
     // Update reminder record in DB
-    db.update(gachaReminders)
+    await db.update(gachaReminders)
       .set({ isNotified: 1 })
       .where(eq(gachaReminders.id, notif.reminderId))
       .run();
@@ -245,7 +245,7 @@ export async function sendTestNotification(
   reminderId: string,
   customMessage?: string
 ): Promise<GachaNotificationPayload | null> {
-  const row = db
+  const row = await db
     .select({
       reminderId: gachaReminders.id,
       userId: gachaReminders.userId,

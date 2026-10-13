@@ -60,7 +60,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (Object.keys(updates).length > 0) {
-      db.update(users)
+      await db.update(users)
         .set(updates)
         .where(eq(users.id, user.id))
         .run();

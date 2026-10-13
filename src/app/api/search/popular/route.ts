@@ -67,8 +67,8 @@ export async function GET(request: NextRequest) {
     const baseQuery = db.select().from(popularSearches);
 
     let rows = trendingOnly
-      ? baseQuery.where(eq(popularSearches.isTrending, 1)).orderBy(desc(popularSearches.hitCount)).limit(limit).all()
-      : baseQuery.orderBy(desc(popularSearches.hitCount)).limit(limit).all();
+      ? await baseQuery.where(eq(popularSearches.isTrending, 1)).orderBy(desc(popularSearches.hitCount)).limit(limit).all()
+      : await baseQuery.orderBy(desc(popularSearches.hitCount)).limit(limit).all();
 
     const formatted = rows.map((r, idx) => {
       const meta = resolveCategoryForTerm(r.term);
@@ -128,14 +128,14 @@ export async function POST(request: NextRequest) {
     const isTrending = body.isTrending ? 1 : 0;
     const now = new Date().toISOString();
 
-    const existing = db
+    const existing = await db
       .select()
       .from(popularSearches)
       .where(eq(popularSearches.term, termTrimmed))
       .get();
 
     if (existing) {
-      db.update(popularSearches)
+      await db.update(popularSearches)
         .set({
           hitCount: existing.hitCount + 1,
           isTrending: isTrending || existing.isTrending,
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
         .where(eq(popularSearches.id, existing.id))
         .run();
     } else {
-      db.insert(popularSearches)
+      await db.insert(popularSearches)
         .values({
           id,
           term: termTrimmed,

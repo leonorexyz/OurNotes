@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       .leftJoin(gachas, eq(events.relatedGachaId, gachas.id))
       .orderBy(desc(events.startAt));
 
-    const rows = query.all();
+    const rows = await query.all();
 
     let filteredRows = rows;
     if (statusParam && statusParam !== "all") {

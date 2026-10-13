@@ -18,7 +18,7 @@ export interface UpdateProfileInput {
 }
 
 export async function getUserProfile(userId: string) {
-  const user = db
+  const user = await db
     .select({
       id: users.id,
       name: users.name,
@@ -35,7 +35,7 @@ export async function getUserProfile(userId: string) {
     return null;
   }
 
-  let profile = db
+  let profile = await db
     .select()
     .from(userProfiles)
     .where(eq(userProfiles.userId, userId))
@@ -44,7 +44,7 @@ export async function getUserProfile(userId: string) {
   if (!profile) {
     // Create default profile if not exists
     const defaultProfileId = `prof-${userId}`;
-    db.insert(userProfiles)
+    await db.insert(userProfiles)
       .values({
         id: defaultProfileId,
         userId,
@@ -62,11 +62,11 @@ export async function getUserProfile(userId: string) {
       .onConflictDoNothing()
       .run();
 
-    profile = db
-      .select()
-      .from(userProfiles)
-      .where(eq(userProfiles.userId, userId))
-      .get();
+  profile = await db
+    .select()
+    .from(userProfiles)
+    .where(eq(userProfiles.userId, userId))
+    .get();
   }
 
   return {
@@ -89,7 +89,7 @@ export async function updateUserProfile(
   }
 
   if (Object.keys(userUpdates).length > 0) {
-    db.update(users)
+    await db.update(users)
       .set(userUpdates)
       .where(eq(users.id, userId))
       .run();
@@ -111,7 +111,7 @@ export async function updateUserProfile(
   }
 
   // Upsert user_profiles
-  const existingProfile = db
+  const existingProfile = await db
     .select()
     .from(userProfiles)
     .where(eq(userProfiles.userId, userId))
@@ -119,13 +119,13 @@ export async function updateUserProfile(
 
   if (existingProfile) {
     if (Object.keys(profileUpdates).length > 0) {
-      db.update(userProfiles)
+      await db.update(userProfiles)
         .set(profileUpdates)
         .where(eq(userProfiles.userId, userId))
         .run();
     }
   } else {
-    db.insert(userProfiles)
+    await db.insert(userProfiles)
       .values({
         id: `prof-${userId}`,
         userId,

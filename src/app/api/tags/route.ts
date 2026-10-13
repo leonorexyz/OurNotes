@@ -9,10 +9,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const sort = searchParams.get("sort") || "count"; // 'count' | 'name'
 
-    const allTags = db.select().from(blogTags).all();
+    const allTags = await db.select().from(blogTags).all();
 
     // Count usage from blogArticleTags junction table
-    const junctionCounts = db
+    const junctionCounts = await db
       .select({
         tagId: blogArticleTags.tagId,
         count: sql<number>`count(*)`,
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    db.insert(blogTags)
+    await db.insert(blogTags)
       .values({
         id: resolvedSlug,
         name: name.trim(),

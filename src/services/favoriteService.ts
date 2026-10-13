@@ -18,7 +18,7 @@ export async function getUserFavorites(
       .from(userFavorites)
       .where(eq(userFavorites.userId, userId));
 
-    const all = query.all();
+    const all = await query.all();
 
     let filtered = all;
     if (options.type && options.type !== "semua") {
@@ -64,7 +64,7 @@ export async function addFavorite(
   const favoriteId = `fav-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
   // Check if already favorited
-  const existing = db
+  const existing = await db
     .select()
     .from(userFavorites)
     .where(
@@ -79,7 +79,7 @@ export async function addFavorite(
     return existing;
   }
 
-  db.insert(userFavorites)
+  await db.insert(userFavorites)
     .values({
       id: favoriteId,
       userId,
@@ -97,7 +97,7 @@ export async function addFavorite(
     })
     .run();
 
-  const created = db
+  const created = await db
     .select()
     .from(userFavorites)
     .where(eq(userFavorites.id, favoriteId))
@@ -111,7 +111,7 @@ export async function removeFavorite(
   favoriteIdOrTargetId: string
 ): Promise<boolean> {
   // Check if matching by id or targetId
-  const item = db
+  const item = await db
     .select()
     .from(userFavorites)
     .where(
@@ -129,7 +129,7 @@ export async function removeFavorite(
     return false;
   }
 
-  db.delete(userFavorites)
+  await db.delete(userFavorites)
     .where(eq(userFavorites.id, item.id))
     .run();
 
@@ -140,7 +140,7 @@ export async function checkIsFavorited(
   userId: string,
   targetId: string
 ): Promise<boolean> {
-  const item = db
+  const item = await db
     .select()
     .from(userFavorites)
     .where(

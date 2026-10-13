@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const item = db.select().from(guides).where(eq(guides.id, id)).get();
+    const item = await db.select().from(guides).where(eq(guides.id, id)).get();
 
     if (!item) {
       return NextResponse.json(

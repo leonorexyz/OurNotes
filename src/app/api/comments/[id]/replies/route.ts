@@ -11,7 +11,7 @@ export async function GET(
   try {
     const { id: commentId } = await params;
 
-    const replies = db
+    const replies = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.parentId, commentId))
@@ -50,7 +50,7 @@ export async function POST(
     }
     const currentUser = authResult.user;
 
-    const parent = db
+    const parent = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, parentId))
@@ -81,7 +81,7 @@ export async function POST(
         ? "Top Contributor"
         : "Produser";
 
-    db.insert(blogComments)
+    await db.insert(blogComments)
       .values({
         id: replyId,
         articleId: parent.articleId,
@@ -96,14 +96,14 @@ export async function POST(
       .run();
 
     // Increment commentsCount in blogArticles
-    const article = db
+    const article = await db
       .select({ commentsCount: blogArticles.commentsCount })
       .from(blogArticles)
       .where(eq(blogArticles.id, parent.articleId))
       .get();
 
     if (article) {
-      db.update(blogArticles)
+      await db.update(blogArticles)
         .set({
           commentsCount: (article.commentsCount || 0) + 1,
         })
@@ -111,7 +111,7 @@ export async function POST(
         .run();
     }
 
-    const created = db
+    const created = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, replyId))

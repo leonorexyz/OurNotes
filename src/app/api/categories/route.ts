@@ -6,10 +6,10 @@ import { requireAuth } from "@/services/authService";
 
 export async function GET(request: NextRequest) {
   try {
-    const categoriesList = db.select().from(blogCategories).all();
+    const categoriesList = await db.select().from(blogCategories).all();
 
     // Calculate article counts per category
-    const articleCounts = db
+    const articleCounts = await db
       .select({
         categoryId: blogArticles.categoryId,
         count: sql<number>`count(*)`,
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-    const existing = db
+    const existing = await db
       .select()
       .from(blogCategories)
       .where(eq(blogCategories.id, slug))
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    db.insert(blogCategories)
+    await db.insert(blogCategories)
       .values({
         id: slug,
         name: name.trim(),

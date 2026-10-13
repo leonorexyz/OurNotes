@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({}));
     const emailOrId = (body.email || body.userId || body.username || "producer@ournotes.id").trim();
 
-    let user = db
+    let user = await db
       .select({
         id: users.id,
         name: users.name,
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     // If user not found, fallback to first user in db or default producer
     if (!user) {
-      user = db
+      user = await db
         .select({
           id: users.id,
           name: users.name,
@@ -42,11 +42,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch user profile if exists
-    const profile = db
+    const profile = (await db
       .select()
       .from(userProfiles)
       .where(eq(userProfiles.userId, user.id))
-      .get() || null;
+      .get()) || null;
 
     const response = NextResponse.json({
       success: true,

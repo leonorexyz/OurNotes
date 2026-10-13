@@ -1,20 +1,29 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import * as schema from "./schema";
 import fs from "fs";
 import path from "path";
 
-// Ensure data folder exists
-const dataDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+const tursoUrl = process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL;
+const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
+
+let client: ReturnType<typeof createClient>;
+
+if (tursoUrl) {
+  client = createClient({
+    url: tursoUrl,
+    authToken: tursoAuthToken,
+  });
+} else {
+  const dataDir = path.join(process.cwd(), "data");
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+  const dbPath = path.join(dataDir, "ournotes.db");
+  client = createClient({
+    url: `file:${dbPath}`,
+  });
 }
 
-const dbPath = path.join(dataDir, "ournotes.db");
-const sqlite = new Database(dbPath);
-
-// Enable WAL mode for better concurrency
-sqlite.pragma("journal_mode = WAL");
-
-export const db = drizzle(sqlite, { schema });
+export const db = drizzle(client, { schema });
 export { schema };

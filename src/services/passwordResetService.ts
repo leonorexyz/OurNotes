@@ -19,7 +19,7 @@ export async function requestPasswordReset(email: string) {
   }
 
   const emailTrimmed = email.trim().toLowerCase();
-  const user = db
+  const user = await db
     .select({
       id: users.id,
       name: users.name,
@@ -109,7 +109,7 @@ export async function resetPassword(
     record.used = true;
   }
 
-  const user = db
+  const user = await db
     .select({
       id: users.id,
       name: users.name,

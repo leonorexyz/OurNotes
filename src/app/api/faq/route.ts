@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const rows = db
+    const rows = await db
       .select()
       .from(guides)
       .where(and(...conditions))
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       .all();
 
     // Available categories from all FAQ records
-    const allFaqs = db.select().from(guides).where(eq(guides.category, "FAQ")).all();
+    const allFaqs = await db.select().from(guides).where(eq(guides.category, "FAQ")).all();
     const categoriesSet = new Set<string>();
     allFaqs.forEach((f) => {
       if (f.summary) categoriesSet.add(f.summary);

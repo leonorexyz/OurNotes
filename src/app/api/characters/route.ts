@@ -162,11 +162,11 @@ export async function GET(request: NextRequest) {
 
     const results =
       conditions.length > 0
-        ? baseQuery.where(and(...conditions)).orderBy(orderByClause).all()
-        : baseQuery.orderBy(orderByClause).all();
+        ? await baseQuery.where(and(...conditions)).orderBy(orderByClause).all()
+        : await baseQuery.orderBy(orderByClause).all();
 
     // Summary counts for filter badges
-    const allCharacters = db.select({ bandId: characters.bandId, attribute: characters.attribute }).from(characters).all();
+    const allCharacters = await db.select({ bandId: characters.bandId, attribute: characters.attribute }).from(characters).all();
     const countsByBand: Record<string, number> = {};
     const countsByAttr: Record<string, number> = {};
 
@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
     const charId = body.id || `char-${slug}-${Date.now().toString().slice(-4)}`;
 
     // Insert character
-    db.insert(characters)
+    await db.insert(characters)
       .values({
         id: charId,
         bandId,
@@ -269,7 +269,7 @@ export async function POST(request: NextRequest) {
     const total = Number(stats?.total) || (perf + tech + vis);
     const hp = Number(stats?.hp) || 1000;
 
-    db.insert(characterStats)
+    await db.insert(characterStats)
       .values({
         id: `stat-${charId}`,
         characterId: charId,

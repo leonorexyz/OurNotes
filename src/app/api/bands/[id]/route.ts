@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const bandRow = db.select().from(bands).where(eq(bands.id, id)).get();
+    const bandRow = await db.select().from(bands).where(eq(bands.id, id)).get();
 
     if (!bandRow) {
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function GET(
     }
 
     // Fetch all members of this band with stats and skills
-    const members = db
+    const members = await db
       .select({
         id: characters.id,
         name: characters.name,

@@ -16,7 +16,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const team = db
+    const team = await db
       .select()
       .from(recommendedTeams)
       .where(eq(recommendedTeams.id, id))
@@ -29,7 +29,7 @@ export async function GET(
       );
     }
 
-    const members = db
+    const members = (await db
       .select({
         id: recommendedTeamMembers.id,
         slotNumber: recommendedTeamMembers.slotNumber,
@@ -61,7 +61,7 @@ export async function GET(
       .leftJoin(bands, eq(characters.bandId, bands.id))
       .leftJoin(characterStats, eq(characters.id, characterStats.characterId))
       .where(eq(recommendedTeamMembers.recommendedTeamId, id))
-      .all()
+      .all())
       .sort((a, b) => a.slotNumber - b.slotNumber);
 
     const memberIds = members.map((m) => m.characterId || "");

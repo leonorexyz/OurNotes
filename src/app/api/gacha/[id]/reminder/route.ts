@@ -23,7 +23,7 @@ export async function GET(
       );
     }
 
-    const reminder = db
+    const reminder = await db
       .select()
       .from(gachaReminders)
       .where(
@@ -71,7 +71,7 @@ export async function POST(
     }
     const currentUser = authResult.user;
 
-    const gachaRecord = db
+    const gachaRecord = await db
       .select()
       .from(gachas)
       .where(eq(gachas.id, gachaId))
@@ -87,7 +87,7 @@ export async function POST(
     const body = await request.json().catch(() => ({}));
     const { targetSpark, savedStars, notifyAt, note } = body;
 
-    const existing = db
+    const existing = await db
       .select()
       .from(gachaReminders)
       .where(
@@ -107,7 +107,7 @@ export async function POST(
     const resolvedNote = typeof note === "string" ? note.trim() : "";
 
     if (existing) {
-      db.update(gachaReminders)
+      await db.update(gachaReminders)
         .set({
           targetSpark: resolvedTargetSpark,
           savedStars: resolvedSavedStars,
@@ -118,7 +118,7 @@ export async function POST(
         .where(eq(gachaReminders.id, reminderId))
         .run();
     } else {
-      db.insert(gachaReminders)
+      await db.insert(gachaReminders)
         .values({
           id: reminderId,
           userId: currentUser.id,
@@ -169,7 +169,7 @@ export async function DELETE(
     }
     const currentUser = authResult.user;
 
-    const existing = db
+    const existing = await db
       .select()
       .from(gachaReminders)
       .where(
@@ -187,7 +187,7 @@ export async function DELETE(
       );
     }
 
-    db.delete(gachaReminders)
+    await db.delete(gachaReminders)
       .where(eq(gachaReminders.id, existing.id))
       .run();
 

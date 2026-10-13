@@ -19,7 +19,7 @@ export async function DELETE(
     }
     const currentUser = authResult.user;
 
-    const comment = db
+    const comment = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, commentId))
@@ -40,7 +40,7 @@ export async function DELETE(
     }
 
     // Delete comment and its replies
-    db.delete(blogComments)
+    await db.delete(blogComments)
       .where(
         or(
           eq(blogComments.id, commentId),
@@ -50,14 +50,14 @@ export async function DELETE(
       .run();
 
     // Decrement commentsCount on the article
-    const article = db
+    const article = await db
       .select({ commentsCount: blogArticles.commentsCount })
       .from(blogArticles)
       .where(eq(blogArticles.id, comment.articleId))
       .get();
 
     if (article) {
-      db.update(blogArticles)
+      await db.update(blogArticles)
         .set({
           commentsCount: Math.max(0, (article.commentsCount || 1) - 1),
         })
@@ -89,7 +89,7 @@ export async function PATCH(
     const { id: commentId } = await params;
     const body = await request.json().catch(() => ({}));
 
-    const comment = db
+    const comment = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, commentId))
@@ -106,7 +106,7 @@ export async function PATCH(
     if (body.action === "like") {
       const delta = body.increment === false ? -1 : 1;
       const newLikes = Math.max(0, (comment.likes || 0) + delta);
-      db.update(blogComments)
+      await db.update(blogComments)
         .set({ likes: newLikes })
         .where(eq(blogComments.id, commentId))
         .run();
@@ -132,13 +132,13 @@ export async function PATCH(
     }
 
     if (typeof body.content === "string" && body.content.trim()) {
-      db.update(blogComments)
+      await db.update(blogComments)
         .set({ content: body.content.trim() })
         .where(eq(blogComments.id, commentId))
         .run();
     }
 
-    const updated = db
+    const updated = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, commentId))

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const rawQuery = searchParams.get("q") || searchParams.get("search") || "";
     const qLower = rawQuery.trim().toLowerCase();
 
-    const allItems = db.select().from(searchItems).all();
+    const allItems = await db.select().from(searchItems).all();
 
     let matching = allItems;
     if (qLower.length > 0) {

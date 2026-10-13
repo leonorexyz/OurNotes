@@ -12,7 +12,7 @@ export async function GET(
   try {
     const { id: articleId } = await params;
 
-    const row = db
+    const row = await db
       .select({
         id: blogArticles.id,
         title: blogArticles.title,
@@ -54,7 +54,7 @@ export async function GET(
     // Increment views count by 1
     const newViews = (row.views || 0) + 1;
     try {
-      db.update(blogArticles)
+      await db.update(blogArticles)
         .set({ views: newViews })
         .where(eq(blogArticles.id, articleId))
         .run();
@@ -63,7 +63,7 @@ export async function GET(
     }
 
     // Get real-time comment count from blogComments table
-    const commentsInDb = db
+    const commentsInDb = await db
       .select({ count: sql<number>`count(*)` })
       .from(blogComments)
       .where(eq(blogComments.articleId, articleId))
@@ -79,7 +79,7 @@ export async function GET(
     }
 
     // Find related articles (same category or others, max 3)
-    const relatedRows = db
+    const relatedRows = await db
       .select({
         id: blogArticles.id,
         title: blogArticles.title,
@@ -166,7 +166,7 @@ export async function PATCH(
     }
     const currentUser = authResult.user;
 
-    const existingArticle = db
+    const existingArticle = await db
       .select()
       .from(blogArticles)
       .where(eq(blogArticles.id, articleId))
@@ -219,12 +219,12 @@ export async function PATCH(
       updateData.tags = JSON.stringify(body.tags);
     }
 
-    db.update(blogArticles)
+    await db.update(blogArticles)
       .set(updateData)
       .where(eq(blogArticles.id, articleId))
       .run();
 
-    const updated = db
+    const updated = await db
       .select()
       .from(blogArticles)
       .where(eq(blogArticles.id, articleId))
@@ -269,7 +269,7 @@ export async function DELETE(
     }
     const currentUser = authResult.user;
 
-    const existingArticle = db
+    const existingArticle = await db
       .select()
       .from(blogArticles)
       .where(eq(blogArticles.id, articleId))
@@ -293,9 +293,9 @@ export async function DELETE(
     }
 
     // Cascade delete comments and junction tags
-    db.delete(blogComments).where(eq(blogComments.articleId, articleId)).run();
-    db.delete(blogArticleTags).where(eq(blogArticleTags.articleId, articleId)).run();
-    db.delete(blogArticles).where(eq(blogArticles.id, articleId)).run();
+    await db.delete(blogComments).where(eq(blogComments.articleId, articleId)).run();
+    await db.delete(blogArticleTags).where(eq(blogArticleTags.articleId, articleId)).run();
+    await db.delete(blogArticles).where(eq(blogArticles.id, articleId)).run();
 
     return NextResponse.json({
       success: true,

@@ -47,7 +47,7 @@ export async function getCurrentUser(
     }
 
     // Lookup user in DB
-    const userRow = db
+    const userRow = await db
       .select({
         id: users.id,
         name: users.name,

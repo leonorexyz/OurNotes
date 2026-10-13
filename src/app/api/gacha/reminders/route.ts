@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const rows = db
+    const rows = await db
       .select({
         id: gachaReminders.id,
         userId: gachaReminders.userId,
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify gacha banner exists
-    const gachaRecord = db
+    const gachaRecord = await db
       .select({ id: gachas.id, title: gachas.title, endAt: gachas.endAt })
       .from(gachas)
       .where(eq(gachas.id, gachaId))
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if reminder already exists for this user and banner
-    const existingReminder = db
+    const existingReminder = await db
       .select()
       .from(gachaReminders)
       .where(
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
     const resolvedNote = typeof note === "string" ? note.trim() : "";
 
     if (existingReminder) {
-      db.update(gachaReminders)
+      await db.update(gachaReminders)
         .set({
           targetSpark: resolvedTargetSpark,
           savedStars: resolvedSavedStars,
@@ -192,7 +192,7 @@ export async function POST(request: NextRequest) {
         .where(eq(gachaReminders.id, reminderId))
         .run();
     } else {
-      db.insert(gachaReminders)
+      await db.insert(gachaReminders)
         .values({
           id: reminderId,
           userId: currentUser.id,
@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
         .run();
     }
 
-    const createdRecord = db
+    const createdRecord = await db
       .select()
       .from(gachaReminders)
       .where(eq(gachaReminders.id, reminderId))
@@ -261,7 +261,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const reminder = db
+    const reminder = await db
       .select()
       .from(gachaReminders)
       .where(eq(gachaReminders.id, reminderId))
@@ -281,7 +281,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    db.delete(gachaReminders).where(eq(gachaReminders.id, reminderId)).run();
+    await db.delete(gachaReminders).where(eq(gachaReminders.id, reminderId)).run();
 
     return NextResponse.json({
       success: true,

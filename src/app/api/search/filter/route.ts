@@ -58,7 +58,7 @@ async function handleFilter(request: NextRequest) {
     }
 
     const qLower = q.toLowerCase();
-    const allItems = db.select().from(searchItems).all();
+    const allItems = await db.select().from(searchItems).all();
 
     // Calculate baseline counts per category for the current query
     const counts: Record<string, number> = {

@@ -91,8 +91,8 @@ export async function GET(request: NextRequest) {
 
     let rows =
       conditions.length > 0
-        ? baseQuery.where(and(...conditions)).all()
-        : baseQuery.all();
+        ? await baseQuery.where(and(...conditions)).all()
+        : await baseQuery.all();
 
     // Filter by tag if requested
     if (tagParam && tagParam.trim()) {
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check slug collision
-    const existing = db
+    const existing = await db
       .select({ id: blogArticles.id })
       .from(blogArticles)
       .where(eq(blogArticles.id, slug))
@@ -276,7 +276,7 @@ export async function POST(request: NextRequest) {
       year: "numeric",
     });
 
-    db.insert(blogArticles)
+    await db.insert(blogArticles)
       .values({
         id: slug,
         title: title.trim(),
@@ -307,7 +307,7 @@ export async function POST(request: NextRequest) {
     for (const tagName of tagsArray) {
       if (typeof tagName === "string" && tagName.trim()) {
         const tagSlug = slugifyTag(tagName);
-        db.insert(blogTags)
+        await db.insert(blogTags)
           .values({
             id: tagSlug,
             name: tagName.trim(),
@@ -317,7 +317,7 @@ export async function POST(request: NextRequest) {
           .run();
 
         const junctionId = `at-${slug}-${tagSlug}`;
-        db.insert(blogArticleTags)
+        await db.insert(blogArticleTags)
           .values({
             id: junctionId,
             articleId: slug,

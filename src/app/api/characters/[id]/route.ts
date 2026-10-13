@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const charRow = db
+    const charRow = await db
       .select({
         id: characters.id,
         name: characters.name,
@@ -60,7 +60,7 @@ export async function GET(
     }
 
     // Fetch fellow band members
-    const bandMembers = db
+    const bandMembers = await db
       .select({
         id: characters.id,
         name: characters.name,
@@ -101,7 +101,7 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const existing = db.select().from(characters).where(eq(characters.id, id)).get();
+    const existing = await db.select().from(characters).where(eq(characters.id, id)).get();
     if (!existing) {
       return NextResponse.json(
         { success: false, error: `Karakter dengan ID '${id}' tidak ditemukan` },
@@ -128,7 +128,7 @@ export async function PUT(
     } = body || {};
 
     // Update character record
-    db.update(characters)
+    await db.update(characters)
       .set({
         name: name !== undefined ? name : existing.name,
         japaneseName: japaneseName !== undefined ? japaneseName : existing.japaneseName,
@@ -150,7 +150,7 @@ export async function PUT(
 
     // Update stats record if stats or skill provided
     if (stats || skill) {
-      const existingStat = db.select().from(characterStats).where(eq(characterStats.characterId, id)).get();
+      const existingStat = await db.select().from(characterStats).where(eq(characterStats.characterId, id)).get();
       if (existingStat) {
         const perf = stats?.performance !== undefined ? Number(stats.performance) : existingStat.performance;
         const tech = stats?.technique !== undefined ? Number(stats.technique) : existingStat.technique;
@@ -158,7 +158,7 @@ export async function PUT(
         const total = stats?.total !== undefined ? Number(stats.total) : (perf + tech + vis);
         const hp = stats?.hp !== undefined ? Number(stats.hp) : existingStat.hp;
 
-        db.update(characterStats)
+        await db.update(characterStats)
           .set({
             total,
             performance: perf,
@@ -178,7 +178,7 @@ export async function PUT(
     }
 
     // Return updated character
-    const updated = db
+    const updated = await db
       .select({
         id: characters.id,
         name: characters.name,
@@ -230,7 +230,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const existing = db.select().from(characters).where(eq(characters.id, id)).get();
+    const existing = await db.select().from(characters).where(eq(characters.id, id)).get();
     if (!existing) {
       return NextResponse.json(
         { success: false, error: `Karakter dengan ID '${id}' tidak ditemukan` },
@@ -239,9 +239,9 @@ export async function DELETE(
     }
 
     // Delete stats first due to foreign key
-    db.delete(characterStats).where(eq(characterStats.characterId, id)).run();
+    await db.delete(characterStats).where(eq(characterStats.characterId, id)).run();
     // Delete character
-    db.delete(characters).where(eq(characters.id, id)).run();
+    await db.delete(characters).where(eq(characters.id, id)).run();
 
     return NextResponse.json({
       success: true,

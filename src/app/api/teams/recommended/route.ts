@@ -40,11 +40,11 @@ export async function GET(request: NextRequest) {
 
     const teamRows =
       conditions.length > 0
-        ? baseQuery.where(and(...conditions)).all()
-        : baseQuery.all();
+        ? await baseQuery.where(and(...conditions)).all()
+        : await baseQuery.all();
 
     // Fetch all members for these teams
-    const allMembers = db
+    const allMembers = await db
       .select({
         id: recommendedTeamMembers.id,
         recommendedTeamId: recommendedTeamMembers.recommendedTeamId,
@@ -201,7 +201,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Counts by category
-    const allCategories = db
+    const allCategories = await db
       .select({ category: recommendedTeams.category })
       .from(recommendedTeams)
       .all();
@@ -265,7 +265,7 @@ export async function POST(request: NextRequest) {
 
     const teamId = body.id || `team-rec-${Date.now()}`;
 
-    db.insert(recommendedTeams)
+    await db.insert(recommendedTeams)
       .values({
         id: teamId,
         name,
@@ -282,8 +282,9 @@ export async function POST(request: NextRequest) {
       .run();
 
     // Insert members
-    memberIds.forEach((memId: string, idx: number) => {
-      db.insert(recommendedTeamMembers)
+    for (let idx = 0; idx < memberIds.length; idx++) {
+      const memId = memberIds[idx];
+      await db.insert(recommendedTeamMembers)
         .values({
           id: `rtm-${teamId}-${idx + 1}`,
           recommendedTeamId: teamId,
@@ -292,7 +293,7 @@ export async function POST(request: NextRequest) {
           isCenter: memId === centerMemberId ? 1 : 0,
         })
         .run();
-    });
+    }
 
     return NextResponse.json(
       {

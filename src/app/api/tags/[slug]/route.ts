@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { slug } = await params;
 
-    const tagRecord = db
+    const tagRecord = await db
       .select()
       .from(blogTags)
       .where(eq(blogTags.slug, slug.toLowerCase()))
@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Get articles with this tag
-    const taggedArticles = db
+    const taggedArticles = await db
       .select({
         id: blogArticles.id,
         title: blogArticles.title,

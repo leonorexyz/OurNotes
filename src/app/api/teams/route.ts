@@ -40,11 +40,11 @@ export async function GET(request: NextRequest) {
 
     const teamRows =
       conditions.length > 0
-        ? baseQuery.where(and(...conditions)).all()
-        : baseQuery.all();
+        ? await baseQuery.where(and(...conditions)).all()
+        : await baseQuery.all();
 
     // Fetch members with character details
-    const allMembers = db
+    const allMembers = await db
       .select({
         id: teamMembers.id,
         teamId: teamMembers.teamId,
@@ -248,7 +248,7 @@ export async function POST(request: NextRequest) {
     const resolvedSynergy = synergyPercent || 0;
     const resolvedIsPublic = isPublic === false || isPublic === 0 ? 0 : 1;
 
-    db.insert(teams)
+    await db.insert(teams)
       .values({
         id: teamId,
         name: name.trim(),
@@ -264,9 +264,10 @@ export async function POST(request: NextRequest) {
       .run();
 
     // Insert slot members
-    memberIds.forEach((charId: string, idx: number) => {
-      if (!charId) return;
-      db.insert(teamMembers)
+    for (let idx = 0; idx < memberIds.length; idx++) {
+      const charId = memberIds[idx];
+      if (!charId) continue;
+      await db.insert(teamMembers)
         .values({
           id: `tm-${teamId}-${idx + 1}`,
           teamId,
@@ -275,7 +276,7 @@ export async function POST(request: NextRequest) {
           isCenter: charId === resolvedCenterId ? 1 : 0,
         })
         .run();
-    });
+    }
 
     return NextResponse.json(
       {

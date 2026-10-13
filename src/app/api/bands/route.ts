@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
     // If specific ID requested via query parameter
     if (idParam) {
-      const bandRow = db.select().from(bands).where(eq(bands.id, idParam)).get();
+      const bandRow = await db.select().from(bands).where(eq(bands.id, idParam)).get();
       if (!bandRow) {
         return NextResponse.json(
           { success: false, error: `Band dengan ID '${idParam}' tidak ditemukan` },
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     // Query bands with optional search
     const allBands =
       searchParam && searchParam.trim().length > 0
-        ? db
+        ? await db
             .select()
             .from(bands)
             .where(
@@ -76,10 +76,10 @@ export async function GET(request: NextRequest) {
             )
             .orderBy(asc(bands.name))
             .all()
-        : db.select().from(bands).orderBy(asc(bands.name)).all();
+        : await db.select().from(bands).orderBy(asc(bands.name)).all();
 
     // Fetch members count and member list for each band
-    const allMembers = db
+    const allMembers = await db
       .select({
         id: characters.id,
         bandId: characters.bandId,

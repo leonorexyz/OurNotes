@@ -96,8 +96,8 @@ export async function GET(request: NextRequest) {
     }
 
     let rows = conditions.length > 0
-      ? baseQuery.where(and(...conditions)).all()
-      : baseQuery.all();
+      ? await baseQuery.where(and(...conditions)).all()
+      : await baseQuery.all();
 
     // Map rows with team slot metadata
     let enriched = rows.map((char) => {

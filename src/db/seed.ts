@@ -52,7 +52,7 @@ export async function seedGuides() {
   for (const item of GUIDES_DATA) {
     if (item.section === "faq") continue;
     const cat = categoryMap[item.section] || "Pemula";
-    db.insert(guides)
+    await db.insert(guides)
       .values({
         id: item.id,
         title: item.title,
@@ -80,7 +80,7 @@ export async function seedGuides() {
 
   // Seed FAQ items as guides category FAQ
   for (const faq of FAQ_LIST) {
-    db.insert(guides)
+    await db.insert(guides)
       .values({
         id: faq.id,
         title: faq.question,
@@ -106,7 +106,7 @@ export async function seedGuides() {
   // Seed Gachas first so events can reference relatedGachaId
   console.log("Memulai seed jadwal gacha dan banner...");
   for (const banner of GACHA_BANNERS_DATA) {
-    db.insert(gachas)
+    await db.insert(gachas)
       .values({
         id: banner.id,
         title: banner.title,
@@ -263,7 +263,7 @@ export async function seedGuides() {
   ];
 
   for (const ev of sampleEvents) {
-    db.insert(events)
+    await db.insert(events)
       .values(ev)
       .onConflictDoUpdate({
         target: events.id,
@@ -275,7 +275,7 @@ export async function seedGuides() {
   // Seed Bands table
   console.log("Memulai seed data band...");
   for (const band of BANDS_DATA) {
-    db.insert(bands)
+    await db.insert(bands)
       .values({
         id: band.id,
         name: band.name,
@@ -305,7 +305,7 @@ export async function seedGuides() {
   // Seed Characters and CharacterStats tables
   console.log("Memulai seed data karakter dan statistik...");
   for (const char of CHARACTERS_DATA) {
-    db.insert(characters)
+    await db.insert(characters)
       .values({
         id: char.id,
         bandId: char.bandId,
@@ -339,7 +339,7 @@ export async function seedGuides() {
       })
       .run();
 
-    db.insert(characterStats)
+    await db.insert(characterStats)
       .values({
         id: `stat-${char.id}`,
         characterId: char.id,
@@ -375,7 +375,7 @@ export async function seedGuides() {
   // Seed Recommended Teams & Members
   console.log("Memulai seed rekomendasi tim & anggotanya...");
   for (const team of RECOMMENDED_TEAMS) {
-    db.insert(recommendedTeams)
+    await db.insert(recommendedTeams)
       .values({
         id: team.id,
         name: team.name,
@@ -407,8 +407,8 @@ export async function seedGuides() {
       .run();
 
     // Seed members for this team
-    team.memberIds.forEach((memberId, idx) => {
-      db.insert(recommendedTeamMembers)
+    for (const [idx, memberId] of team.memberIds.entries()) {
+      await db.insert(recommendedTeamMembers)
         .values({
           id: `rtm-${team.id}-${idx + 1}`,
           recommendedTeamId: team.id,
@@ -425,7 +425,7 @@ export async function seedGuides() {
           },
         })
         .run();
-    });
+    }
   }
 
   // Seed Users table
@@ -448,7 +448,7 @@ export async function seedGuides() {
   ];
 
   for (const u of sampleUsers) {
-    db.insert(users)
+    await db.insert(users)
       .values(u)
       .onConflictDoUpdate({
         target: users.id,
@@ -491,7 +491,7 @@ export async function seedGuides() {
   ];
 
   for (const prof of sampleProfiles) {
-    db.insert(userProfiles)
+    await db.insert(userProfiles)
       .values(prof)
       .onConflictDoUpdate({
         target: userProfiles.userId,
@@ -550,7 +550,7 @@ export async function seedGuides() {
   ];
 
   for (const fav of sampleFavorites) {
-    db.insert(userFavorites)
+    await db.insert(userFavorites)
       .values(fav)
       .onConflictDoNothing()
       .run();
@@ -578,7 +578,7 @@ export async function seedGuides() {
     ],
   };
 
-  db.insert(teams)
+  await db.insert(teams)
     .values({
       id: sampleSavedTeam.id,
       userId: sampleSavedTeam.userId,
@@ -607,8 +607,8 @@ export async function seedGuides() {
     })
     .run();
 
-  sampleSavedTeam.memberIds.forEach((memId, idx) => {
-    db.insert(teamMembers)
+  for (const [idx, memId] of sampleSavedTeam.memberIds.entries()) {
+    await db.insert(teamMembers)
       .values({
         id: `tm-${sampleSavedTeam.id}-${idx + 1}`,
         teamId: sampleSavedTeam.id,
@@ -625,10 +625,10 @@ export async function seedGuides() {
         },
       })
       .run();
-  });
+  }
 
   // Seed sample reminder
-  db.insert(gachaReminders)
+  await db.insert(gachaReminders)
     .values({
       id: "reminder-sample-1",
       userId: "user-producer-1",
@@ -691,7 +691,7 @@ export async function seedGuides() {
   ];
 
   for (const cat of blogCategoryItems) {
-    db.insert(blogCategories)
+    await db.insert(blogCategories)
       .values(cat)
       .onConflictDoUpdate({
         target: blogCategories.id,
@@ -768,7 +768,7 @@ export async function seedGuides() {
   }
 
   for (const tag of uniqueTagsMap.values()) {
-    db.insert(blogTags)
+    await db.insert(blogTags)
       .values({
         id: tag.slug,
         name: tag.name,
@@ -788,7 +788,7 @@ export async function seedGuides() {
   console.log("Memulai seed artikel blog...");
   for (const post of BLOG_POSTS_DATA) {
     const categorySlug = REVERSE_CATEGORY_MAP[post.category] || "tips-gameplay";
-    db.insert(blogArticles)
+    await db.insert(blogArticles)
       .values({
         id: post.id,
         title: post.title,
@@ -838,7 +838,7 @@ export async function seedGuides() {
     for (const tagName of post.tags) {
       const tagSlug = slugifyTag(tagName);
       const junctionId = `at-${post.id}-${tagSlug}`;
-      db.insert(blogArticleTags)
+      await db.insert(blogArticleTags)
         .values({
           id: junctionId,
           articleId: post.id,
@@ -894,7 +894,7 @@ export async function seedGuides() {
   ];
 
   for (const c of sampleComments) {
-    db.insert(blogComments)
+    await db.insert(blogComments)
       .values(c)
       .onConflictDoUpdate({
         target: blogComments.id,
@@ -922,7 +922,7 @@ export async function seedGuides() {
         ? 70
         : 60;
 
-    db.insert(searchItems)
+    await db.insert(searchItems)
       .values({
         id: item.id,
         category: item.category,
@@ -959,12 +959,12 @@ export async function seedGuides() {
 
   // Seed Popular Searches
   console.log("Memulai seed kata kunci pencarian populer...");
-  POPULAR_SEARCH_TERMS.forEach((term, idx) => {
+  for (const [idx, term] of POPULAR_SEARCH_TERMS.entries()) {
     const slug = slugifyTag(term);
     const hitCount = Math.max(10, 150 - idx * 8);
     const isTrending = idx < 5 ? 1 : 0;
 
-    db.insert(popularSearches)
+    await db.insert(popularSearches)
       .values({
         id: `pop-${slug}`,
         term,
@@ -979,23 +979,23 @@ export async function seedGuides() {
         },
       })
       .run();
-  });
+  }
 
-  const guideCount = db.select().from(guides).all().length;
-  const eventCount = db.select().from(events).all().length;
-  const bandCount = db.select().from(bands).all().length;
-  const charCount = db.select().from(characters).all().length;
-  const statCount = db.select().from(characterStats).all().length;
-  const recTeamCount = db.select().from(recommendedTeams).all().length;
-  const savedTeamCount = db.select().from(teams).all().length;
-  const gachaCount = db.select().from(gachas).all().length;
-  const reminderCount = db.select().from(gachaReminders).all().length;
-  const blogCatCount = db.select().from(blogCategories).all().length;
-  const blogTagCount = db.select().from(blogTags).all().length;
-  const blogPostCount = db.select().from(blogArticles).all().length;
-  const blogCommentCount = db.select().from(blogComments).all().length;
-  const searchItemCount = db.select().from(searchItems).all().length;
-  const popularSearchCount = db.select().from(popularSearches).all().length;
+  const guideCount = (await db.select().from(guides).all()).length;
+  const eventCount = (await db.select().from(events).all()).length;
+  const bandCount = (await db.select().from(bands).all()).length;
+  const charCount = (await db.select().from(characters).all()).length;
+  const statCount = (await db.select().from(characterStats).all()).length;
+  const recTeamCount = (await db.select().from(recommendedTeams).all()).length;
+  const savedTeamCount = (await db.select().from(teams).all()).length;
+  const gachaCount = (await db.select().from(gachas).all()).length;
+  const reminderCount = (await db.select().from(gachaReminders).all()).length;
+  const blogCatCount = (await db.select().from(blogCategories).all()).length;
+  const blogTagCount = (await db.select().from(blogTags).all()).length;
+  const blogPostCount = (await db.select().from(blogArticles).all()).length;
+  const blogCommentCount = (await db.select().from(blogComments).all()).length;
+  const searchItemCount = (await db.select().from(searchItems).all()).length;
+  const popularSearchCount = (await db.select().from(popularSearches).all()).length;
 
   console.log(
     `✓ Seed database berhasil!\n` +

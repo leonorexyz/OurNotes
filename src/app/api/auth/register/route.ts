@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const emailTrimmed = email.trim().toLowerCase();
-    const existing = db
+    const existing = await db
       .select()
       .from(users)
       .where(eq(users.email, emailTrimmed))
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
 
     // 1. Insert into users table
-    db.insert(users)
+    await db.insert(users)
       .values({
         id: userId,
         name: name.trim(),
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     // 2. Insert into user_profiles table
     const chosenBand = favoriteBand || "Poppin'Party";
-    db.insert(userProfiles)
+    await db.insert(userProfiles)
       .values({
         id: `prof-${userId}`,
         userId: userId,

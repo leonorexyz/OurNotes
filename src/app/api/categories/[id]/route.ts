@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id: categorySlug } = await params;
 
-    const category = db
+    const category = await db
       .select()
       .from(blogCategories)
       .where(eq(blogCategories.id, categorySlug.toLowerCase()))
@@ -23,7 +23,7 @@ export async function GET(
       );
     }
 
-    const articles = db
+    const articles = await db
       .select()
       .from(blogArticles)
       .where(

@@ -17,7 +17,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const team = db
+    const team = await db
       .select()
       .from(teams)
       .where(eq(teams.id, id))
@@ -30,7 +30,7 @@ export async function GET(
       );
     }
 
-    const members = db
+    const members = (await db
       .select({
         id: teamMembers.id,
         slotNumber: teamMembers.slotNumber,
@@ -62,7 +62,7 @@ export async function GET(
       .leftJoin(bands, eq(characters.bandId, bands.id))
       .leftJoin(characterStats, eq(characters.id, characterStats.characterId))
       .where(eq(teamMembers.teamId, id))
-      .all()
+      .all())
       .sort((a, b) => a.slotNumber - b.slotNumber);
 
     const memberIds = members.map((m) => m.characterId || "");
@@ -178,7 +178,7 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const existing = db
+    const existing = await db
       .select()
       .from(teams)
       .where(eq(teams.id, id))
@@ -248,7 +248,7 @@ export async function PUT(
           : 1
         : existing.isPublic;
 
-    db.update(teams)
+    await db.update(teams)
       .set({
         name: resolvedName,
         category: resolvedCategory,
@@ -266,12 +266,13 @@ export async function PUT(
     // If new memberIds provided, update slots
     if (memberIds && Array.isArray(memberIds)) {
       // Clear existing members
-      db.delete(teamMembers).where(eq(teamMembers.teamId, id)).run();
+      await db.delete(teamMembers).where(eq(teamMembers.teamId, id)).run();
 
       // Insert new members
-      memberIds.forEach((charId: string, idx: number) => {
-        if (!charId) return;
-        db.insert(teamMembers)
+      for (let idx = 0; idx < memberIds.length; idx++) {
+        const charId = memberIds[idx];
+        if (!charId) continue;
+        await db.insert(teamMembers)
           .values({
             id: `tm-${id}-${idx + 1}-${Date.now()}`,
             teamId: id,
@@ -280,7 +281,7 @@ export async function PUT(
             isCenter: charId === resolvedCenterId ? 1 : 0,
           })
           .run();
-      });
+      }
     }
 
     return NextResponse.json({
@@ -320,7 +321,7 @@ export async function DELETE(
 
     const { id } = await params;
 
-    const existing = db
+    const existing = await db
       .select()
       .from(teams)
       .where(eq(teams.id, id))
@@ -345,8 +346,8 @@ export async function DELETE(
     }
 
     // Delete members then team
-    db.delete(teamMembers).where(eq(teamMembers.teamId, id)).run();
-    db.delete(teams).where(eq(teams.id, id)).run();
+    await db.delete(teamMembers).where(eq(teamMembers.teamId, id)).run();
+    await db.delete(teams).where(eq(teams.id, id)).run();
 
     return NextResponse.json({
       success: true,

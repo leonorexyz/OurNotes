@@ -13,7 +13,7 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams;
     const sortBy = searchParams.get("sort") || "newest";
 
-    const allComments = db
+    const allComments = await db
       .select({
         id: blogComments.id,
         articleId: blogComments.articleId,
@@ -100,7 +100,7 @@ export async function POST(
     const currentUser = authResult.user;
 
     // Check if article exists
-    const article = db
+    const article = await db
       .select({ id: blogArticles.id, commentsCount: blogArticles.commentsCount })
       .from(blogArticles)
       .where(eq(blogArticles.id, articleId))
@@ -124,7 +124,7 @@ export async function POST(
     }
 
     if (parentId) {
-      const parentComment = db
+      const parentComment = await db
         .select()
         .from(blogComments)
         .where(
@@ -151,7 +151,7 @@ export async function POST(
         ? "Top Contributor"
         : "Produser";
 
-    db.insert(blogComments)
+    await db.insert(blogComments)
       .values({
         id: commentId,
         articleId,
@@ -166,14 +166,14 @@ export async function POST(
       .run();
 
     // Increment commentsCount in blogArticles
-    db.update(blogArticles)
+    await db.update(blogArticles)
       .set({
         commentsCount: (article.commentsCount || 0) + 1,
       })
       .where(eq(blogArticles.id, articleId))
       .run();
 
-    const created = db
+    const created = await db
       .select()
       .from(blogComments)
       .where(eq(blogComments.id, commentId))

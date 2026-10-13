@@ -380,7 +380,7 @@ export async function calculateTeamSynergy(
   }
 
   // Fetch character stats from DB
-  const charRows = db
+  const charRows = await db
     .select({
       id: characters.id,
       name: characters.name,

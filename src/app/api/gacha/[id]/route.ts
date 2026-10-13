@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const row = db.select().from(gachas).where(eq(gachas.id, id)).get();
+    const row = await db.select().from(gachas).where(eq(gachas.id, id)).get();
 
     if (!row) {
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function GET(
     }
 
     // Fetch related reminders count for this banner
-    const reminders = db
+    const reminders = await db
       .select()
       .from(gachaReminders)
       .where(eq(gachaReminders.gachaId, id))

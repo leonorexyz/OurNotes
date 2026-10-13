@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     // If specific ID requested
     if (idParam) {
-      const item = db.select().from(guides).where(eq(guides.id, idParam)).get();
+      const item = await db.select().from(guides).where(eq(guides.id, idParam)).get();
       if (!item) {
         return NextResponse.json(
           { success: false, error: `Panduan dengan ID '${idParam}' tidak ditemukan` },
@@ -51,18 +51,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const query = conditions.length > 0
-      ? db.select().from(guides).where(and(...conditions))
-      : db.select().from(guides);
-
-    const results = query.all();
+    const results =
+      conditions.length > 0
+        ? await db.select().from(guides).where(and(...conditions)).all()
+        : await db.select().from(guides).all();
 
     // Grouping count summary
     const countByCategory = {
-      pemula: db.select().from(guides).where(eq(guides.category, "Pemula")).all().length,
-      tips: db.select().from(guides).where(eq(guides.category, "Tips")).all().length,
-      event: db.select().from(guides).where(eq(guides.category, "Event")).all().length,
-      faq: db.select().from(guides).where(eq(guides.category, "FAQ")).all().length,
+      pemula: (await db.select().from(guides).where(eq(guides.category, "Pemula")).all()).length,
+      tips: (await db.select().from(guides).where(eq(guides.category, "Tips")).all()).length,
+      event: (await db.select().from(guides).where(eq(guides.category, "Event")).all()).length,
+      faq: (await db.select().from(guides).where(eq(guides.category, "FAQ")).all()).length,
     };
 
     return NextResponse.json({

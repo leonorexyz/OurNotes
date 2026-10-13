@@ -37,11 +37,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const query = conditions.length > 0
-      ? db.select().from(gachas).where(and(...conditions)).orderBy(desc(gachas.startAt))
-      : db.select().from(gachas).orderBy(desc(gachas.startAt));
-
-    const rows = query.all();
+    const rows =
+      conditions.length > 0
+        ? await db.select().from(gachas).where(and(...conditions)).orderBy(desc(gachas.startAt)).all()
+        : await db.select().from(gachas).orderBy(desc(gachas.startAt)).all();
 
     const formatted = rows.map((row) => ({
       ...row,

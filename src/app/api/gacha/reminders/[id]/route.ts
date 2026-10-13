@@ -23,7 +23,7 @@ export async function GET(
       );
     }
 
-    const reminder = db
+    const reminder = await db
       .select({
         id: gachaReminders.id,
         userId: gachaReminders.userId,
@@ -126,7 +126,7 @@ export async function PATCH(
     }
     const currentUser = authResult.user;
 
-    const existingReminder = db
+    const existingReminder = await db
       .select()
       .from(gachaReminders)
       .where(eq(gachaReminders.id, id))
@@ -165,7 +165,7 @@ export async function PATCH(
       updateData.isNotified = body.isNotified ? 1 : 0;
     }
 
-    db.update(gachaReminders)
+    await db.update(gachaReminders)
       .set(updateData)
       .where(eq(gachaReminders.id, id))
       .run();
@@ -205,7 +205,7 @@ export async function DELETE(
     }
     const currentUser = authResult.user;
 
-    const reminder = db
+    const reminder = await db
       .select()
       .from(gachaReminders)
       .where(eq(gachaReminders.id, id))
@@ -225,7 +225,7 @@ export async function DELETE(
       );
     }
 
-    db.delete(gachaReminders).where(eq(gachaReminders.id, id)).run();
+    await db.delete(gachaReminders).where(eq(gachaReminders.id, id)).run();
 
     return NextResponse.json({
       success: true,

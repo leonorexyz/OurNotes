@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const limit = Math.max(1, Math.min(100, parseInt(searchParams.get("limit") || "20", 10)));
 
     // Fetch candidate records
-    let allCandidates = db.select().from(searchItems).all();
+    let allCandidates = await db.select().from(searchItems).all();
 
     // Calculate category counts for the current query before filtering by category
     const categoryCounts: Record<string, number> = {
@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
     if (q.length >= 2) {
       try {
         // Record in searchLogs
-        db.insert(searchLogs)
+        await db.insert(searchLogs)
           .values({
             id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
             query: q,
@@ -163,14 +163,14 @@ export async function GET(request: NextRequest) {
 
         // Increment or insert popularSearches
         const termSlug = slugifyTag(q);
-        const existingPopular = db
+        const existingPopular = await db
           .select()
           .from(popularSearches)
           .where(eq(popularSearches.term, q))
           .get();
 
         if (existingPopular) {
-          db.update(popularSearches)
+          await db.update(popularSearches)
             .set({
               hitCount: existingPopular.hitCount + 1,
               lastSearchedAt: new Date().toISOString(),
@@ -178,7 +178,7 @@ export async function GET(request: NextRequest) {
             .where(eq(popularSearches.id, existingPopular.id))
             .run();
         } else {
-          db.insert(popularSearches)
+          await db.insert(popularSearches)
             .values({
               id: `pop-${termSlug}-${Date.now().toString().slice(-4)}`,
               term: q,

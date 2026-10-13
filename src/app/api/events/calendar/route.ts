@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const typeParam = searchParams.get("type");
 
     // Query events with left join to gachas
-    const rows = db
+    const rows = await db
       .select({
         event: events,
         gacha: gachas,

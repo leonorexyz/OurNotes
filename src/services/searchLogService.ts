@@ -49,7 +49,7 @@ export async function recordSearchQuery(
   const now = new Date().toISOString();
 
   // 1. Insert into searchLogs
-  db.insert(searchLogs)
+  await db.insert(searchLogs)
     .values({
       id: logId,
       query: queryTrimmed,
@@ -63,7 +63,7 @@ export async function recordSearchQuery(
   const termSlug = slugifyTag(queryTrimmed);
   const termId = `pop-${termSlug}`;
 
-  const existingTerm = db
+  const existingTerm = await db
     .select()
     .from(popularSearches)
     .where(eq(popularSearches.term, queryTrimmed))
@@ -74,7 +74,7 @@ export async function recordSearchQuery(
     // Mark trending if hit count reaches threshold or was already trending
     const isTrending = newHitCount >= 20 || existingTerm.isTrending === 1 ? 1 : 0;
 
-    db.update(popularSearches)
+    await db.update(popularSearches)
       .set({
         hitCount: newHitCount,
         isTrending,
@@ -83,7 +83,7 @@ export async function recordSearchQuery(
       .where(eq(popularSearches.id, existingTerm.id))
       .run();
   } else {
-    db.insert(popularSearches)
+    await db.insert(popularSearches)
       .values({
         id: termId,
         term: queryTrimmed,
@@ -108,35 +108,35 @@ export async function recordSearchQuery(
  * Retrieves keyword analytics and search history.
  */
 export async function getSearchKeywordAnalytics(limit = 20): Promise<SearchKeywordAnalytics> {
-  const topKeywordsRows = db
+  const topKeywordsRows = await db
     .select()
     .from(popularSearches)
     .orderBy(desc(popularSearches.hitCount))
     .limit(limit)
     .all();
 
-  const recentLogsRows = db
+  const recentLogsRows = await db
     .select()
     .from(searchLogs)
     .orderBy(desc(searchLogs.createdAt))
     .limit(limit)
     .all();
 
-  const totalSearchesCount = db
+  const totalSearchesCount = (await db
     .select({ count: sql<number>`count(*)` })
     .from(searchLogs)
-    .get()?.count || 0;
+    .get())?.count || 0;
 
-  const uniqueKeywordsCount = db
+  const uniqueKeywordsCount = (await db
     .select({ count: sql<number>`count(*)` })
     .from(popularSearches)
-    .get()?.count || 0;
+    .get())?.count || 0;
 
-  const trendingCount = db
+  const trendingCount = (await db
     .select({ count: sql<number>`count(*)` })
     .from(popularSearches)
     .where(eq(popularSearches.isTrending, 1))
-    .get()?.count || 0;
+    .get())?.count || 0;
 
   return {
     totalSearches: totalSearchesCount,
