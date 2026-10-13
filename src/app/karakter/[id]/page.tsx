@@ -16,6 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA } from "@/data/charactersData";
+import { CharacterDetailActions } from "@/components/CharacterDetailActions";
 
 export function generateStaticParams() {
   return CHARACTERS_DATA.map((char) => ({
@@ -52,14 +53,18 @@ export default async function KarakterDetailPage({
       <Navbar />
 
       <main className="flex-1 container mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Link href="/karakter" className="hover:text-foreground flex items-center gap-1 font-semibold text-pink-600">
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Kembali ke Daftar Karakter
-          </Link>
-          <span>/</span>
-          <span className="text-foreground font-medium">{character.name}</span>
+        {/* Breadcrumb Navigation & Action Buttons */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-muted-foreground pb-2">
+          <div className="flex items-center gap-2">
+            <Link href="/karakter" className="hover:text-foreground flex items-center gap-1 font-semibold text-pink-600">
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Kembali ke Daftar Karakter
+            </Link>
+            <span>/</span>
+            <span className="text-foreground font-medium">{character.name}</span>
+          </div>
+
+          <CharacterDetailActions character={character} />
         </div>
 
         {/* Character Profile Hero Banner */}
@@ -286,6 +291,16 @@ export default async function KarakterDetailPage({
             </div>
           </div>
         )}
+
+        {/* Bottom Actions Card */}
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-xs text-muted-foreground text-center sm:text-left">
+            <span>Selesai membaca profil {character.name}?</span>
+            <span className="block font-medium text-foreground">Kembali ke daftar untuk menelusuri karakter lain atau mulai menyusun tim.</span>
+          </div>
+
+          <CharacterDetailActions character={character} />
+        </div>
       </main>
 
       <Footer />
