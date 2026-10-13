@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "03be526802fc8e69d6d40cdf579ab9cf59d9113c",
+  "generatedForCommit": "dccb00ae9f257d191793131dc7d0f88b32846899",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -52,7 +52,7 @@
     },
     {
       "path": "drizzle/0002_solid_doctor_spectrum.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1516
     },
@@ -70,13 +70,13 @@
     },
     {
       "path": "drizzle/meta/0002_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 14055
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 496
     },
@@ -322,21 +322,21 @@
     },
     {
       "path": "src/db/migrate.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 528
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3998
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 5636
+      "size": 8937
     },
     {
       "path": "tsconfig.json",
