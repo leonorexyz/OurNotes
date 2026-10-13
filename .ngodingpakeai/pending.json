@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "6bd27478471bf5273f6db51c8a1ca231c2204207",
+  "generatedForCommit": "1523d58bdc6cb6c0084850907a6203760995d38d",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -58,7 +58,7 @@
     },
     {
       "path": "drizzle/0003_fantastic_carmella_unuscione.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1968
     },
@@ -82,13 +82,13 @@
     },
     {
       "path": "drizzle/meta/0003_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 24129
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 652
     },
@@ -184,7 +184,7 @@
     },
     {
       "path": "src/app/api/recommended-teams/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 63
     },
@@ -202,15 +202,27 @@
     },
     {
       "path": "src/app/api/teams/recommended/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9964
     },
     {
       "path": "src/app/api/teams/recommended/[id]/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5782
+    },
+    {
+      "path": "src/app/api/teams/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 9571
+    },
+    {
+      "path": "src/app/api/teams/[id]/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 9659
     },
     {
       "path": "src/app/band/page.tsx",
@@ -408,7 +420,7 @@
       "path": "src/db/seed.ts",
       "reason": "changed",
       "language": "typescript",
-      "size": 10995
+      "size": 13221
     },
     {
       "path": "tsconfig.json",
