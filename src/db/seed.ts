@@ -1,8 +1,9 @@
 import { db } from "./index";
-import { guides, events, bands, characters, characterStats } from "./schema";
+import { guides, events, bands, characters, characterStats, recommendedTeams, recommendedTeamMembers } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
 import { BANDS_DATA, CHARACTERS_DATA } from "../data/charactersData";
+import { RECOMMENDED_TEAMS } from "../data/recommendedTeamsData";
 
 export async function seedGuides() {
   await runMigrations();
@@ -245,11 +246,68 @@ export async function seedGuides() {
       .run();
   }
 
+  // Seed Recommended Teams & Members
+  console.log("Memulai seed rekomendasi tim & anggotanya...");
+  for (const team of RECOMMENDED_TEAMS) {
+    db.insert(recommendedTeams)
+      .values({
+        id: team.id,
+        name: team.name,
+        category: team.category,
+        tagline: team.tagline,
+        targetRoom: team.targetRoom,
+        estimatedBp: team.estimatedBP,
+        centerMemberId: team.centerMemberId,
+        synergyTags: JSON.stringify(team.synergyTags),
+        strategy: team.strategy,
+        recommendedAreaItems: JSON.stringify(team.recommendedAreaItems),
+        songSuitability: team.songSuitability,
+      })
+      .onConflictDoUpdate({
+        target: recommendedTeams.id,
+        set: {
+          name: team.name,
+          category: team.category,
+          tagline: team.tagline,
+          targetRoom: team.targetRoom,
+          estimatedBp: team.estimatedBP,
+          centerMemberId: team.centerMemberId,
+          synergyTags: JSON.stringify(team.synergyTags),
+          strategy: team.strategy,
+          recommendedAreaItems: JSON.stringify(team.recommendedAreaItems),
+          songSuitability: team.songSuitability,
+        },
+      })
+      .run();
+
+    // Seed members for this team
+    team.memberIds.forEach((memberId, idx) => {
+      db.insert(recommendedTeamMembers)
+        .values({
+          id: `rtm-${team.id}-${idx + 1}`,
+          recommendedTeamId: team.id,
+          characterId: memberId,
+          slotNumber: idx + 1,
+          isCenter: memberId === team.centerMemberId ? 1 : 0,
+        })
+        .onConflictDoUpdate({
+          target: recommendedTeamMembers.id,
+          set: {
+            characterId: memberId,
+            slotNumber: idx + 1,
+            isCenter: memberId === team.centerMemberId ? 1 : 0,
+          },
+        })
+        .run();
+    });
+  }
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
   const bandCount = db.select().from(bands).all().length;
   const charCount = db.select().from(characters).all().length;
   const statCount = db.select().from(characterStats).all().length;
+  const recTeamCount = db.select().from(recommendedTeams).all().length;
 
   console.log(
     `✓ Seed database berhasil!\n` +
@@ -257,7 +315,8 @@ export async function seedGuides() {
       `  • Event: ${eventCount}\n` +
       `  • Band: ${bandCount}\n` +
       `  • Karakter: ${charCount}\n` +
-      `  • Statistik: ${statCount}`
+      `  • Statistik: ${statCount}\n` +
+      `  • Rekomendasi Tim: ${recTeamCount}`
   );
 }
 

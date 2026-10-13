@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "f89197da4f1c9a80c3579a4629a0affc1dafd024",
+  "generatedForCommit": "a7928f9cbcbd0bf19b9b946b6eb3680f5dd66310",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -169,6 +169,18 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 905
+    },
+    {
+      "path": "src/app/api/team/slot-characters/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 56
+    },
+    {
+      "path": "src/app/api/teams/characters/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 6930
     },
     {
       "path": "src/app/band/page.tsx",
@@ -358,7 +370,7 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 6978
     },
