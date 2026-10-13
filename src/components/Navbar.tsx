@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { SearchCommandModal } from "@/components/SearchCommandModal";
+import { HeaderAccountMenu, MobileAccountDrawer } from "@/components/HeaderAccountMenu";
 import {
   BookOpen,
   Users,
@@ -110,14 +111,8 @@ export function Navbar() {
             </span>
           </button>
 
-          <Link
-            href="/akun"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-pink-500/30 bg-pink-500/10 px-3 py-1.5 text-xs font-bold text-pink-600 dark:text-pink-300 hover:bg-pink-500/20 transition-all"
-            title="Akun & Favorit"
-          >
-            <Heart className="h-3.5 w-3.5 fill-pink-500 text-pink-500" />
-            <span>Akun</span>
-          </Link>
+          {/* Account Dropdown Menu in Header */}
+          <HeaderAccountMenu />
 
           <button
             type="button"
@@ -164,6 +159,8 @@ export function Navbar() {
               </Link>
             );
           })}
+
+          <MobileAccountDrawer />
         </div>
       )}
     </header>
