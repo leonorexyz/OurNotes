@@ -336,13 +336,21 @@ function AkunFavoritContent({ initialTab, baseRoute = "/akun" }: AkunFavoritProp
                 <span>Ganti Akun</span>
               </Link>
 
+              <Link
+                href="/profil"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-input bg-background/80 px-3.5 py-2 text-xs font-semibold hover:bg-muted transition-colors"
+              >
+                <Award className="h-3.5 w-3.5 text-amber-500" />
+                <span>Kartu Profil Lengkap</span>
+              </Link>
+
               <button
                 type="button"
                 onClick={() => setIsEditingProfile(!isEditingProfile)}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-input bg-background/80 px-3.5 py-2 text-xs font-semibold hover:bg-muted transition-colors"
               >
                 <Settings className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>{isEditingProfile ? "Tutup Editor" : "Edit Profil"}</span>
+                <span>{isEditingProfile ? "Tutup Editor Cepat" : "Edit Cepat"}</span>
               </button>
 
               <Link
