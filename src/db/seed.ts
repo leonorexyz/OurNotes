@@ -1,5 +1,15 @@
 import { db } from "./index";
-import { guides, events, bands, characters, characterStats, recommendedTeams, recommendedTeamMembers } from "./schema";
+import {
+  guides,
+  events,
+  bands,
+  characters,
+  characterStats,
+  recommendedTeams,
+  recommendedTeamMembers,
+  teams,
+  teamMembers,
+} from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
 import { BANDS_DATA, CHARACTERS_DATA } from "../data/charactersData";
@@ -302,12 +312,81 @@ export async function seedGuides() {
     });
   }
 
+  // Seed Sample User Saved Team
+  console.log("Memulai seed sample tim tersimpan...");
+  const sampleSavedTeam = {
+    id: "saved-poppin-kirakira",
+    name: "Poppin'Party All Stars Pure",
+    category: "Mono-Band",
+    notes: "Formasi andalan untuk event Pure. Kasumi Center memberikan bonus 110% Score Fever.",
+    centerCharacterId: "char-kasumi-toyama",
+    effectiveBp: 168480,
+    totalHp: 5000,
+    synergyPercent: 20,
+    isPublic: 1,
+    memberIds: [
+      "char-ran-mitake",
+      "char-saya-yamabuki",
+      "char-kasumi-toyama",
+      "char-arisa-ichigaya",
+      "char-yukina-minato",
+    ],
+  };
+
+  db.insert(teams)
+    .values({
+      id: sampleSavedTeam.id,
+      name: sampleSavedTeam.name,
+      category: sampleSavedTeam.category,
+      notes: sampleSavedTeam.notes,
+      centerCharacterId: sampleSavedTeam.centerCharacterId,
+      effectiveBp: sampleSavedTeam.effectiveBp,
+      totalHp: sampleSavedTeam.totalHp,
+      synergyPercent: sampleSavedTeam.synergyPercent,
+      isPublic: sampleSavedTeam.isPublic,
+    })
+    .onConflictDoUpdate({
+      target: teams.id,
+      set: {
+        name: sampleSavedTeam.name,
+        category: sampleSavedTeam.category,
+        notes: sampleSavedTeam.notes,
+        centerCharacterId: sampleSavedTeam.centerCharacterId,
+        effectiveBp: sampleSavedTeam.effectiveBp,
+        totalHp: sampleSavedTeam.totalHp,
+        synergyPercent: sampleSavedTeam.synergyPercent,
+        isPublic: sampleSavedTeam.isPublic,
+      },
+    })
+    .run();
+
+  sampleSavedTeam.memberIds.forEach((memId, idx) => {
+    db.insert(teamMembers)
+      .values({
+        id: `tm-${sampleSavedTeam.id}-${idx + 1}`,
+        teamId: sampleSavedTeam.id,
+        characterId: memId,
+        slotNumber: idx + 1,
+        isCenter: memId === sampleSavedTeam.centerCharacterId ? 1 : 0,
+      })
+      .onConflictDoUpdate({
+        target: teamMembers.id,
+        set: {
+          characterId: memId,
+          slotNumber: idx + 1,
+          isCenter: memId === sampleSavedTeam.centerCharacterId ? 1 : 0,
+        },
+      })
+      .run();
+  });
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
   const bandCount = db.select().from(bands).all().length;
   const charCount = db.select().from(characters).all().length;
   const statCount = db.select().from(characterStats).all().length;
   const recTeamCount = db.select().from(recommendedTeams).all().length;
+  const savedTeamCount = db.select().from(teams).all().length;
 
   console.log(
     `✓ Seed database berhasil!\n` +
@@ -316,7 +395,8 @@ export async function seedGuides() {
       `  • Band: ${bandCount}\n` +
       `  • Karakter: ${charCount}\n` +
       `  • Statistik: ${statCount}\n` +
-      `  • Rekomendasi Tim: ${recTeamCount}`
+      `  • Rekomendasi Tim: ${recTeamCount}\n` +
+      `  • Tim Tersimpan: ${savedTeamCount}`
   );
 }
 
