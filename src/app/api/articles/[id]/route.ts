@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { blogArticles, blogCategories, blogComments } from "@/db/schema";
+import { blogArticles, blogCategories, blogComments, blogTags, blogArticleTags } from "@/db/schema";
 import { eq, and, ne, sql } from "drizzle-orm";
+import { requireAuth } from "@/services/authService";
+import { REVERSE_CATEGORY_MAP, slugifyTag } from "@/data/blogData";
 
 export async function GET(
   request: NextRequest,
@@ -144,6 +146,168 @@ export async function GET(
     console.error("Error fetching article detail:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengambil detail artikel" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id: articleId } = await params;
+    const authResult = await requireAuth(
+      request,
+      "Autentikasi diperlukan. Silakan masuk untuk mengubah artikel."
+    );
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
+    const existingArticle = db
+      .select()
+      .from(blogArticles)
+      .where(eq(blogArticles.id, articleId))
+      .get();
+
+    if (!existingArticle) {
+      return NextResponse.json(
+        { success: false, error: "Artikel tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    if (
+      existingArticle.authorId !== currentUser.id &&
+      currentUser.role !== "admin"
+    ) {
+      return NextResponse.json(
+        { success: false, error: "Anda tidak memiliki izin mengubah artikel ini" },
+        { status: 403 }
+      );
+    }
+
+    const body = await request.json();
+    const updateData: Partial<typeof blogArticles.$inferInsert> = {
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (typeof body.title === "string" && body.title.trim()) {
+      updateData.title = body.title.trim();
+    }
+    if (typeof body.excerpt === "string") {
+      updateData.excerpt = body.excerpt.trim();
+    }
+    if (typeof body.content === "string" && body.content.trim()) {
+      updateData.content = body.content.trim();
+      const wordCount = body.content.trim().split(/\s+/).filter(Boolean).length;
+      updateData.readTime = `${Math.max(1, Math.ceil(wordCount / 160))} Menit Baca`;
+    }
+    if (typeof body.category === "string" && body.category.trim()) {
+      updateData.category = body.category.trim();
+      updateData.categoryId =
+        body.categoryId ||
+        (REVERSE_CATEGORY_MAP as any)[body.category] ||
+        existingArticle.categoryId;
+    }
+    if (typeof body.coverImageBg === "string") {
+      updateData.coverImageBg = body.coverImageBg;
+    }
+    if (Array.isArray(body.tags)) {
+      updateData.tags = JSON.stringify(body.tags);
+    }
+
+    db.update(blogArticles)
+      .set(updateData)
+      .where(eq(blogArticles.id, articleId))
+      .run();
+
+    const updated = db
+      .select()
+      .from(blogArticles)
+      .where(eq(blogArticles.id, articleId))
+      .get();
+
+    return NextResponse.json({
+      success: true,
+      message: "Artikel berhasil diperbarui",
+      data: updated,
+    });
+  } catch (error: any) {
+    if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
+      throw error;
+    }
+    console.error("Error updating article:", error);
+    return NextResponse.json(
+      { success: false, error: "Gagal memperbarui artikel" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return PATCH(request, context);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id: articleId } = await params;
+    const authResult = await requireAuth(
+      request,
+      "Autentikasi diperlukan. Silakan masuk untuk menghapus artikel."
+    );
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
+    const existingArticle = db
+      .select()
+      .from(blogArticles)
+      .where(eq(blogArticles.id, articleId))
+      .get();
+
+    if (!existingArticle) {
+      return NextResponse.json(
+        { success: false, error: "Artikel tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    if (
+      existingArticle.authorId !== currentUser.id &&
+      currentUser.role !== "admin"
+    ) {
+      return NextResponse.json(
+        { success: false, error: "Anda tidak memiliki izin menghapus artikel ini" },
+        { status: 403 }
+      );
+    }
+
+    // Cascade delete comments and junction tags
+    db.delete(blogComments).where(eq(blogComments.articleId, articleId)).run();
+    db.delete(blogArticleTags).where(eq(blogArticleTags.articleId, articleId)).run();
+    db.delete(blogArticles).where(eq(blogArticles.id, articleId)).run();
+
+    return NextResponse.json({
+      success: true,
+      message: "Artikel berhasil dihapus",
+    });
+  } catch (error: any) {
+    if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
+      throw error;
+    }
+    console.error("Error deleting article:", error);
+    return NextResponse.json(
+      { success: false, error: "Gagal menghapus artikel" },
       { status: 500 }
     );
   }

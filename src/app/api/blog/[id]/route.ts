@@ -1,1 +1,1 @@
-export { GET } from "../../articles/[id]/route";
+export { GET, PATCH, PUT, DELETE } from "../../articles/[id]/route";

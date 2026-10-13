@@ -85,7 +85,8 @@ export async function getCurrentUser(
 }
 
 export async function requireAuth(
-  request: NextRequest
+  request: NextRequest,
+  customMessage?: string
 ): Promise<
   | { user: AuthenticatedUser; errorResponse?: never }
   | { user?: never; errorResponse: NextResponse }
@@ -98,7 +99,8 @@ export async function requireAuth(
         {
           success: false,
           error:
-            "Autentikasi diperlukan. Silakan masuk sebagai Produser terlebih dahulu untuk menyimpan formasi tim Anda.",
+            customMessage ||
+            "Autentikasi diperlukan. Silakan masuk sebagai Produser terlebih dahulu.",
           authRequired: true,
         },
         { status: 401 }

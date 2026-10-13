@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { blogArticles, blogCategories, blogArticleTags, blogTags } from "@/db/schema";
 import { eq, and, or, like, desc, asc, sql } from "drizzle-orm";
+import { requireAuth } from "@/services/authService";
+import { REVERSE_CATEGORY_MAP, slugifyTag } from "@/data/blogData";
 
 export async function GET(request: NextRequest) {
   try {
@@ -186,6 +188,167 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching articles:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengambil daftar artikel blog" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const authResult = await requireAuth(
+      request,
+      "Autentikasi diperlukan. Silakan masuk sebagai Produser terlebih dahulu untuk menulis dan mempublikasikan artikel."
+    );
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
+    const body = await request.json();
+    const {
+      title,
+      content,
+      excerpt,
+      category,
+      categoryId,
+      tags = [],
+      coverImageBg,
+      authorRole,
+    } = body;
+
+    if (!title || typeof title !== "string" || !title.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Judul artikel (title) wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    if (!content || typeof content !== "string" || !content.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Isi konten artikel (content) wajib diisi." },
+        { status: 400 }
+      );
+    }
+
+    // Resolve slug / ID
+    let slug = body.id || body.slug;
+    if (!slug) {
+      const generatedSlug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      slug = generatedSlug.length > 3 ? generatedSlug : `post-${Date.now()}`;
+    }
+
+    // Check slug collision
+    const existing = db
+      .select({ id: blogArticles.id })
+      .from(blogArticles)
+      .where(eq(blogArticles.id, slug))
+      .get();
+
+    if (existing) {
+      slug = `${slug}-${Date.now().toString().slice(-4)}`;
+    }
+
+    // Resolve category name and ID
+    const resolvedCategoryName = category || "Tips & Gameplay";
+    const resolvedCategoryId =
+      categoryId ||
+      (REVERSE_CATEGORY_MAP as any)[resolvedCategoryName] ||
+      "tips-gameplay";
+
+    const resolvedExcerpt =
+      (excerpt && typeof excerpt === "string" && excerpt.trim()) ||
+      content.trim().slice(0, 160).replace(/\n/g, " ") + "...";
+
+    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+    const readMinutes = Math.max(1, Math.ceil(wordCount / 160));
+    const resolvedReadTime = `${readMinutes} Menit Baca`;
+
+    const resolvedCoverBg =
+      coverImageBg || "from-indigo-600 via-purple-600 to-pink-600";
+    const tagsArray = Array.isArray(tags) ? tags : [];
+
+    const nowFormatted = new Date().toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    db.insert(blogArticles)
+      .values({
+        id: slug,
+        title: title.trim(),
+        excerpt: resolvedExcerpt,
+        content: content.trim(),
+        categoryId: resolvedCategoryId,
+        category: resolvedCategoryName,
+        authorId: currentUser.id,
+        authorName: currentUser.name,
+        authorAvatar: currentUser.avatarUrl,
+        authorRole: authorRole || (currentUser.role === "admin" ? "Staff Admin" : "Kontributor Komunitas"),
+        authorBadgeColor:
+          currentUser.role === "admin"
+            ? "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300"
+            : "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300",
+        publishedAt: nowFormatted,
+        readTime: resolvedReadTime,
+        likes: 0,
+        commentsCount: 0,
+        views: 0,
+        isFeatured: 0,
+        coverImageBg: resolvedCoverBg,
+        tags: JSON.stringify(tagsArray),
+      })
+      .run();
+
+    // Insert tags
+    for (const tagName of tagsArray) {
+      if (typeof tagName === "string" && tagName.trim()) {
+        const tagSlug = slugifyTag(tagName);
+        db.insert(blogTags)
+          .values({
+            id: tagSlug,
+            name: tagName.trim(),
+            slug: tagSlug,
+          })
+          .onConflictDoNothing()
+          .run();
+
+        const junctionId = `at-${slug}-${tagSlug}`;
+        db.insert(blogArticleTags)
+          .values({
+            id: junctionId,
+            articleId: slug,
+            tagId: tagSlug,
+          })
+          .onConflictDoNothing()
+          .run();
+      }
+    }
+
+    const createdArticle = db
+      .select()
+      .from(blogArticles)
+      .where(eq(blogArticles.id, slug))
+      .get();
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Artikel berhasil dipublikasikan",
+        data: createdArticle,
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
+      throw error;
+    }
+    console.error("Error creating blog article:", error);
+    return NextResponse.json(
+      { success: false, error: "Gagal mempublikasikan artikel blog" },
       { status: 500 }
     );
   }
