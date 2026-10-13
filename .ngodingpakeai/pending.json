@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "00a41841fea70835b5759f26d0923f2739a74e63",
+  "generatedForCommit": "cfc7526516df9acdf112cee7aea9df7ac73c0937",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -22,9 +22,9 @@
     },
     {
       "path": ".gitignore",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": null,
-      "size": 480
+      "size": 519
     },
     {
       "path": ".ngodingpakeaiignore",
@@ -39,6 +39,30 @@
       "size": 18850
     },
     {
+      "path": "drizzle/0000_curly_shen.sql",
+      "reason": "new",
+      "language": "sql",
+      "size": 302
+    },
+    {
+      "path": "drizzle/meta/0000_snapshot.json",
+      "reason": "new",
+      "language": "json",
+      "size": 2394
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "new",
+      "language": "json",
+      "size": 200
+    },
+    {
+      "path": "drizzle.config.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 207
+    },
+    {
       "path": "eslint.config.mjs",
       "reason": "needs_summary",
       "language": "javascript",
@@ -46,21 +70,21 @@
     },
     {
       "path": "next.config.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 387
     },
     {
       "path": "package-lock.json",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "json",
-      "size": 236384
+      "size": 287037
     },
     {
       "path": "package.json",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "json",
-      "size": 564
+      "size": 820
     },
     {
       "path": "README.md",
@@ -94,7 +118,7 @@
     },
     {
       "path": "src/app/layout.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 719
     },
@@ -148,7 +172,7 @@
     },
     {
       "path": "src/components/MobileBottomNav.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1729
     },
@@ -172,7 +196,7 @@
     },
     {
       "path": "src/components/ScrollToTop.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1068
     },
@@ -187,6 +211,30 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 16405
+    },
+    {
+      "path": "src/db/index.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 569
+    },
+    {
+      "path": "src/db/migrate.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 526
+    },
+    {
+      "path": "src/db/schema.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 757
+    },
+    {
+      "path": "src/db/seed.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2134
     },
     {
       "path": "tsconfig.json",
