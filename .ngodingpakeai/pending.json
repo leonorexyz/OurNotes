@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "d9ff7b4815a4652dac504686ea38f88229158f99",
+  "generatedForCommit": "e1cb5a467671fbb459d28cf985adea88fda0277e",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -130,13 +130,13 @@
     },
     {
       "path": "src/app/band/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 6899
     },
     {
       "path": "src/app/band/[id]/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 14508
     },
@@ -160,9 +160,9 @@
     },
     {
       "path": "src/app/karakter/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 16549
+      "size": 25355
     },
     {
       "path": "src/app/karakter/[id]/page.tsx",
@@ -196,9 +196,9 @@
     },
     {
       "path": "src/components/CharacterCard.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 6682
+      "size": 6803
     },
     {
       "path": "src/components/CharacterDetailActions.tsx",
@@ -274,15 +274,15 @@
     },
     {
       "path": "src/data/bandDetailsData.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 31284
     },
     {
       "path": "src/data/charactersData.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 11668
+      "size": 16287
     },
     {
       "path": "src/data/guidesData.ts",

@@ -25,6 +25,8 @@ import {
   Radio,
   Drum,
   ExternalLink,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
 import { CharacterCard } from "@/components/CharacterCard";
@@ -62,6 +64,7 @@ function KarakterContent() {
   const [selectedRarity, setSelectedRarity] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("power");
+  const [sortDirection, setSortDirection] = useState<"desc" | "asc">("desc");
 
   // Sync state if URL search params change
   useEffect(() => {
@@ -94,6 +97,7 @@ function KarakterContent() {
     setSelectedRarity("all");
     setSearchQuery("");
     setSortBy("power");
+    setSortDirection("desc");
   };
 
   const isFiltered =
@@ -103,8 +107,10 @@ function KarakterContent() {
     selectedRarity !== "all" ||
     searchQuery.trim().length > 0;
 
-  // Filter & sort logic
+  // Filter & sort logic with ascending/descending direction
   const filteredCharacters = useMemo(() => {
+    const multiplier = sortDirection === "desc" ? 1 : -1;
+
     return CHARACTERS_DATA.filter((c) => {
       const matchBand = selectedBand === "all" || c.bandId === selectedBand;
       const matchAttr = selectedAttribute === "all" || c.attribute === selectedAttribute;
@@ -120,15 +126,20 @@ function KarakterContent() {
 
       return matchBand && matchAttr && matchRole && matchRarity && matchQuery;
     }).sort((a, b) => {
-      if (sortBy === "power") return b.stats.total - a.stats.total;
-      if (sortBy === "rarity") return b.rarity - a.rarity;
-      if (sortBy === "hp") return b.stats.hp - a.stats.hp;
-      if (sortBy === "performance") return b.stats.performance - a.stats.performance;
-      if (sortBy === "technique") return b.stats.technique - a.stats.technique;
-      if (sortBy === "visual") return b.stats.visual - a.stats.visual;
-      return a.name.localeCompare(b.name);
+      if (sortBy === "power") return multiplier * (b.stats.total - a.stats.total);
+      if (sortBy === "rarity") return multiplier * (b.rarity - a.rarity);
+      if (sortBy === "hp") return multiplier * (b.stats.hp - a.stats.hp);
+      if (sortBy === "performance") return multiplier * (b.stats.performance - a.stats.performance);
+      if (sortBy === "technique") return multiplier * (b.stats.technique - a.stats.technique);
+      if (sortBy === "visual") return multiplier * (b.stats.visual - a.stats.visual);
+      if (sortBy === "name") {
+        return sortDirection === "desc"
+          ? b.name.localeCompare(a.name)
+          : a.name.localeCompare(b.name);
+      }
+      return 0;
     });
-  }, [selectedBand, selectedAttribute, selectedRole, selectedRarity, searchQuery, sortBy]);
+  }, [selectedBand, selectedAttribute, selectedRole, selectedRarity, searchQuery, sortBy, sortDirection]);
 
   const comparedChars = CHARACTERS_DATA.filter((c) => compareList.includes(c.id));
 
@@ -224,7 +235,7 @@ function KarakterContent() {
             )}
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <ArrowUpDown className="h-3.5 w-3.5" />
               <span>Urutkan:</span>
@@ -233,15 +244,46 @@ function KarakterContent() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="rounded-xl border border-input bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:border-pink-500"
               >
-                <option value="power">Total BP Tertinggi</option>
-                <option value="rarity">Rarity (★5 dulu)</option>
+                <option value="power">Total BP</option>
+                <option value="rarity">Rarity (Bintang)</option>
                 <option value="performance">Stat Performance</option>
                 <option value="technique">Stat Technique</option>
                 <option value="visual">Stat Visual</option>
                 <option value="hp">Max Life / HP</option>
-                <option value="name">Nama (A-Z)</option>
+                <option value="name">Nama Karakter</option>
               </select>
             </div>
+
+            {/* Ascending / Descending Toggle Button */}
+            <button
+              onClick={() => setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"))}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-input bg-background hover:bg-muted text-xs font-semibold text-foreground transition-colors shadow-2xs"
+              title={sortDirection === "desc" ? "Urutan Menurun (Tertinggi ke Terendah)" : "Urutan Menaik (Terendah ke Tertinggi)"}
+            >
+              {sortDirection === "desc" ? (
+                <>
+                  <ArrowDown className="h-3.5 w-3.5 text-pink-600" />
+                  <span>Turun (↓)</span>
+                </>
+              ) : (
+                <>
+                  <ArrowUp className="h-3.5 w-3.5 text-pink-600" />
+                  <span>Naik (↑)</span>
+                </>
+              )}
+            </button>
+
+            {/* Quick Reset Button if active */}
+            {(isFiltered || sortDirection !== "desc" || sortBy !== "power") && (
+              <button
+                onClick={resetAllFilters}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-50 dark:bg-pink-950/60 hover:bg-pink-100 dark:hover:bg-pink-900/50 text-xs font-bold text-pink-700 dark:text-pink-300 transition-colors"
+                title="Reset semua filter dan arah pengurutan"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>Reset</span>
+              </button>
+            )}
 
             {compareList.length > 0 && (
               <button
