@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "2308cb7235f3b79eba8eef4742b376ef9a825166",
+  "generatedForCommit": "00a41841fea70835b5759f26d0923f2739a74e63",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -46,9 +46,9 @@
     },
     {
       "path": "next.config.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 318
+      "size": 387
     },
     {
       "path": "package-lock.json",
@@ -70,13 +70,13 @@
     },
     {
       "path": "src/app/blog/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2244
     },
     {
       "path": "src/app/gacha/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2843
     },
@@ -88,19 +88,19 @@
     },
     {
       "path": "src/app/karakter/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4577
     },
     {
       "path": "src/app/layout.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 466
+      "size": 719
     },
     {
       "path": "src/app/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16617
     },
@@ -112,7 +112,7 @@
     },
     {
       "path": "src/app/tim/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3004
     },
@@ -130,7 +130,7 @@
     },
     {
       "path": "src/components/GameGlossary.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 8104
     },
@@ -145,6 +145,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 4026
+    },
+    {
+      "path": "src/components/MobileBottomNav.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1729
     },
     {
       "path": "src/components/Navbar.tsx",
@@ -163,6 +169,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 31446
+    },
+    {
+      "path": "src/components/ScrollToTop.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1068
     },
     {
       "path": "src/components/TipsTrikSection.tsx",
