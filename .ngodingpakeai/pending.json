@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "531a8c83f7792c6bc31d9c1293e003f9b53b29ec",
+  "generatedForCommit": "8b6b6e684181d6b8b91c229e6b5518a9a2ababad",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -318,7 +318,7 @@
       "path": "src/app/cari/page.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 14274
+      "size": 13873
     },
     {
       "path": "src/app/gacha/page.tsx",
@@ -501,6 +501,12 @@
       "size": 31446
     },
     {
+      "path": "src/components/PopularSearchesList.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 7160
+    },
+    {
       "path": "src/components/RealtimeSearchInput.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -520,9 +526,9 @@
     },
     {
       "path": "src/components/SearchCommandModal.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 2676
+      "size": 2097
     },
     {
       "path": "src/components/SearchEmptyState.tsx",
@@ -538,7 +544,7 @@
     },
     {
       "path": "src/components/SearchResultItemLink.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5219
     },

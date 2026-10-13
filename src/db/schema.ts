@@ -146,6 +146,40 @@ export const recommendedTeamMembers = sqliteTable("recommended_team_members", {
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+export const gachas = sqliteTable("gachas", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  japaneseTitle: text("japanese_title"),
+  category: text("category").notNull(),
+  status: text("status").notNull(),
+  startAt: text("start_at").notNull(),
+  endAt: text("end_at").notNull(),
+  bannerImageBg: text("banner_image_bg").notNull(),
+  featuredCharacters: text("featured_characters"), // JSON
+  pickupRates: text("pickup_rates"), // JSON
+  pitySystem: text("pity_system"), // JSON
+  cost: text("cost"), // JSON
+  description: text("description").notNull(),
+  isRecommended: integer("is_recommended").notNull().default(0), // 0 or 1
+  tags: text("tags"), // JSON array
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const gachaReminders = sqliteTable("gacha_reminders", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+  gachaId: text("gacha_id")
+    .notNull()
+    .references(() => gachas.id, { onDelete: "cascade" }),
+  targetSpark: integer("target_spark").default(300),
+  savedStars: integer("saved_stars").default(0),
+  notifyAt: text("notify_at"),
+  note: text("note"),
+  isNotified: integer("is_notified").notNull().default(0),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
 export type Guide = typeof guides.$inferSelect;
 export type NewGuide = typeof guides.$inferInsert;
 export type GameEvent = typeof events.$inferSelect;
@@ -166,3 +200,7 @@ export type RecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferSe
 export type NewRecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferInsert;
 export type UserRecord = typeof users.$inferSelect;
 export type NewUserRecord = typeof users.$inferInsert;
+export type GachaRecord = typeof gachas.$inferSelect;
+export type NewGachaRecord = typeof gachas.$inferInsert;
+export type GachaReminderRecord = typeof gachaReminders.$inferSelect;
+export type NewGachaReminderRecord = typeof gachaReminders.$inferInsert;

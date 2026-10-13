@@ -10,11 +10,14 @@ import {
   teams,
   teamMembers,
   users,
+  gachas,
+  gachaReminders,
 } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
 import { BANDS_DATA, CHARACTERS_DATA } from "../data/charactersData";
 import { RECOMMENDED_TEAMS } from "../data/recommendedTeamsData";
+import { GACHA_BANNERS_DATA } from "../data/gachaData";
 
 export async function seedGuides() {
   await runMigrations();
@@ -413,6 +416,71 @@ export async function seedGuides() {
       .run();
   });
 
+  console.log("Memulai seed jadwal gacha dan banner...");
+  for (const banner of GACHA_BANNERS_DATA) {
+    db.insert(gachas)
+      .values({
+        id: banner.id,
+        title: banner.title,
+        japaneseTitle: banner.japaneseTitle || null,
+        category: banner.category,
+        status: banner.status,
+        startAt: banner.startAt,
+        endAt: banner.endAt,
+        bannerImageBg: banner.bannerImageBg,
+        featuredCharacters: JSON.stringify(banner.featuredCharacters),
+        pickupRates: JSON.stringify(banner.pickupRates),
+        pitySystem: JSON.stringify(banner.pitySystem),
+        cost: JSON.stringify(banner.cost),
+        description: banner.description,
+        isRecommended: banner.isRecommended ? 1 : 0,
+        tags: JSON.stringify(banner.tags),
+      })
+      .onConflictDoUpdate({
+        target: gachas.id,
+        set: {
+          title: banner.title,
+          japaneseTitle: banner.japaneseTitle || null,
+          category: banner.category,
+          status: banner.status,
+          startAt: banner.startAt,
+          endAt: banner.endAt,
+          bannerImageBg: banner.bannerImageBg,
+          featuredCharacters: JSON.stringify(banner.featuredCharacters),
+          pickupRates: JSON.stringify(banner.pickupRates),
+          pitySystem: JSON.stringify(banner.pitySystem),
+          cost: JSON.stringify(banner.cost),
+          description: banner.description,
+          isRecommended: banner.isRecommended ? 1 : 0,
+          tags: JSON.stringify(banner.tags),
+        },
+      })
+      .run();
+  }
+
+  // Seed sample reminder
+  db.insert(gachaReminders)
+    .values({
+      id: "reminder-sample-1",
+      userId: "user-producer-1",
+      gachaId: "gacha-kirafes-vol1",
+      targetSpark: 300,
+      savedStars: 42500,
+      notifyAt: "2026-10-19T12:00:00+09:00",
+      note: "Pastikan spark Kasumi Kirafes sebelum banner berakhir!",
+      isNotified: 0,
+    })
+    .onConflictDoUpdate({
+      target: gachaReminders.id,
+      set: {
+        targetSpark: 300,
+        savedStars: 42500,
+        notifyAt: "2026-10-19T12:00:00+09:00",
+        note: "Pastikan spark Kasumi Kirafes sebelum banner berakhir!",
+      },
+    })
+    .run();
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
   const bandCount = db.select().from(bands).all().length;
@@ -420,6 +488,8 @@ export async function seedGuides() {
   const statCount = db.select().from(characterStats).all().length;
   const recTeamCount = db.select().from(recommendedTeams).all().length;
   const savedTeamCount = db.select().from(teams).all().length;
+  const gachaCount = db.select().from(gachas).all().length;
+  const reminderCount = db.select().from(gachaReminders).all().length;
 
   console.log(
     `✓ Seed database berhasil!\n` +
@@ -429,7 +499,9 @@ export async function seedGuides() {
       `  • Karakter: ${charCount}\n` +
       `  • Statistik: ${statCount}\n` +
       `  • Rekomendasi Tim: ${recTeamCount}\n` +
-      `  • Tim Tersimpan: ${savedTeamCount}`
+      `  • Tim Tersimpan: ${savedTeamCount}\n` +
+      `  • Banner Gacha: ${gachaCount}\n` +
+      `  • Pengingat Gacha: ${reminderCount}`
   );
 }
 

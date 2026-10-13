@@ -36,6 +36,13 @@
       "when": 1791894084966,
       "tag": "0004_left_stellaris",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1791898179568,
+      "tag": "0005_flaky_lionheart",
+      "breakpoints": true
     }
   ]
 }
