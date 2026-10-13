@@ -120,6 +120,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               initialLikes={post.likes}
               commentsCount={post.commentsCount}
               title={post.title}
+              postId={post.id}
             />
           </div>
         </header>
