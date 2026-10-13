@@ -291,6 +291,13 @@ export default function GachaPage() {
               <Calendar className="h-4 w-4" />
               <span>Kalender Event & Gacha Berjalan</span>
             </button>
+            <Link
+              href="/gacha/pengingat"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors border border-purple-200 dark:border-purple-800"
+            >
+              <Bell className="h-3.5 w-3.5" />
+              <span>Pengingat Saya</span>
+            </Link>
           </div>
 
           {viewMode === "banners" ? (
