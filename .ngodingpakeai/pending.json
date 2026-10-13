@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "5c16a71df3fc276f2f168dab2e96ce7ff743b532",
+  "generatedForCommit": "8a1c31017ab4ea010eb74c0cc73ab7ba827f5715",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -76,9 +76,21 @@
     },
     {
       "path": "drizzle/0006_glorious_brother_voodoo.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 71
+    },
+    {
+      "path": "drizzle/0007_supreme_karen_page.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 2281
+    },
+    {
+      "path": "drizzle/0008_brief_the_captain.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 1170
     },
     {
       "path": "drizzle/meta/0000_snapshot.json",
@@ -118,15 +130,27 @@
     },
     {
       "path": "drizzle/meta/0006_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 32763
     },
     {
-      "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "path": "drizzle/meta/0007_snapshot.json",
+      "reason": "needs_summary",
       "language": "json",
-      "size": 1088
+      "size": 44979
+    },
+    {
+      "path": "drizzle/meta/0008_snapshot.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 51238
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 1379
     },
     {
       "path": "drizzle.config.ts",
@@ -165,6 +189,30 @@
       "size": 1246
     },
     {
+      "path": "src/app/akun/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 448
+    },
+    {
+      "path": "src/app/api/articles/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 10981
+    },
+    {
+      "path": "src/app/api/articles/[id]/comments/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5711
+    },
+    {
+      "path": "src/app/api/articles/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 9496
+    },
+    {
       "path": "src/app/api/auth/login/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -195,6 +243,84 @@
       "size": 2624
     },
     {
+      "path": "src/app/api/blog/categories/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 52
+    },
+    {
+      "path": "src/app/api/blog/categories/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 54
+    },
+    {
+      "path": "src/app/api/blog/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 47
+    },
+    {
+      "path": "src/app/api/blog/tags/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 46
+    },
+    {
+      "path": "src/app/api/blog/tags/[slug]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 50
+    },
+    {
+      "path": "src/app/api/blog/[id]/comments/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 67
+    },
+    {
+      "path": "src/app/api/blog/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 69
+    },
+    {
+      "path": "src/app/api/cari/counts/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 49
+    },
+    {
+      "path": "src/app/api/cari/filter/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 55
+    },
+    {
+      "path": "src/app/api/cari/popular/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 56
+    },
+    {
+      "path": "src/app/api/cari/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 39
+    },
+    {
+      "path": "src/app/api/categories/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3299
+    },
+    {
+      "path": "src/app/api/categories/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2363
+    },
+    {
       "path": "src/app/api/characters/compare/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -213,10 +339,34 @@
       "size": 8652
     },
     {
+      "path": "src/app/api/comments/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5122
+    },
+    {
+      "path": "src/app/api/comments/[id]/replies/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3554
+    },
+    {
+      "path": "src/app/api/comments/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4343
+    },
+    {
+      "path": "src/app/api/events/calendar/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3988
+    },
+    {
       "path": "src/app/api/events/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 1602
+      "size": 2095
     },
     {
       "path": "src/app/api/faq/route.ts",
@@ -225,10 +375,34 @@
       "size": 2404
     },
     {
+      "path": "src/app/api/gacha/notifications/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3781
+    },
+    {
+      "path": "src/app/api/gacha/reminders/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8901
+    },
+    {
+      "path": "src/app/api/gacha/reminders/[id]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 7112
+    },
+    {
       "path": "src/app/api/gacha/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 2543
+    },
+    {
+      "path": "src/app/api/gacha/[id]/reminder/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5350
     },
     {
       "path": "src/app/api/gacha/[id]/route.ts",
@@ -253,6 +427,42 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 63
+    },
+    {
+      "path": "src/app/api/search/counts/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1963
+    },
+    {
+      "path": "src/app/api/search/filter/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6393
+    },
+    {
+      "path": "src/app/api/search/popular/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5188
+    },
+    {
+      "path": "src/app/api/search/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6328
+    },
+    {
+      "path": "src/app/api/tags/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3029
+    },
+    {
+      "path": "src/app/api/tags/[slug]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2793
     },
     {
       "path": "src/app/api/team/slot-characters/route.ts",
@@ -357,6 +567,12 @@
       "size": 13873
     },
     {
+      "path": "src/app/favorit/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 415
+    },
+    {
       "path": "src/app/gacha/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
@@ -427,6 +643,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 106500
+    },
+    {
+      "path": "src/components/AkunFavoritLayout.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 30202
     },
     {
       "path": "src/components/BlogArticleActions.tsx",
@@ -514,15 +736,15 @@
     },
     {
       "path": "src/components/MobileBottomNav.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 1955
+      "size": 2013
     },
     {
       "path": "src/components/Navbar.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 6386
+      "size": 6887
     },
     {
       "path": "src/components/PanduanEventSection.tsx",
@@ -646,21 +868,33 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
-      "size": 9192
+      "size": 14532
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
-      "size": 18901
+      "size": 29160
     },
     {
       "path": "src/services/authService.ts",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 2619
+      "size": 2641
+    },
+    {
+      "path": "src/services/gachaNotificationService.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 10338
+    },
+    {
+      "path": "src/services/searchLogService.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3952
     },
     {
       "path": "src/services/teamSynergyService.ts",

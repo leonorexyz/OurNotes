@@ -312,6 +312,14 @@ function AkunFavoritContent() {
 
             {/* Right: Quick Action Buttons */}
             <div className="flex flex-wrap items-center gap-2.5">
+              <Link
+                href="/masuk"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-pink-500/30 bg-pink-500/10 px-3.5 py-2 text-xs font-semibold text-pink-600 dark:text-pink-300 hover:bg-pink-500/20 transition-colors"
+              >
+                <User className="h-3.5 w-3.5" />
+                <span>Ganti Akun</span>
+              </Link>
+
               <button
                 type="button"
                 onClick={() => setIsEditingProfile(!isEditingProfile)}
