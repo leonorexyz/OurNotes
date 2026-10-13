@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Sparkles, RotateCcw, Bell, X, CheckCircle2 } from "lucide-react";
 import { GachaBanner } from "@/data/gachaData";
+import { GachaReminderModal } from "@/components/GachaReminderModal";
 
 interface GachaDetailActionsProps {
   banner: GachaBanner;
 }
 
 export function GachaDetailActions({ banner }: GachaDetailActionsProps) {
+  const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
   const [reminderNotice, setReminderNotice] = useState<string | null>(null);
   const [simResults, setSimResults] = useState<
     { name: string; rarity: number; attribute: string; isPickup: boolean }[] | null
@@ -101,13 +103,26 @@ export function GachaDetailActions({ banner }: GachaDetailActionsProps) {
         </button>
 
         <button
-          onClick={handleSetReminder}
+          onClick={() => setIsReminderModalOpen(true)}
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
         >
           <Bell className="h-4 w-4" />
-          <span>Pasang Pengingat Banner</span>
+          <span>Setel Pengingat & Target Kartu</span>
         </button>
       </div>
+
+      {/* Reminder Modal */}
+      <GachaReminderModal
+        isOpen={isReminderModalOpen}
+        onClose={() => setIsReminderModalOpen(false)}
+        initialBanner={banner}
+        onReminderSaved={(rem) => {
+          setReminderNotice(
+            `Pengingat untuk banner "${rem.bannerTitle}" (${rem.targetCharacterName}) berhasil disimpan!`
+          );
+          setTimeout(() => setReminderNotice(null), 3500);
+        }}
+      />
 
       {/* Simulator Results Box */}
       {simResults && (

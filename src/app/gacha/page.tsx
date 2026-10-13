@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { GACHA_BANNERS_DATA, GachaBanner, FeaturedGachaCharacter } from "@/data/gachaData";
 import { GachaEventCalendar } from "@/components/GachaEventCalendar";
+import { GachaReminderModal, GachaReminderManager } from "@/components/GachaReminderModal";
 
 export default function GachaPage() {
   const [viewMode, setViewMode] = useState<"banners" | "calendar">("banners");
@@ -688,93 +689,21 @@ export default function GachaPage() {
           </div>
         </section>
 
+        {/* Section: Pengingat Gacha Incaran Saya */}
+        <section id="pengingat-gacha">
+          <GachaReminderManager />
+        </section>
+
         {/* Modal: Pasang Pengingat Banner Gacha */}
-        {reminderModalBanner && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-            <div className="w-full max-w-md overflow-hidden rounded-3xl bg-card border border-border shadow-2xl animate-in zoom-in-95">
-              <div className="p-5 border-b border-border flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Bell className="h-5 w-5 text-purple-600" />
-                  <h3 className="font-black text-base text-foreground">
-                    Pasang Pengingat Gacha
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setReminderModalBanner(null)}
-                  className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-
-              <form onSubmit={handleSaveReminder} className="p-5 space-y-4 text-xs">
-                <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 space-y-1">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
-                    Target Banner:
-                  </span>
-                  <h4 className="font-bold text-foreground text-sm">
-                    {reminderModalBanner.title}
-                  </h4>
-                  <p className="text-[11px] text-purple-700 dark:text-purple-300">
-                    Berakhir pada:{" "}
-                    {new Date(reminderModalBanner.endAt).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-bold text-foreground block">
-                    Kapan Ingin Diingatkan?
-                  </label>
-                  <select
-                    value={reminderTimeNotice}
-                    onChange={(e) => setReminderTimeNotice(e.target.value)}
-                    className="w-full rounded-xl border border-input bg-card px-3.5 py-2 text-xs"
-                  >
-                    <option value="h-3">H-3 Sebelum Banner Berakhir</option>
-                    <option value="h-1">H-1 Sebelum Banner Berakhir (Direkomendasikan)</option>
-                    <option value="h-day">6 Jam Sebelum Penutupan Server</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-bold text-foreground block">
-                    Alamat Email (Opsional / Notifikasi Cloud)
-                  </label>
-                  <input
-                    type="email"
-                    value={reminderEmail}
-                    onChange={(e) => setReminderEmail(e.target.value)}
-                    placeholder="nama@email.com"
-                    className="w-full rounded-xl border border-input bg-muted/20 px-3.5 py-2.5 text-xs focus:border-purple-500 focus:outline-none"
-                  />
-                  <span className="text-[10px] text-muted-foreground block">
-                    Pengingat juga akan tersimpan di browser lokalmu.
-                  </span>
-                </div>
-
-                <div className="pt-2 border-t border-border flex items-center justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setReminderModalBanner(null)}
-                    className="px-4 py-2.5 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-bold text-xs"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-2xs"
-                  >
-                    Aktifkan Pengingat
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        <GachaReminderModal
+          isOpen={reminderModalBanner !== null}
+          onClose={() => setReminderModalBanner(null)}
+          initialBanner={reminderModalBanner}
+          onReminderSaved={(reminder) => {
+            setReminderSavedNotice(`Pengingat gacha untuk "${reminder.bannerTitle}" berhasil disimpan!`);
+            setTimeout(() => setReminderSavedNotice(null), 3500);
+          }}
+        />
 
         {/* Modal: Drop Rate Details */}
         {selectedBannerDetail && (
