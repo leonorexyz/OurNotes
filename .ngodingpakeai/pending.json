@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "27a13dc7886bd9994e895eb8045bcb3417406236",
+  "generatedForCommit": "fd5e8e41ed21f304b5c02631516bbfaa7b79b1a5",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -63,6 +63,12 @@
       "size": 1968
     },
     {
+      "path": "drizzle/0004_left_stellaris.sql",
+      "reason": "new",
+      "language": "sql",
+      "size": 1467
+    },
+    {
       "path": "drizzle/meta/0000_snapshot.json",
       "reason": "needs_summary",
       "language": "json",
@@ -87,10 +93,16 @@
       "size": 24129
     },
     {
-      "path": "drizzle/meta/_journal.json",
-      "reason": "needs_summary",
+      "path": "drizzle/meta/0004_snapshot.json",
+      "reason": "new",
       "language": "json",
-      "size": 652
+      "size": 25994
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "changed",
+      "language": "json",
+      "size": 794
     },
     {
       "path": "drizzle.config.ts",
@@ -127,6 +139,24 @@
       "reason": "needs_summary",
       "language": "markdown",
       "size": 1246
+    },
+    {
+      "path": "src/app/api/auth/login/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1531
+    },
+    {
+      "path": "src/app/api/auth/logout/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 329
+    },
+    {
+      "path": "src/app/api/auth/me/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 967
     },
     {
       "path": "src/app/api/bands/route.ts",
@@ -196,7 +226,7 @@
     },
     {
       "path": "src/app/api/team/synergy/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 59
     },
@@ -220,21 +250,21 @@
     },
     {
       "path": "src/app/api/teams/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 9571
+      "size": 9785
     },
     {
       "path": "src/app/api/teams/synergy/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1596
     },
     {
       "path": "src/app/api/teams/[id]/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 9659
+      "size": 10726
     },
     {
       "path": "src/app/band/page.tsx",
@@ -304,9 +334,9 @@
     },
     {
       "path": "src/app/tim/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 100349
+      "size": 106500
     },
     {
       "path": "src/components/CharacterCard.tsx",
@@ -424,19 +454,25 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 6978
+      "size": 7451
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 13221
+      "size": 14101
+    },
+    {
+      "path": "src/services/authService.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2619
     },
     {
       "path": "src/services/teamSynergyService.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 13653
     },
