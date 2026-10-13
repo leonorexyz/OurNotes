@@ -18,6 +18,7 @@ import { Character } from "@/data/charactersData";
 interface CharacterCardProps {
   character: Character;
   isComparing?: boolean;
+  isCompared?: boolean;
   onToggleCompare?: (id: string) => void;
   onSelect?: (character: Character) => void;
   showCompareButton?: boolean;
@@ -26,10 +27,12 @@ interface CharacterCardProps {
 export function CharacterCard({
   character,
   isComparing = false,
+  isCompared,
   onToggleCompare,
   onSelect,
   showCompareButton = true,
 }: CharacterCardProps) {
+  const activeCompare = isCompared !== undefined ? isCompared : isComparing;
   const [showStats, setShowStats] = useState(false);
 
   const attributeStyles = {
@@ -42,7 +45,7 @@ export function CharacterCard({
   return (
     <div
       className={`group rounded-3xl border transition-all duration-200 bg-card p-5 shadow-xs flex flex-col justify-between space-y-4 hover:shadow-md ${
-        isComparing
+        activeCompare
           ? "border-pink-500 ring-2 ring-pink-500/20"
           : "border-border/80 hover:border-pink-300/80"
       }`}
@@ -143,12 +146,12 @@ export function CharacterCard({
           <button
             onClick={() => onToggleCompare?.(character.id)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all w-full justify-center ${
-              isComparing
+              activeCompare
                 ? "bg-pink-600 text-white shadow-xs"
                 : "bg-muted/70 hover:bg-muted text-foreground"
             }`}
           >
-            {isComparing ? (
+            {activeCompare ? (
               <>
                 <Check className="h-3.5 w-3.5" />
                 <span>Dipilih untuk Perbandingan</span>
