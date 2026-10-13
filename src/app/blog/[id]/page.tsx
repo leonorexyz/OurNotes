@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { BLOG_POSTS_DATA, BlogPost } from "@/data/blogData";
 import { BlogArticleActions } from "@/components/BlogArticleActions";
+import { BlogCommentsSection } from "@/components/BlogCommentsSection";
 
 export function generateStaticParams() {
   return BLOG_POSTS_DATA.map((post) => ({
@@ -267,78 +268,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </section>
         )}
 
-        {/* Section: Diskusi Komunitas (Komentar) */}
-        <section id="diskusi-komentar" className="rounded-3xl border border-border bg-card p-6 sm:p-8 space-y-5 shadow-xs">
-          <div className="flex items-center justify-between border-b border-border pb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-2xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600">
-                <MessageSquare className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-foreground">
-                  Diskusi Komunitas ({post.commentsCount} Komentar)
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  Beri tanggapan, bagikan pengalaman skor, atau ajukan pertanyaan ke penulis
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Comment Submission Form Box */}
-          <div className="space-y-3">
-            <textarea
-              rows={3}
-              placeholder="Tulis tanggapan atau pengalamanmu terkait artikel ini..."
-              className="w-full rounded-2xl border border-input bg-muted/20 p-3.5 text-xs focus:border-indigo-500 focus:outline-none"
-            />
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">
-                Gunakan bahasa yang sopan dan saling mendukung sesama pemain.
-              </span>
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-2xs transition-colors cursor-pointer"
-              >
-                <Send className="h-3.5 w-3.5" />
-                <span>Kirim Komentar</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Sample Community Comments */}
-          <div className="space-y-3 pt-3 border-t border-border">
-            <div className="p-4 rounded-2xl bg-muted/30 border border-border/60 space-y-2 text-xs">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-foreground">Hina_Boomer</span>
-                  <span className="px-2 py-0.5 rounded-md bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 text-[10px] font-bold">
-                    Lv. 140
-                  </span>
-                </div>
-                <span className="text-[10px] text-muted-foreground">2 jam yang lalu</span>
-              </div>
-              <p className="text-muted-foreground leading-relaxed">
-                Terima kasih tipsnya! Setelah menaikkan note speed ke 10.4 akhirnya bisa Full Combo lagu Fire Bird Expert. Offset +3 sangat ngebantu earphone bluetooth saya.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-muted/30 border border-border/60 space-y-2 text-xs">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-foreground">Moca_Bread</span>
-                  <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 text-[10px] font-bold">
-                    Lv. 118
-                  </span>
-                </div>
-                <span className="text-[10px] text-muted-foreground">5 jam yang lalu</span>
-              </div>
-              <p className="text-muted-foreground leading-relaxed">
-                Setuju banget dengan poin jempol vs telunjuk. Kalau main lagu Special level 28 ke atas emang wajib taruh HP di meja pakai telunjuk biar ga kram!
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Section: Kolom Komentar & Balasan Komunitas */}
+        <BlogCommentsSection postId={post.id} defaultCommentsCount={post.commentsCount} />
       </main>
 
       <Footer />
