@@ -278,6 +278,48 @@ export type NewBlogTagRecord = typeof blogTags.$inferInsert;
 export type BlogArticleRecord = typeof blogArticles.$inferSelect;
 export type NewBlogArticleRecord = typeof blogArticles.$inferInsert;
 export type BlogArticleTagRecord = typeof blogArticleTags.$inferSelect;
-export type NewBlogArticleTagRecord = typeof blogArticleTags.$inferInsert;
 export type BlogCommentRecord = typeof blogComments.$inferSelect;
 export type NewBlogCommentRecord = typeof blogComments.$inferInsert;
+
+export const searchItems = sqliteTable("search_items", {
+  id: text("id").primaryKey(),
+  category: text("category").notNull(), // 'character' | 'band' | 'guide' | 'gacha' | 'blog' | 'team'
+  categoryLabel: text("category_label").notNull(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  snippet: text("snippet").notNull(),
+  url: text("url").notNull(),
+  tags: text("tags"), // JSON array string
+  badgeText: text("badge_text"),
+  badgeColor: text("badge_color"),
+  metadata: text("metadata"), // JSON object string
+  searchVector: text("search_vector"), // precomputed lowercase search text
+  popularityScore: integer("popularity_score").notNull().default(0),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const popularSearches = sqliteTable("popular_searches", {
+  id: text("id").primaryKey(),
+  term: text("term").notNull().unique(),
+  hitCount: integer("hit_count").notNull().default(1),
+  isTrending: integer("is_trending").notNull().default(0), // 0 or 1
+  lastSearchedAt: text("last_searched_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const searchLogs = sqliteTable("search_logs", {
+  id: text("id").primaryKey(),
+  query: text("query").notNull(),
+  category: text("category").notNull().default("all"),
+  resultCount: integer("result_count").notNull().default(0),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export type SearchItemRecord = typeof searchItems.$inferSelect;
+export type NewSearchItemRecord = typeof searchItems.$inferInsert;
+export type PopularSearchRecord = typeof popularSearches.$inferSelect;
+export type NewPopularSearchRecord = typeof popularSearches.$inferInsert;
+export type SearchLogRecord = typeof searchLogs.$inferSelect;
+export type NewSearchLogRecord = typeof searchLogs.$inferInsert;
+

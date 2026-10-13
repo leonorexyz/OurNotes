@@ -17,6 +17,9 @@ import {
   blogArticles,
   blogArticleTags,
   blogComments,
+  searchItems,
+  popularSearches,
+  searchLogs,
 } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
@@ -29,6 +32,7 @@ import {
   getAllUniqueTags,
   slugifyTag,
 } from "../data/blogData";
+import { buildSearchIndex, POPULAR_SEARCH_TERMS } from "../data/searchData";
 
 export async function seedGuides() {
   await runMigrations();
@@ -801,6 +805,81 @@ export async function seedGuides() {
       .run();
   }
 
+  // Seed Search Index
+  console.log("Memulai seed indeks pencarian global...");
+  const rawSearchItems = buildSearchIndex();
+  for (const item of rawSearchItems) {
+    const searchVector = `${item.title} ${item.subtitle} ${item.snippet} ${item.tags.join(" ")}`.toLowerCase();
+    const initialPopularity =
+      item.category === "character"
+        ? 80
+        : item.category === "band"
+        ? 75
+        : item.category === "gacha"
+        ? 90
+        : item.category === "blog"
+        ? 70
+        : 60;
+
+    db.insert(searchItems)
+      .values({
+        id: item.id,
+        category: item.category,
+        categoryLabel: item.categoryLabel,
+        title: item.title,
+        subtitle: item.subtitle,
+        snippet: item.snippet,
+        url: item.url,
+        tags: JSON.stringify(item.tags),
+        badgeText: item.badgeText || null,
+        badgeColor: item.badgeColor || null,
+        metadata: item.metadata ? JSON.stringify(item.metadata) : null,
+        searchVector,
+        popularityScore: initialPopularity,
+      })
+      .onConflictDoUpdate({
+        target: searchItems.id,
+        set: {
+          category: item.category,
+          categoryLabel: item.categoryLabel,
+          title: item.title,
+          subtitle: item.subtitle,
+          snippet: item.snippet,
+          url: item.url,
+          tags: JSON.stringify(item.tags),
+          badgeText: item.badgeText || null,
+          badgeColor: item.badgeColor || null,
+          metadata: item.metadata ? JSON.stringify(item.metadata) : null,
+          searchVector,
+        },
+      })
+      .run();
+  }
+
+  // Seed Popular Searches
+  console.log("Memulai seed kata kunci pencarian populer...");
+  POPULAR_SEARCH_TERMS.forEach((term, idx) => {
+    const slug = slugifyTag(term);
+    const hitCount = Math.max(10, 150 - idx * 8);
+    const isTrending = idx < 5 ? 1 : 0;
+
+    db.insert(popularSearches)
+      .values({
+        id: `pop-${slug}`,
+        term,
+        hitCount,
+        isTrending,
+      })
+      .onConflictDoUpdate({
+        target: popularSearches.term,
+        set: {
+          hitCount,
+          isTrending,
+        },
+      })
+      .run();
+  });
+
   const guideCount = db.select().from(guides).all().length;
   const eventCount = db.select().from(events).all().length;
   const bandCount = db.select().from(bands).all().length;
@@ -814,6 +893,8 @@ export async function seedGuides() {
   const blogTagCount = db.select().from(blogTags).all().length;
   const blogPostCount = db.select().from(blogArticles).all().length;
   const blogCommentCount = db.select().from(blogComments).all().length;
+  const searchItemCount = db.select().from(searchItems).all().length;
+  const popularSearchCount = db.select().from(popularSearches).all().length;
 
   console.log(
     `✓ Seed database berhasil!\n` +
@@ -829,7 +910,9 @@ export async function seedGuides() {
       `  • Kategori Blog: ${blogCatCount}\n` +
       `  • Tag Blog: ${blogTagCount}\n` +
       `  • Artikel Blog: ${blogPostCount}\n` +
-      `  • Komentar Blog: ${blogCommentCount}`
+      `  • Komentar Blog: ${blogCommentCount}\n` +
+      `  • Indeks Pencarian: ${searchItemCount}\n` +
+      `  • Pencarian Populer: ${popularSearchCount}`
   );
 }
 
