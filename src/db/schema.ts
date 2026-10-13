@@ -79,6 +79,64 @@ export const characterStats = sqliteTable("character_stats", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+export const teams = sqliteTable("teams", {
+  id: text("id").primaryKey(),
+  userId: text("user_id"),
+  name: text("name").notNull(),
+  category: text("category").notNull().default("Score Attack"),
+  notes: text("notes"),
+  centerCharacterId: text("center_character_id"),
+  effectiveBp: integer("effective_bp").notNull().default(0),
+  totalHp: integer("total_hp").notNull().default(5000),
+  synergyPercent: integer("synergy_percent").notNull().default(0),
+  isPublic: integer("is_public").notNull().default(1),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const teamMembers = sqliteTable("team_members", {
+  id: text("id").primaryKey(),
+  teamId: text("team_id")
+    .notNull()
+    .references(() => teams.id, { onDelete: "cascade" }),
+  characterId: text("character_id")
+    .notNull()
+    .references(() => characters.id),
+  slotNumber: integer("slot_number").notNull(), // 1 - 5
+  isCenter: integer("is_center").notNull().default(0), // 0 or 1
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const recommendedTeams = sqliteTable("recommended_teams", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").notNull(), // 'Score Meta' | 'Mono-Band' | 'Event Point' | 'Survival / Healer'
+  tagline: text("tagline").notNull(),
+  targetRoom: text("target_room").notNull(),
+  estimatedBp: integer("estimated_bp").notNull(),
+  centerMemberId: text("center_member_id")
+    .notNull()
+    .references(() => characters.id),
+  synergyTags: text("synergy_tags"), // JSON string array
+  strategy: text("strategy").notNull(),
+  recommendedAreaItems: text("recommended_area_items"), // JSON string array
+  songSuitability: text("song_suitability").notNull(),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const recommendedTeamMembers = sqliteTable("recommended_team_members", {
+  id: text("id").primaryKey(),
+  recommendedTeamId: text("recommended_team_id")
+    .notNull()
+    .references(() => recommendedTeams.id, { onDelete: "cascade" }),
+  characterId: text("character_id")
+    .notNull()
+    .references(() => characters.id),
+  slotNumber: integer("slot_number").notNull(), // 1 - 5
+  isCenter: integer("is_center").notNull().default(0), // 0 or 1
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
 export type Guide = typeof guides.$inferSelect;
 export type NewGuide = typeof guides.$inferInsert;
 export type GameEvent = typeof events.$inferSelect;
@@ -89,3 +147,11 @@ export type CharacterRecord = typeof characters.$inferSelect;
 export type NewCharacterRecord = typeof characters.$inferInsert;
 export type CharacterStatRecord = typeof characterStats.$inferSelect;
 export type NewCharacterStatRecord = typeof characterStats.$inferInsert;
+export type TeamRecord = typeof teams.$inferSelect;
+export type NewTeamRecord = typeof teams.$inferInsert;
+export type TeamMemberRecord = typeof teamMembers.$inferSelect;
+export type NewTeamMemberRecord = typeof teamMembers.$inferInsert;
+export type RecommendedTeamRecord = typeof recommendedTeams.$inferSelect;
+export type NewRecommendedTeamRecord = typeof recommendedTeams.$inferInsert;
+export type RecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferSelect;
+export type NewRecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferInsert;
