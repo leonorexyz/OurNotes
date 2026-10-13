@@ -59,9 +59,27 @@ export async function GET(
       );
     }
 
+    // Fetch fellow band members
+    const bandMembers = db
+      .select({
+        id: characters.id,
+        name: characters.name,
+        japaneseName: characters.japaneseName,
+        role: characters.role,
+        attribute: characters.attribute,
+        rarity: characters.rarity,
+        avatarBg: characters.avatarBg,
+      })
+      .from(characters)
+      .where(eq(characters.bandId, charRow.bandId))
+      .all();
+
     return NextResponse.json({
       success: true,
-      data: charRow,
+      data: {
+        ...charRow,
+        bandMembers,
+      },
     });
   } catch (error: any) {
     if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
