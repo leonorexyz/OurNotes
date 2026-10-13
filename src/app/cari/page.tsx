@@ -41,6 +41,7 @@ import { SearchResultCard } from "@/components/SearchResultCard";
 import { SearchResultItemLink } from "@/components/SearchResultItemLink";
 import { SearchEmptyState } from "@/components/SearchEmptyState";
 import { SearchCategoryFilter } from "@/components/SearchCategoryFilter";
+import { PopularSearchesList } from "@/components/PopularSearchesList";
 
 const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
   Sparkles,
@@ -203,22 +204,7 @@ function SearchContent() {
           />
 
           {/* Quick Popular Searches / Trending Tags */}
-          <div className="flex items-center gap-2 flex-wrap text-xs">
-            <div className="flex items-center gap-1 text-muted-foreground font-semibold shrink-0">
-              <TrendingUp className="h-3.5 w-3.5 text-pink-600" />
-              <span>Populer:</span>
-            </div>
-            {POPULAR_SEARCH_TERMS.slice(0, 8).map((term) => (
-              <button
-                key={term}
-                type="button"
-                onClick={() => executeSearch(term)}
-                className="px-2.5 py-1 rounded-full bg-muted/60 hover:bg-pink-50 hover:text-pink-600 dark:hover:bg-pink-950/40 dark:hover:text-pink-300 border border-border text-[11px] font-medium transition-colors cursor-pointer"
-              >
-                {term}
-              </button>
-            ))}
-          </div>
+          <PopularSearchesList onSelectTerm={executeSearch} variant="chips" />
 
           {/* Recent Searches (Riwayat Pencarian) */}
           {recentSearches.length > 0 && !query && (
@@ -255,6 +241,13 @@ function SearchContent() {
                   </span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Detailed Trending Topics Grid (shown when input query is empty) */}
+          {!query && (
+            <div className="pt-2">
+              <PopularSearchesList onSelectTerm={executeSearch} variant="detailed" />
             </div>
           )}
         </section>

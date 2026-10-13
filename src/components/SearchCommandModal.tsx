@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
+import { PopularSearchesList } from "@/components/PopularSearchesList";
 import { X, Sparkles, TrendingUp, Search } from "lucide-react";
-import { POPULAR_SEARCH_TERMS } from "@/data/searchData";
 
 interface SearchCommandModalProps {
   isOpen: boolean;
@@ -50,21 +50,8 @@ export function SearchCommandModal({ isOpen, onClose }: SearchCommandModalProps)
           placeholder="Cari karakter, band, lagu, atau tips..."
         />
 
-        <div className="flex items-center gap-2 flex-wrap text-xs pt-1 border-t border-border/60">
-          <span className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
-            <TrendingUp className="h-3 w-3 text-pink-600" />
-            Trending:
-          </span>
-          {POPULAR_SEARCH_TERMS.slice(0, 6).map((term) => (
-            <button
-              key={term}
-              type="button"
-              onClick={() => setQuery(term)}
-              className="px-2 py-0.5 rounded-full bg-muted hover:bg-pink-100 hover:text-pink-600 dark:hover:bg-pink-950/40 text-[10px] font-medium border border-border/80 transition-colors"
-            >
-              {term}
-            </button>
-          ))}
+        <div className="pt-2 border-t border-border/60">
+          <PopularSearchesList onSelectTerm={(term) => setQuery(term)} variant="chips" />
         </div>
       </div>
     </div>
