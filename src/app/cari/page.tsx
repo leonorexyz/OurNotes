@@ -36,6 +36,7 @@ import {
 import { BlogPost } from "@/data/blogData";
 import { RealtimeSearchInput } from "@/components/RealtimeSearchInput";
 import { SearchResultCard } from "@/components/SearchResultCard";
+import { SearchEmptyState } from "@/components/SearchEmptyState";
 
 const CATEGORY_ICON_MAP: Record<string, React.ElementType> = {
   Sparkles,
@@ -329,38 +330,17 @@ function SearchContent() {
               ))}
             </div>
           ) : (
-            /* Empty State */
-            <div className="p-10 rounded-3xl bg-card border border-border text-center space-y-4 max-w-lg mx-auto">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400">
-                <HelpCircle className="h-8 w-8" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-foreground">Tidak Ada Hasil Ditemukan</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Tidak ada konten yang cocok dengan kata kunci &quot;<strong className="text-foreground">{query}</strong>&quot;
-                  {selectedCategory !== "all" && ` pada kategori "${selectedCategory}"`}.
-                </p>
-              </div>
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleQueryChange("");
-                    setSelectedCategory("all");
-                  }}
-                  className="px-4 py-2 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-bold text-xs"
-                >
-                  Bersihkan Pencarian
-                </button>
-                <button
-                  type="button"
-                  onClick={() => executeSearch("Kasumi Toyama")}
-                  className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs shadow-md"
-                >
-                  Coba &quot;Kasumi Toyama&quot;
-                </button>
-              </div>
-            </div>
+            <SearchEmptyState
+              query={query}
+              selectedCategory={selectedCategory}
+              categoryLabel={SEARCH_CATEGORIES.find((c) => c.key === selectedCategory)?.label}
+              onReset={() => {
+                handleQueryChange("");
+                setSelectedCategory("all");
+              }}
+              onSelectSuggestion={(term) => executeSearch(term)}
+              onSelectAllCategory={() => handleCategorySelect("all")}
+            />
           )}
         </section>
       </main>
