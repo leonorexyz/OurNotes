@@ -33,6 +33,7 @@ import {
   Search,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
+import { RECOMMENDED_TEAMS, RecommendedTeam } from "@/data/recommendedTeamsData";
 
 interface TeamSlot {
   slotNumber: number;
@@ -74,6 +75,26 @@ function TimBuilderContent() {
   const [pickerSearch, setPickerSearch] = useState<string>("");
   const [pickerBand, setPickerBand] = useState<string>("all");
   const [pickerAttr, setPickerAttr] = useState<string>("all");
+
+  // Recommended team states
+  const [selectedDetailTeam, setSelectedDetailTeam] = useState<RecommendedTeam | null>(null);
+  const [teamCategoryFilter, setTeamCategoryFilter] = useState<string>("all");
+
+  const applyRecommendedTeam = (team: RecommendedTeam) => {
+    const newSlots = [...DEFAULT_SLOTS];
+    team.memberIds.forEach((charId, idx) => {
+      const char = CHARACTERS_DATA.find((c) => c.id === charId) || null;
+      newSlots[idx] = {
+        slotNumber: idx + 1,
+        isCenter: charId === team.centerMemberId || (idx === 2 && !team.memberIds.includes(team.centerMemberId)),
+        character: char,
+      };
+    });
+    setSlots(newSlots);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 350, behavior: "smooth" });
+    }
+  };
 
   const centerSlot = slots.find((s) => s.isCenter) || slots[2];
   const centerChar = centerSlot.character;
@@ -220,6 +241,11 @@ function TimBuilderContent() {
       return matchBand && matchAttr && matchSearch;
     });
   }, [pickerBand, pickerAttr, pickerSearch]);
+
+  const filteredRecommendedTeams = useMemo(() => {
+    if (teamCategoryFilter === "all") return RECOMMENDED_TEAMS;
+    return RECOMMENDED_TEAMS.filter((t) => t.category === teamCategoryFilter);
+  }, [teamCategoryFilter]);
 
   return (
     <main className="flex-1 container mx-auto max-w-7xl px-4 py-8 pb-28 md:pb-8 sm:px-6 lg:px-8 space-y-8">
@@ -585,6 +611,236 @@ function TimBuilderContent() {
           </div>
         </div>
       </div>
+
+      {/* Recommended Teams Catalog Section */}
+      <section className="space-y-6 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-2">
+              <Trophy className="h-6 w-6 text-amber-500" />
+              <span>Daftar & Rekomendasi Build Tim Meta</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Formasi teruji untuk mencetak skor tertinggi di Multi-Live, panen poin event, dan kelangsungan hidup di lagu sulit.
+            </p>
+          </div>
+
+          {/* Category Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+            {[
+              { id: "all", label: "Semua Kategori" },
+              { id: "Score Meta", label: "Score Meta" },
+              { id: "Mono-Band", label: "Mono-Band" },
+              { id: "Event Point", label: "Event Point" },
+              { id: "Survival / Healer", label: "Survival Healer" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setTeamCategoryFilter(cat.id)}
+                className={`px-3 py-1.5 rounded-xl font-semibold whitespace-nowrap transition-colors ${
+                  teamCategoryFilter === cat.id
+                    ? "bg-pink-600 text-white shadow-2xs"
+                    : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredRecommendedTeams.map((team) => {
+            const members = team.memberIds
+              .map((id) => CHARACTERS_DATA.find((c) => c.id === id))
+              .filter(Boolean) as Character[];
+
+            return (
+              <div
+                key={team.id}
+                className="rounded-3xl border border-border bg-card p-6 shadow-xs flex flex-col justify-between space-y-5 hover:border-pink-300 transition-all duration-200"
+              >
+                <div className="space-y-4">
+                  {/* Header badges */}
+                  <div className="flex items-center justify-between gap-2 text-xs">
+                    <span className="px-2.5 py-1 rounded-lg bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300 font-bold text-[11px]">
+                      {team.category}
+                    </span>
+                    <span className="font-semibold text-muted-foreground text-[11px] flex items-center gap-1">
+                      <Trophy className="h-3.5 w-3.5 text-amber-500" />
+                      {team.targetRoom}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-extrabold text-lg sm:text-xl text-foreground">
+                      {team.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                      {team.tagline}
+                    </p>
+                  </div>
+
+                  {/* Members Roster preview row */}
+                  <div className="space-y-1.5 pt-2 border-t border-border/60">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Susunan 5 Personel:
+                    </span>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {members.map((m, idx) => {
+                        const isCenter = m.id === team.centerMemberId;
+                        return (
+                          <div
+                            key={m.id + idx}
+                            className={`p-1.5 rounded-xl border text-center flex flex-col items-center justify-between min-h-[72px] ${
+                              isCenter
+                                ? "border-pink-500 bg-pink-50/50 dark:bg-pink-950/40 ring-1 ring-pink-500/20"
+                                : "border-border/60 bg-muted/30"
+                            }`}
+                          >
+                            <div
+                              className={`h-7 w-7 rounded-lg bg-gradient-to-tr ${m.avatarBg} text-white font-bold text-[10px] flex items-center justify-center shadow-2xs relative`}
+                            >
+                              {m.name.charAt(0)}
+                              {isCenter && (
+                                <Crown className="h-2.5 w-2.5 text-amber-300 absolute -top-1 -right-1" />
+                              )}
+                            </div>
+                            <span className="text-[9px] font-bold text-foreground truncate w-full block mt-1">
+                              {m.name.split(" ")[0]}
+                            </span>
+                            <span className="text-[8px] text-muted-foreground truncate w-full block">
+                              {m.role}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Synergy tag badges */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {team.synergyTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded-md bg-muted text-[10px] font-semibold text-muted-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="pt-3 border-t border-border/60 flex items-center gap-2">
+                  <button
+                    onClick={() => applyRecommendedTeam(team)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold transition-colors shadow-xs"
+                  >
+                    <Wand2 className="h-3.5 w-3.5" />
+                    <span>Terapkan ke Simulator</span>
+                  </button>
+                  <button
+                    onClick={() => setSelectedDetailTeam(team)}
+                    className="py-2.5 px-3 rounded-xl border border-border hover:bg-muted text-xs font-semibold text-foreground transition-colors"
+                  >
+                    Detail Strategi
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Detail Modal for Selected Recommended Team */}
+      {selectedDetailTeam && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-border">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-2.5 py-0.5 rounded-lg bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300 font-bold text-xs">
+                    {selectedDetailTeam.category}
+                  </span>
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {selectedDetailTeam.targetRoom}
+                  </span>
+                </div>
+                <h3 className="text-xl font-black text-foreground">
+                  {selectedDetailTeam.name}
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedDetailTeam(null)}
+                className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs sm:text-sm">
+              {/* Strategy Breakdown */}
+              <div className="p-4 rounded-2xl bg-muted/40 border border-border/70 space-y-1.5">
+                <h4 className="font-bold text-foreground text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <Info className="h-4 w-4 text-pink-500" />
+                  <span>Taktik & Alur Strategi Bermain:</span>
+                </h4>
+                <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm">
+                  {selectedDetailTeam.strategy}
+                </p>
+              </div>
+
+              {/* Recommended Area Items */}
+              <div className="p-4 rounded-2xl bg-muted/40 border border-border/70 space-y-2">
+                <h4 className="font-bold text-foreground text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="h-4 w-4 text-amber-500" />
+                  <span>Rekomendasi Area Items (CiRCLE & Edogawa):</span>
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedDetailTeam.recommendedAreaItems.map((item) => (
+                    <span
+                      key={item}
+                      className="px-2.5 py-1 rounded-lg bg-card border border-border font-semibold text-xs text-foreground"
+                    >
+                      ✓ {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Song Suitability */}
+              <div className="p-4 rounded-2xl bg-muted/40 border border-border/70 space-y-1.5">
+                <h4 className="font-bold text-foreground text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <Zap className="h-4 w-4 text-purple-500" />
+                  <span>Kecocokan Lagu & Challenge:</span>
+                </h4>
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
+                  {selectedDetailTeam.songSuitability}
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-border flex items-center justify-between gap-3">
+              <button
+                onClick={() => {
+                  applyRecommendedTeam(selectedDetailTeam);
+                  setSelectedDetailTeam(null);
+                }}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors shadow-sm"
+              >
+                Terapkan Build Ini ke Simulator
+              </button>
+              <button
+                onClick={() => setSelectedDetailTeam(null)}
+                className="py-2.5 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-bold text-xs transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Character Picker Modal Dialog */}
       {activePickerSlot !== null && (
