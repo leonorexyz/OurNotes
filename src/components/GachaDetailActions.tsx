@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sparkles, RotateCcw, Bell, X, CheckCircle2 } from "lucide-react";
 import { GachaBanner } from "@/data/gachaData";
 import { GachaReminderModal } from "@/components/GachaReminderModal";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 interface GachaDetailActionsProps {
   banner: GachaBanner;
@@ -94,13 +95,31 @@ export function GachaDetailActions({ banner }: GachaDetailActionsProps) {
 
       {/* Simulator Trigger & CTA */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <button
-          onClick={handleSimulateTenPull}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors shadow-2xs cursor-pointer"
-        >
-          <RotateCcw className="h-4 w-4" />
-          <span>Tes Simulasi Tarik 10x</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={handleSimulateTenPull}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors shadow-2xs cursor-pointer"
+          >
+            <RotateCcw className="h-4 w-4" />
+            <span>Tes Simulasi Tarik 10x</span>
+          </button>
+
+          <FavoriteButton
+            item={{
+              id: banner.id,
+              type: "gacha",
+              title: banner.title,
+              subtitle: `Kategori: ${banner.category} • Berakhir: ${banner.endAt}`,
+              categoryLabel: "Jadwal Gacha",
+              url: `/gacha/${banner.id}`,
+              badge: banner.category,
+              badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+              coverBg: "from-purple-600 via-pink-600 to-indigo-600",
+              notes: banner.description,
+            }}
+            variant="button"
+          />
+        </div>
 
         <button
           onClick={() => setIsReminderModalOpen(true)}

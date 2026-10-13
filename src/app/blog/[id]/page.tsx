@@ -123,6 +123,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               commentsCount={post.commentsCount}
               title={post.title}
               postId={post.id}
+              category={post.category}
+              excerpt={post.excerpt}
             />
           </div>
         </header>

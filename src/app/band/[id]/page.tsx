@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { BAND_DETAILS } from "@/data/bandDetailsData";
 import { BANDS_DATA } from "@/data/charactersData";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -131,6 +132,22 @@ export default async function BandDetailPage({ params }: PageProps) {
                 <span>Lihat Kartu Karakter {band.name}</span>
                 <ExternalLink className="h-3.5 w-3.5" />
               </Link>
+              <FavoriteButton
+                item={{
+                  id: band.id,
+                  type: "band",
+                  title: band.name,
+                  subtitle: `${band.genre} • Pemimpin: ${band.leader}`,
+                  categoryLabel: "Band Favorit",
+                  url: `/band/${band.id}`,
+                  badge: band.genre,
+                  badgeColor: "bg-pink-500/10 text-pink-600 dark:text-pink-300 border-pink-500/20",
+                  coverBg: band.theme,
+                  notes: band.tagline,
+                }}
+                variant="button"
+                className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+              />
             </div>
           </div>
         </div>

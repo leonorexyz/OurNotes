@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Character, CHARACTERS_DATA } from "@/data/charactersData";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 interface CharacterDetailActionsProps {
   character: Character;
@@ -56,6 +57,22 @@ export function CharacterDetailActions({ character }: CharacterDetailActionsProp
           <Layers className="h-4 w-4 text-pink-500" />
           <span>Pakai di Susun Tim</span>
         </Link>
+
+        {/* Tombol Favorit Karakter */}
+        <FavoriteButton
+          item={{
+            id: character.id,
+            type: "character",
+            title: character.name,
+            subtitle: `${character.bandName} • ${character.role} • Atribut ${character.attribute}`,
+            categoryLabel: "Karakter Favorit",
+            url: `/karakter/${character.id}`,
+            badge: `★4 ${character.attribute}`,
+            badgeColor: "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20",
+            notes: `Total Power: ${character.stats.total.toLocaleString()} • Skill: ${character.skill.name}`,
+          }}
+          variant="button"
+        />
       </div>
 
       {/* Comparison Modal on Detail Page */}

@@ -166,6 +166,17 @@ function AkunFavoritContent() {
         if (parsed.name) setProducerName(parsed.name);
         if (parsed.title) setProducerTitle(parsed.title);
       }
+      const handleFavChanged = () => {
+        try {
+          const updated = localStorage.getItem(STORAGE_FAVORIT_KEY);
+          if (updated) setFavorites(JSON.parse(updated));
+        } catch {}
+      };
+
+      window.addEventListener("ournotes_favorites_changed", handleFavChanged);
+      return () => {
+        window.removeEventListener("ournotes_favorites_changed", handleFavChanged);
+      };
     } catch {
       setFavorites(DEFAULT_FAVORIT_ITEMS);
     }

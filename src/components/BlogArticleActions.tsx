@@ -15,12 +15,15 @@ import {
   X,
   CheckCircle2,
 } from "lucide-react";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 interface BlogArticleActionsProps {
   initialLikes: number;
   commentsCount: number;
   title: string;
   postId?: string;
+  category?: string;
+  excerpt?: string;
 }
 
 export function BlogArticleActions({
@@ -28,11 +31,12 @@ export function BlogArticleActions({
   commentsCount,
   title,
   postId,
+  category,
+  excerpt,
 }: BlogArticleActionsProps) {
   const router = useRouter();
   const [likes, setLikes] = useState(initialLikes);
   const [hasLiked, setHasLiked] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -45,10 +49,6 @@ export function BlogArticleActions({
       setLikes((prev) => prev + 1);
       setHasLiked(true);
     }
-  };
-
-  const handleBookmark = () => {
-    setIsBookmarked((prev) => !prev);
   };
 
   const handleShare = () => {
@@ -102,18 +102,23 @@ export function BlogArticleActions({
           <span>{likes} Suka</span>
         </button>
 
-        {/* Bookmark Button */}
-        <button
-          onClick={handleBookmark}
-          className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border font-bold transition-all cursor-pointer ${
-            isBookmarked
-              ? "border-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 shadow-2xs"
-              : "border-border bg-card hover:bg-muted text-foreground"
-          }`}
-        >
-          <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-indigo-600 text-indigo-600" : "text-muted-foreground"}`} />
-          <span>{isBookmarked ? "Tersimpan" : "Simpan"}</span>
-        </button>
+        {/* Favorite Button */}
+        {postId && (
+          <FavoriteButton
+            item={{
+              id: postId,
+              type: "guide",
+              title,
+              subtitle: excerpt || "Panduan & Catatan Komunitas BanG Dream!",
+              categoryLabel: category || "Panduan Komunitas",
+              url: `/blog/${postId}`,
+              badge: category || "Artikel",
+              badgeColor: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20",
+              coverBg: "from-indigo-600 via-purple-600 to-pink-600",
+            }}
+            variant="button"
+          />
+        )}
 
         {/* Share / Copy Link Button */}
         <button
