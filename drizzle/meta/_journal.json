@@ -29,6 +29,13 @@
       "when": 1791893563587,
       "tag": "0003_fantastic_carmella_unuscione",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1791894084966,
+      "tag": "0004_left_stellaris",
+      "breakpoints": true
     }
   ]
 }

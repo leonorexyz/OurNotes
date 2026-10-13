@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "1523d58bdc6cb6c0084850907a6203760995d38d",
+  "generatedForCommit": "27a13dc7886bd9994e895eb8045bcb3417406236",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -195,6 +195,12 @@
       "size": 56
     },
     {
+      "path": "src/app/api/team/synergy/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 59
+    },
+    {
       "path": "src/app/api/teams/characters/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -214,13 +220,19 @@
     },
     {
       "path": "src/app/api/teams/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9571
     },
     {
-      "path": "src/app/api/teams/[id]/route.ts",
+      "path": "src/app/api/teams/synergy/route.ts",
       "reason": "new",
+      "language": "typescript",
+      "size": 1596
+    },
+    {
+      "path": "src/app/api/teams/[id]/route.ts",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 9659
     },
@@ -418,9 +430,15 @@
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 13221
+    },
+    {
+      "path": "src/services/teamSynergyService.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 13653
     },
     {
       "path": "tsconfig.json",

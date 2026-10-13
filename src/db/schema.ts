@@ -79,9 +79,18 @@ export const characterStats = sqliteTable("character_stats", {
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
 });
 
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  avatarUrl: text("avatar_url"),
+  role: text("role").default("user"), // 'user' | 'admin'
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
 export const teams = sqliteTable("teams", {
   id: text("id").primaryKey(),
-  userId: text("user_id"),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
   name: text("name").notNull(),
   category: text("category").notNull().default("Score Attack"),
   notes: text("notes"),
@@ -155,3 +164,5 @@ export type RecommendedTeamRecord = typeof recommendedTeams.$inferSelect;
 export type NewRecommendedTeamRecord = typeof recommendedTeams.$inferInsert;
 export type RecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferSelect;
 export type NewRecommendedTeamMemberRecord = typeof recommendedTeamMembers.$inferInsert;
+export type UserRecord = typeof users.$inferSelect;
+export type NewUserRecord = typeof users.$inferInsert;

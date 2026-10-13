@@ -9,6 +9,7 @@ import {
   recommendedTeamMembers,
   teams,
   teamMembers,
+  users,
 } from "./schema";
 import { runMigrations } from "./migrate";
 import { GUIDES_DATA, FAQ_LIST } from "../data/guidesData";
@@ -312,10 +313,40 @@ export async function seedGuides() {
     });
   }
 
+  // Seed Users table
+  console.log("Memulai seed pengguna akun produser...");
+  const sampleUsers = [
+    {
+      id: "user-producer-1",
+      name: "Kasumi Producer",
+      email: "producer@ournotes.id",
+      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+      role: "user",
+    },
+    {
+      id: "user-admin-1",
+      name: "CiRCLE Staff Admin",
+      email: "admin@ournotes.id",
+      avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
+      role: "admin",
+    },
+  ];
+
+  for (const u of sampleUsers) {
+    db.insert(users)
+      .values(u)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: u,
+      })
+      .run();
+  }
+
   // Seed Sample User Saved Team
   console.log("Memulai seed sample tim tersimpan...");
   const sampleSavedTeam = {
     id: "saved-poppin-kirakira",
+    userId: "user-producer-1",
     name: "Poppin'Party All Stars Pure",
     category: "Mono-Band",
     notes: "Formasi andalan untuk event Pure. Kasumi Center memberikan bonus 110% Score Fever.",
@@ -336,6 +367,7 @@ export async function seedGuides() {
   db.insert(teams)
     .values({
       id: sampleSavedTeam.id,
+      userId: sampleSavedTeam.userId,
       name: sampleSavedTeam.name,
       category: sampleSavedTeam.category,
       notes: sampleSavedTeam.notes,
@@ -348,6 +380,7 @@ export async function seedGuides() {
     .onConflictDoUpdate({
       target: teams.id,
       set: {
+        userId: sampleSavedTeam.userId,
         name: sampleSavedTeam.name,
         category: sampleSavedTeam.category,
         notes: sampleSavedTeam.notes,

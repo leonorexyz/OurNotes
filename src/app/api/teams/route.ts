@@ -8,6 +8,7 @@ import {
   characterStats,
 } from "@/db/schema";
 import { eq, and, like, or, desc, asc } from "drizzle-orm";
+import { requireAuth } from "@/services/authService";
 
 export async function GET(request: NextRequest) {
   try {
@@ -203,13 +204,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const authResult = await requireAuth(request);
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
     const body = await request.json();
     const {
       name,
       category,
       note,
       notes,
-      userId,
       memberIds,
       centerMemberId,
       effectiveBP,
@@ -248,7 +254,7 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         category: category || "Score Attack",
         notes: resolvedNotes,
-        userId: userId || null,
+        userId: currentUser.id,
         centerCharacterId: resolvedCenterId,
         effectiveBp: resolvedEffectiveBP,
         totalHp: resolvedTotalHP,

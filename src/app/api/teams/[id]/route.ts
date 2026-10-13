@@ -8,6 +8,7 @@ import {
   characterStats,
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { requireAuth } from "@/services/authService";
 
 export async function GET(
   request: NextRequest,
@@ -168,6 +169,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authResult = await requireAuth(request);
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
     const { id } = await params;
     const body = await request.json();
 
@@ -181,6 +188,17 @@ export async function PUT(
       return NextResponse.json(
         { success: false, error: `Formasi tim dengan ID '${id}' tidak ditemukan` },
         { status: 404 }
+      );
+    }
+
+    // Ownership check
+    if (existing.userId && existing.userId !== currentUser.id && currentUser.role !== "admin") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Anda tidak memiliki izin untuk mengubah formasi tim milik pengguna lain.",
+        },
+        { status: 403 }
       );
     }
 
@@ -294,6 +312,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authResult = await requireAuth(request);
+    if (authResult.errorResponse) {
+      return authResult.errorResponse;
+    }
+    const currentUser = authResult.user;
+
     const { id } = await params;
 
     const existing = db
@@ -306,6 +330,17 @@ export async function DELETE(
       return NextResponse.json(
         { success: false, error: `Formasi tim dengan ID '${id}' tidak ditemukan` },
         { status: 404 }
+      );
+    }
+
+    // Ownership check
+    if (existing.userId && existing.userId !== currentUser.id && currentUser.role !== "admin") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Anda tidak memiliki izin untuk menghapus formasi tim milik pengguna lain.",
+        },
+        { status: 403 }
       );
     }
 

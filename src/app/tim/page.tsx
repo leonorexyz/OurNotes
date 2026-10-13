@@ -134,21 +134,82 @@ function TimBuilderContent() {
   const [copyFeedbackId, setCopyFeedbackId] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
+  // Authentication states
+  const [currentUser, setCurrentUser] = useState<{
+    id: string;
+    name: string;
+    email: string;
+    role?: string;
+  } | null>(null);
+  const [authRequiredPrompt, setAuthRequiredPrompt] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("our_notes_saved_user_teams");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setSavedTeams(parsed);
-          }
-        } catch {
-          // fallback
+    // Check auth status
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated && data.user) {
+          setCurrentUser(data.user);
         }
-      }
-    }
+      })
+      .catch(() => {});
+
+    // Fetch saved teams from API with localStorage fallback
+    fetch("/api/teams")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setSavedTeams(data.data);
+        } else if (typeof window !== "undefined") {
+          const stored = localStorage.getItem("our_notes_saved_user_teams");
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setSavedTeams(parsed);
+              }
+            } catch {
+              // fallback
+            }
+          }
+        }
+      })
+      .catch(() => {
+        if (typeof window !== "undefined") {
+          const stored = localStorage.getItem("our_notes_saved_user_teams");
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setSavedTeams(parsed);
+              }
+            } catch {
+              // fallback
+            }
+          }
+        }
+      });
   }, []);
+
+  const handleQuickLogin = async () => {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "producer@ournotes.id" }),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setCurrentUser(data.user);
+        setAuthRequiredPrompt(false);
+        setActionNotice(`Berhasil masuk sebagai ${data.user.name}!`);
+        setTimeout(() => setActionNotice(null), 3000);
+      }
+    } catch (e) {
+      console.error("Quick login error:", e);
+    }
+  };
 
   // Recommended team states
   const [selectedDetailTeam, setSelectedDetailTeam] = useState<RecommendedTeam | null>(null);
@@ -463,41 +524,96 @@ function TimBuilderContent() {
   }, [activeCharacters, maxBandCount, dominantBand, maxAttrCount, dominantAttr, centerChar, rawStats, effectiveBP]);
 
   // Saved Team Actions
-  const saveCurrentTeam = (e: React.FormEvent) => {
+  const saveCurrentTeam = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!saveTeamName.trim()) return;
 
-    const newTeam: SavedUserTeam = {
-      id: "team-" + Date.now(),
-      name: saveTeamName.trim(),
-      category: saveTeamCategory,
-      note: saveTeamNote.trim(),
-      memberIds: slots.map((s) => s.character?.id || ""),
-      centerMemberId: centerChar?.id || "",
-      effectiveBP,
-      totalHP: rawStats.hp,
-      synergyPercent: bandBonusPercent + attrBonusPercent,
-      createdAt: new Date().toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }),
-    };
-
-    const updated = [newTeam, ...savedTeams];
-    setSavedTeams(updated);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("our_notes_saved_user_teams", JSON.stringify(updated));
+    if (!currentUser) {
+      setAuthRequiredPrompt(true);
+      return;
     }
 
-    setIsSaveModalOpen(false);
-    setSaveTeamName("");
-    setSaveTeamNote("");
-    setActionNotice(`Formasi "${newTeam.name}" berhasil disimpan!`);
-    setTimeout(() => setActionNotice(null), 3000);
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/teams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": currentUser.id,
+        },
+        body: JSON.stringify({
+          name: saveTeamName.trim(),
+          category: saveTeamCategory,
+          note: saveTeamNote.trim(),
+          memberIds: slots.map((s) => s.character?.id || ""),
+          centerMemberId: centerChar?.id || "",
+          effectiveBP,
+          totalHP: rawStats.hp,
+          synergyPercent: bandBonusPercent + attrBonusPercent,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (res.status === 401 || result.authRequired) {
+        setAuthRequiredPrompt(true);
+        setIsSaving(false);
+        return;
+      }
+
+      if (result.success) {
+        const newTeam: SavedUserTeam = {
+          id: result.data?.id || "team-" + Date.now(),
+          name: saveTeamName.trim(),
+          category: saveTeamCategory,
+          note: saveTeamNote.trim(),
+          memberIds: slots.map((s) => s.character?.id || ""),
+          centerMemberId: centerChar?.id || "",
+          effectiveBP,
+          totalHP: rawStats.hp,
+          synergyPercent: bandBonusPercent + attrBonusPercent,
+          createdAt: new Date().toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }),
+        };
+
+        const updated = [newTeam, ...savedTeams.filter((t) => t.id !== newTeam.id)];
+        setSavedTeams(updated);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("our_notes_saved_user_teams", JSON.stringify(updated));
+        }
+
+        setIsSaveModalOpen(false);
+        setSaveTeamName("");
+        setSaveTeamNote("");
+        setActionNotice(`Formasi "${newTeam.name}" berhasil disimpan ke akun!`);
+        setTimeout(() => setActionNotice(null), 3000);
+      } else {
+        setActionNotice(result.error || "Gagal menyimpan formasi tim.");
+        setTimeout(() => setActionNotice(null), 4000);
+      }
+    } catch (err) {
+      console.error("Save team error:", err);
+      setActionNotice("Terjadi kesalahan jaringan saat menyimpan formasi.");
+      setTimeout(() => setActionNotice(null), 3000);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const deleteSavedTeam = (teamId: string) => {
+  const deleteSavedTeam = async (teamId: string) => {
+    try {
+      if (currentUser) {
+        await fetch(`/api/teams/${teamId}`, {
+          method: "DELETE",
+          headers: { "x-user-id": currentUser.id },
+        });
+      }
+    } catch (e) {
+      console.error("Delete team error:", e);
+    }
     const updated = savedTeams.filter((t) => t.id !== teamId);
     setSavedTeams(updated);
     if (typeof window !== "undefined") {
@@ -2062,6 +2178,47 @@ function TimBuilderContent() {
 
             {/* Modal Form */}
             <form onSubmit={saveCurrentTeam} className="p-5 space-y-4 text-xs">
+              {/* Auth Status Banner */}
+              {currentUser ? (
+                <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="text-muted-foreground">Tersimpan ke akun: </span>
+                      <strong className="text-foreground font-bold">{currentUser.name}</strong>
+                      <span className="text-muted-foreground ml-1">({currentUser.email})</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-bold text-[10px]">
+                    Terautentikasi
+                  </span>
+                </div>
+              ) : (
+                <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-2 text-[11px]">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-amber-900 dark:text-amber-200 block font-bold">
+                        Autentikasi Diperlukan
+                      </strong>
+                      <p className="text-amber-700 dark:text-amber-300">
+                        Masuk ke akun Produser terlebih dahulu untuk menyimpan formasi ini ke cloud database Our Notes.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-1 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleQuickLogin}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-colors shadow-2xs cursor-pointer"
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      <span>Masuk Akun Produser Sekarang</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Form Input: Nama Tim */}
               <div className="space-y-1.5">
                 <label className="font-bold text-foreground block">
@@ -2130,10 +2287,10 @@ function TimBuilderContent() {
                 </button>
                 <button
                   type="submit"
-                  disabled={!saveTeamName.trim()}
-                  className="px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors disabled:opacity-50"
+                  disabled={!saveTeamName.trim() || !currentUser || isSaving}
+                  className="px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
                 >
-                  Simpan Formasi
+                  {isSaving ? "Menyimpan..." : "Simpan Formasi"}
                 </button>
               </div>
             </form>
