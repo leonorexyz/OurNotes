@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "8b6b6e684181d6b8b91c229e6b5518a9a2ababad",
+  "generatedForCommit": "d03f3c10dbece34c03e1209621702d571e1b2a3f",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -69,6 +69,12 @@
       "size": 1467
     },
     {
+      "path": "drizzle/0005_flaky_lionheart.sql",
+      "reason": "new",
+      "language": "sql",
+      "size": 1030
+    },
+    {
       "path": "drizzle/meta/0000_snapshot.json",
       "reason": "needs_summary",
       "language": "json",
@@ -99,10 +105,16 @@
       "size": 25994
     },
     {
-      "path": "drizzle/meta/_journal.json",
-      "reason": "needs_summary",
+      "path": "drizzle/meta/0005_snapshot.json",
+      "reason": "new",
       "language": "json",
-      "size": 794
+      "size": 32183
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "reason": "changed",
+      "language": "json",
+      "size": 937
     },
     {
       "path": "drizzle.config.ts",
@@ -316,7 +328,7 @@
     },
     {
       "path": "src/app/cari/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 13873
     },
@@ -502,7 +514,7 @@
     },
     {
       "path": "src/components/PopularSearchesList.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 7160
     },
@@ -526,7 +538,7 @@
     },
     {
       "path": "src/components/SearchCommandModal.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2097
     },
@@ -610,15 +622,15 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 7451
+      "size": 9094
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 14101
+      "size": 16594
     },
     {
       "path": "src/services/authService.ts",
