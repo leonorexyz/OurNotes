@@ -76,6 +76,63 @@ function BandingkanContent() {
   const sameBand = char1.bandId === char2.bandId;
   const sameAttr = char1.attribute === char2.attribute;
 
+  // Tally category wins
+  const char1Wins = [
+    char1.stats.total > char2.stats.total,
+    char1.stats.performance > char2.stats.performance,
+    char1.stats.technique > char2.stats.technique,
+    char1.stats.visual > char2.stats.visual,
+    char1.stats.hp > char2.stats.hp,
+  ].filter(Boolean).length;
+
+  const char2Wins = [
+    char2.stats.total > char1.stats.total,
+    char2.stats.performance > char1.stats.performance,
+    char2.stats.technique > char1.stats.technique,
+    char2.stats.visual > char1.stats.visual,
+    char2.stats.hp > char1.stats.hp,
+  ].filter(Boolean).length;
+
+  const renderDelta = (v1: number, v2: number) => {
+    const diff = v1 - v2;
+    if (diff === 0) {
+      return (
+        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+          Imbang
+        </span>
+      );
+    }
+    const pct = ((Math.abs(diff) / v2) * 100).toFixed(1);
+    if (diff > 0) {
+      return (
+        <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300">
+          +{diff.toLocaleString()} (+{pct}%) ▲
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground">
+        -{Math.abs(diff).toLocaleString()} (-{pct}%) ▼
+      </span>
+    );
+  };
+
+  // Quick preset finders for Character 2
+  const pickMateFromBand = () => {
+    const mate = CHARACTERS_DATA.find((c) => c.bandId === char1.bandId && c.id !== char1.id);
+    if (mate) setChar2Id(mate.id);
+  };
+
+  const pickMateFromRole = () => {
+    const mate = CHARACTERS_DATA.find((c) => c.role === char1.role && c.id !== char1.id);
+    if (mate) setChar2Id(mate.id);
+  };
+
+  const pickMateFromAttr = () => {
+    const mate = CHARACTERS_DATA.find((c) => c.attribute === char1.attribute && c.id !== char1.id);
+    if (mate) setChar2Id(mate.id);
+  };
+
   return (
     <main className="flex-1 container mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
       {/* Breadcrumb Navigation */}
@@ -104,7 +161,7 @@ function BandingkanContent() {
         </div>
       </div>
 
-      {/* Character Selector Controls */}
+      {/* Character Selector Controls & Quick Match Presets */}
       <div className="rounded-3xl border border-border bg-card p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Character 1 Dropdown */}
@@ -153,6 +210,68 @@ function BandingkanContent() {
               ))}
             </select>
           </div>
+        </div>
+
+        {/* Quick Filter Presets */}
+        <div className="pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span className="text-muted-foreground font-semibold">Preset Cepat Lawan Tanding:</span>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={pickMateFromBand}
+              className="px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-pink-950/50 hover:bg-pink-100 text-pink-700 dark:text-pink-300 font-semibold transition-colors"
+            >
+              Rekan Se-Band ({char1.bandName})
+            </button>
+            <button
+              onClick={pickMateFromRole}
+              className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/50 hover:bg-purple-100 text-purple-700 dark:text-purple-300 font-semibold transition-colors"
+            >
+              Rival Se-Role ({char1.role})
+            </button>
+            <button
+              onClick={pickMateFromAttr}
+              className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 text-blue-700 dark:text-blue-300 font-semibold transition-colors"
+            >
+              Rekan Se-Atribut ({char1.attribute})
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Head-to-Head Tally Score Banner */}
+      <div className="rounded-3xl border border-border bg-gradient-to-r from-card via-muted/30 to-card p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-3 rounded-2xl bg-amber-100 dark:bg-amber-950/70 text-amber-600">
+            <Trophy className="h-6 w-6" />
+          </div>
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block">
+              Skor Adu 5 Parameter Utama
+            </span>
+            <h3 className="text-lg font-black text-foreground">
+              {char1Wins > char2Wins ? (
+                <>
+                  <span className="text-pink-600">{char1.name}</span> Unggul ({char1Wins} vs {char2Wins})
+                </>
+              ) : char2Wins > char1Wins ? (
+                <>
+                  <span className="text-purple-600">{char2.name}</span> Unggul ({char2Wins} vs {char1Wins})
+                </>
+              ) : (
+                <>Hasil Imbang ({char1Wins} vs {char2Wins})</>
+              )}
+            </h3>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs font-bold">
+          <span className="px-3 py-1.5 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300">
+            {char1.name}: {char1Wins} Poin
+          </span>
+          <span className="text-muted-foreground">vs</span>
+          <span className="px-3 py-1.5 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">
+            {char2.name}: {char2Wins} Poin
+          </span>
         </div>
       </div>
 
@@ -294,11 +413,23 @@ function BandingkanContent() {
 
         <div className="space-y-4">
           {/* Row 1: Total Band Power */}
-          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2">
-            <div className="flex justify-between items-center text-xs font-bold">
-              <span className="text-pink-600 font-mono">{char1.stats.total.toLocaleString()}</span>
-              <span className="text-foreground uppercase tracking-wider">Total Band Power</span>
-              <span className="text-purple-600 font-mono">{char2.stats.total.toLocaleString()}</span>
+          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2.5">
+            <div className="flex justify-between items-center text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-pink-600 font-mono font-bold text-sm sm:text-base">
+                  {char1.stats.total.toLocaleString()}
+                </span>
+                {renderDelta(char1.stats.total, char2.stats.total)}
+              </div>
+              <span className="text-foreground font-extrabold uppercase tracking-wider text-[11px]">
+                Total Band Power (BP)
+              </span>
+              <div className="flex items-center gap-2">
+                {renderDelta(char2.stats.total, char1.stats.total)}
+                <span className="text-purple-600 font-mono font-bold text-sm sm:text-base">
+                  {char2.stats.total.toLocaleString()}
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2 h-3 rounded-full overflow-hidden bg-muted">
               <div
@@ -317,17 +448,21 @@ function BandingkanContent() {
           </div>
 
           {/* Row 2: Performance */}
-          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2">
+          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2.5">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-mono font-bold text-foreground">
-                {char1.stats.performance.toLocaleString()}
-                {perfDiff > 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
-              <span className="font-semibold text-muted-foreground">Performance Stat</span>
-              <span className="font-mono font-bold text-foreground">
-                {char2.stats.performance.toLocaleString()}
-                {perfDiff < 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-foreground">
+                  {char1.stats.performance.toLocaleString()}
+                </span>
+                {renderDelta(char1.stats.performance, char2.stats.performance)}
+              </div>
+              <span className="font-semibold text-muted-foreground text-[11px]">Performance</span>
+              <div className="flex items-center gap-2">
+                {renderDelta(char2.stats.performance, char1.stats.performance)}
+                <span className="font-mono font-bold text-foreground">
+                  {char2.stats.performance.toLocaleString()}
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2 h-2.5 rounded-full overflow-hidden bg-muted">
               <div
@@ -346,17 +481,21 @@ function BandingkanContent() {
           </div>
 
           {/* Row 3: Technique */}
-          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2">
+          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2.5">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-mono font-bold text-foreground">
-                {char1.stats.technique.toLocaleString()}
-                {techDiff > 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
-              <span className="font-semibold text-muted-foreground">Technique Stat</span>
-              <span className="font-mono font-bold text-foreground">
-                {char2.stats.technique.toLocaleString()}
-                {techDiff < 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-foreground">
+                  {char1.stats.technique.toLocaleString()}
+                </span>
+                {renderDelta(char1.stats.technique, char2.stats.technique)}
+              </div>
+              <span className="font-semibold text-muted-foreground text-[11px]">Technique</span>
+              <div className="flex items-center gap-2">
+                {renderDelta(char2.stats.technique, char1.stats.technique)}
+                <span className="font-mono font-bold text-foreground">
+                  {char2.stats.technique.toLocaleString()}
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2 h-2.5 rounded-full overflow-hidden bg-muted">
               <div
@@ -375,17 +514,21 @@ function BandingkanContent() {
           </div>
 
           {/* Row 4: Visual */}
-          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2">
+          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2.5">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-mono font-bold text-foreground">
-                {char1.stats.visual.toLocaleString()}
-                {visDiff > 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
-              <span className="font-semibold text-muted-foreground">Visual Stat</span>
-              <span className="font-mono font-bold text-foreground">
-                {char2.stats.visual.toLocaleString()}
-                {visDiff < 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-foreground">
+                  {char1.stats.visual.toLocaleString()}
+                </span>
+                {renderDelta(char1.stats.visual, char2.stats.visual)}
+              </div>
+              <span className="font-semibold text-muted-foreground text-[11px]">Visual</span>
+              <div className="flex items-center gap-2">
+                {renderDelta(char2.stats.visual, char1.stats.visual)}
+                <span className="font-mono font-bold text-foreground">
+                  {char2.stats.visual.toLocaleString()}
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2 h-2.5 rounded-full overflow-hidden bg-muted">
               <div
@@ -404,17 +547,21 @@ function BandingkanContent() {
           </div>
 
           {/* Row 5: Max HP */}
-          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2">
+          <div className="rounded-2xl border border-border/80 bg-muted/20 p-4 space-y-2.5">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-mono font-bold text-foreground">
-                {char1.stats.hp}
-                {hpDiff > 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
-              <span className="font-semibold text-muted-foreground">Max Life / HP</span>
-              <span className="font-mono font-bold text-foreground">
-                {char2.stats.hp}
-                {hpDiff < 0 && <span className="text-emerald-600 text-[10px] ml-1">▲</span>}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-foreground">
+                  {char1.stats.hp}
+                </span>
+                {renderDelta(char1.stats.hp, char2.stats.hp)}
+              </div>
+              <span className="font-semibold text-muted-foreground text-[11px]">Max Life / HP</span>
+              <div className="flex items-center gap-2">
+                {renderDelta(char2.stats.hp, char1.stats.hp)}
+                <span className="font-mono font-bold text-foreground">
+                  {char2.stats.hp}
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2 h-2.5 rounded-full overflow-hidden bg-muted">
               <div
