@@ -1,14 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
-import { GET as handleGetMe, PATCH as handlePatchMe } from "../me/route";
+import { NextRequest } from "next/server";
+import {
+  GET as handleGetProfile,
+  PATCH as handlePatchProfile,
+  PUT as handlePutProfile,
+} from "../../profile/route";
 
 export async function GET(request: NextRequest) {
-  return handleGetMe(request);
+  return handleGetProfile(request);
 }
 
 export async function PATCH(request: NextRequest) {
-  return handlePatchMe(request);
+  return handlePatchProfile(request);
+}
+
+export async function PUT(request: NextRequest) {
+  return handlePutProfile(request);
 }
 
 export async function POST(request: NextRequest) {
-  return handlePatchMe(request);
+  return handlePatchProfile(request);
 }

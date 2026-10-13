@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "1283e5335dd6e7f26abfbc6e177dfac925ebe499",
+  "generatedForCommit": "1b0f087d2fa3ea4366bfa9e9093f71587c76f3b2",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -232,13 +232,13 @@
     },
     {
       "path": "src/app/api/auth/login/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2206
     },
     {
       "path": "src/app/api/auth/logout/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 406
     },
@@ -256,7 +256,7 @@
     },
     {
       "path": "src/app/api/auth/register/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3522
     },
@@ -409,6 +409,30 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 2404
+    },
+    {
+      "path": "src/app/api/favorit/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 318
+    },
+    {
+      "path": "src/app/api/favorit/[id]/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 454
+    },
+    {
+      "path": "src/app/api/favorites/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2557
+    },
+    {
+      "path": "src/app/api/favorites/[id]/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1924
     },
     {
       "path": "src/app/api/gacha/notifications/route.ts",
@@ -790,9 +814,9 @@
     },
     {
       "path": "src/components/FavoriteButton.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 5709
+      "size": 6372
     },
     {
       "path": "src/components/Footer.tsx",
@@ -1009,6 +1033,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 2641
+    },
+    {
+      "path": "src/services/favoriteService.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 3793
     },
     {
       "path": "src/services/gachaNotificationService.ts",
