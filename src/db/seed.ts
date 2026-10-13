@@ -602,8 +602,67 @@ export async function seedGuides() {
 
   // Seed Blog Tags
   console.log("Memulai seed tag blog...");
-  const uniqueTags = getAllUniqueTags();
-  for (const tag of uniqueTags) {
+  const masterBlogTags = [
+    // Difficulties & Rhythm
+    "Expert",
+    "Special",
+    "Hard",
+    "All Perfect",
+    "Full Combo",
+    "Rhythm",
+    "Tips Pemula",
+    // Bands
+    "Poppin'Party",
+    "Afterglow",
+    "Pastel*Palettes",
+    "Roselia",
+    "Hello, Happy World!",
+    "Morfonica",
+    "RAISE A SUILEN",
+    "MyGO!!!!!",
+    "Ave Mujica",
+    // Attributes
+    "Pure",
+    "Cool",
+    "Power",
+    "Happy",
+    // Gameplay & Mechanics
+    "Team Building",
+    "Score Meta",
+    "Story Recap",
+    "Lore",
+    "F2P Guide",
+    "Kirafes",
+    "DoriFes",
+    "Stars Saving",
+    "Gacha Spark",
+    "Event Guide",
+    "Marathon",
+    "VS Live",
+    "Live Goals",
+    "Event Rank",
+    "Studio Upgrade",
+    "Area Items",
+    "CiRCLE",
+    "Power Boost",
+  ];
+
+  const uniqueTagsMap = new Map<string, { name: string; slug: string }>();
+
+  // Add extracted tags from blog data
+  for (const t of getAllUniqueTags()) {
+    uniqueTagsMap.set(t.slug, { name: t.name, slug: t.slug });
+  }
+
+  // Add master tags
+  for (const t of masterBlogTags) {
+    const slug = slugifyTag(t);
+    if (!uniqueTagsMap.has(slug)) {
+      uniqueTagsMap.set(slug, { name: t, slug });
+    }
+  }
+
+  for (const tag of uniqueTagsMap.values()) {
     db.insert(blogTags)
       .values({
         id: tag.slug,
