@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "828e2a2de783b479e9743b1102c15066fc11fa63",
+  "generatedForCommit": "81fd5cff9749d0f840350db1e239b2be00e1a471",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -198,7 +198,7 @@
       "path": "src/app/tim/page.tsx",
       "reason": "changed",
       "language": "typescript",
-      "size": 32749
+      "size": 44964
     },
     {
       "path": "src/components/CharacterCard.tsx",
@@ -295,6 +295,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 16405
+    },
+    {
+      "path": "src/data/recommendedTeamsData.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 5843
     },
     {
       "path": "src/db/index.ts",

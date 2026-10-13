@@ -31,6 +31,9 @@ import {
   Shield,
   X,
   Search,
+  ArrowLeftRight,
+  ChevronLeft,
+  SlidersHorizontal,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
 import { RECOMMENDED_TEAMS, RecommendedTeam } from "@/data/recommendedTeamsData";
@@ -75,6 +78,9 @@ function TimBuilderContent() {
   const [pickerSearch, setPickerSearch] = useState<string>("");
   const [pickerBand, setPickerBand] = useState<string>("all");
   const [pickerAttr, setPickerAttr] = useState<string>("all");
+  const [pickerRole, setPickerRole] = useState<string>("all");
+  const [pickerRarity, setPickerRarity] = useState<string>("all");
+  const [pickerSort, setPickerSort] = useState<string>("bp-desc");
 
   // Recommended team states
   const [selectedDetailTeam, setSelectedDetailTeam] = useState<RecommendedTeam | null>(null);
@@ -113,13 +119,23 @@ function TimBuilderContent() {
       next[slotIndex] = { ...next[slotIndex], character: char };
       return next;
     });
-    setActivePickerSlot(null);
   };
 
   const removeCharacter = (slotIndex: number) => {
     setSlots((prev) => {
       const next = [...prev];
       next[slotIndex] = { ...next[slotIndex], character: null };
+      return next;
+    });
+  };
+
+  const swapSlots = (fromIndex: number, toIndex: number) => {
+    if (fromIndex < 0 || fromIndex >= 5 || toIndex < 0 || toIndex >= 5 || fromIndex === toIndex) return;
+    setSlots((prev) => {
+      const next = [...prev];
+      const tempChar = next[fromIndex].character;
+      next[fromIndex] = { ...next[fromIndex], character: next[toIndex].character };
+      next[toIndex] = { ...next[toIndex], character: tempChar };
       return next;
     });
   };
@@ -131,6 +147,24 @@ function TimBuilderContent() {
         isCenter: idx === slotIndex,
       }))
     );
+  };
+
+  // Preview prospective synergy impact of selecting a candidate character
+  const getSynergyImpact = (candidate: Character, slotIndex: number) => {
+    const otherChars = slots
+      .filter((s, idx) => idx !== slotIndex && s.character && s.character.id !== candidate.id)
+      .map((s) => s.character as Character);
+    const prospective = [...otherChars, candidate];
+    const bandCount = prospective.filter((c) => c.bandId === candidate.bandId).length;
+    const attrCount = prospective.filter((c) => c.attribute === candidate.attribute).length;
+    return {
+      bandCount,
+      attrCount,
+      hasBandBuff: bandCount >= 3,
+      hasAttrBuff: attrCount >= 3,
+      bandBonus: bandCount === 5 ? 20 : bandCount >= 3 ? 10 : 0,
+      attrBonus: attrCount === 5 ? 20 : attrCount >= 3 ? 10 : 0,
+    };
   };
 
   // Calculations
@@ -229,18 +263,39 @@ function TimBuilderContent() {
     }
   };
 
-  // Filtered list for Picker Modal
+  // Filtered & Sorted list for Picker Modal
   const pickerCharacters = useMemo(() => {
+    const query = pickerSearch.trim().toLowerCase();
+
     return CHARACTERS_DATA.filter((c) => {
       const matchBand = pickerBand === "all" || c.bandId === pickerBand;
       const matchAttr = pickerAttr === "all" || c.attribute === pickerAttr;
+      const matchRole =
+        pickerRole === "all" || c.role.toLowerCase().includes(pickerRole.toLowerCase());
+      const matchRarity =
+        pickerRarity === "all" || c.rarity.toString() === pickerRarity;
+
       const matchSearch =
-        c.name.toLowerCase().includes(pickerSearch.toLowerCase()) ||
-        c.japaneseName.includes(pickerSearch) ||
-        c.bandName.toLowerCase().includes(pickerSearch.toLowerCase());
-      return matchBand && matchAttr && matchSearch;
+        !query ||
+        c.name.toLowerCase().includes(query) ||
+        c.japaneseName.toLowerCase().includes(query) ||
+        c.bandName.toLowerCase().includes(query) ||
+        c.role.toLowerCase().includes(query) ||
+        c.skill.name.toLowerCase().includes(query) ||
+        c.skill.type.toLowerCase().includes(query);
+
+      return matchBand && matchAttr && matchRole && matchRarity && matchSearch;
+    }).sort((a, b) => {
+      if (pickerSort === "bp-desc") return b.stats.total - a.stats.total;
+      if (pickerSort === "bp-asc") return a.stats.total - b.stats.total;
+      if (pickerSort === "perf-desc") return b.stats.performance - a.stats.performance;
+      if (pickerSort === "tech-desc") return b.stats.technique - a.stats.technique;
+      if (pickerSort === "vis-desc") return b.stats.visual - a.stats.visual;
+      if (pickerSort === "rarity-desc") return b.rarity - a.rarity;
+      if (pickerSort === "name-asc") return a.name.localeCompare(b.name);
+      return 0;
     });
-  }, [pickerBand, pickerAttr, pickerSearch]);
+  }, [pickerBand, pickerAttr, pickerRole, pickerRarity, pickerSearch, pickerSort]);
 
   const filteredRecommendedTeams = useMemo(() => {
     if (teamCategoryFilter === "all") return RECOMMENDED_TEAMS;
@@ -434,29 +489,50 @@ function TimBuilderContent() {
                 )}
 
                 {/* Card Action Controls */}
-                <div className="pt-2 border-t border-border/50 flex items-center justify-between gap-1">
+                <div className="pt-2 border-t border-border/50 flex items-center justify-between gap-1 text-[11px]">
                   {char ? (
                     <>
-                      <button
-                        onClick={() => setActivePickerSlot(index)}
-                        className="text-[11px] font-bold text-pink-600 hover:text-pink-700 py-1"
-                      >
-                        Ganti
-                      </button>
-                      <button
-                        onClick={() => removeCharacter(index)}
-                        className="text-muted-foreground hover:text-red-600 p-1 rounded-lg"
-                        title="Lepas Karakter"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => swapSlots(index, index - 1)}
+                          disabled={index === 0}
+                          title={index === 0 ? "Slot paling kiri" : `Tukar dengan Slot ${index}`}
+                          className="p-1 rounded-lg hover:bg-muted text-muted-foreground disabled:opacity-25 disabled:hover:bg-transparent"
+                        >
+                          <ChevronLeft className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => swapSlots(index, index + 1)}
+                          disabled={index === 4}
+                          title={index === 4 ? "Slot paling kanan" : `Tukar dengan Slot ${index + 2}`}
+                          className="p-1 rounded-lg hover:bg-muted text-muted-foreground disabled:opacity-25 disabled:hover:bg-transparent"
+                        >
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setActivePickerSlot(index)}
+                          className="px-2 py-0.5 rounded-lg bg-pink-50 dark:bg-pink-950/40 text-pink-600 font-bold hover:bg-pink-100 transition-colors"
+                        >
+                          Ganti
+                        </button>
+                        <button
+                          onClick={() => removeCharacter(index)}
+                          className="text-muted-foreground hover:text-red-600 p-1 rounded-lg transition-colors"
+                          title="Lepas Karakter dari Slot"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </>
                   ) : (
                     <button
                       onClick={() => setActivePickerSlot(index)}
                       className="w-full py-1 text-center text-[11px] font-bold text-pink-600 hover:underline"
                     >
-                      + Pasang
+                      + Pasang Karakter
                     </button>
                   )}
                 </div>
@@ -842,137 +918,410 @@ function TimBuilderContent() {
         </div>
       )}
 
-      {/* Character Picker Modal Dialog */}
+      {/* Character Picker & Slot Editor Modal Dialog */}
       {activePickerSlot !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-          <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-3xl bg-card border border-border flex flex-col shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in">
+          <div className="w-full max-w-4xl max-h-[92vh] overflow-hidden rounded-3xl bg-card border border-border flex flex-col shadow-2xl">
             {/* Modal Header */}
-            <div className="p-5 border-b border-border flex items-center justify-between">
+            <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between gap-3">
               <div>
-                <h3 className="font-black text-lg text-foreground">
-                  Pilih Karakter untuk {slots[activePickerSlot]?.isCenter ? "Slot Center" : `Slot ${slots[activePickerSlot]?.slotNumber}`}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  Pilih karakter dari katalog untuk dimasukkan ke dalam formasi tim
+                <div className="flex items-center gap-2">
+                  <h3 className="font-black text-lg text-foreground flex items-center gap-1.5">
+                    {slots[activePickerSlot]?.isCenter ? (
+                      <>
+                        <Crown className="h-4 w-4 text-pink-600" />
+                        <span>Editor Slot Center (Leader)</span>
+                      </>
+                    ) : (
+                      <span>Editor Slot {slots[activePickerSlot]?.slotNumber}</span>
+                    )}
+                  </h3>
+                  {slots[activePickerSlot]?.character && (
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300">
+                      Terisi: {slots[activePickerSlot]?.character?.name}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Pilih atau ganti karakter untuk formasi tim panggung
                 </p>
               </div>
-              <button
-                onClick={() => setActivePickerSlot(null)}
-                className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-5 w-5" />
-              </button>
+
+              <div className="flex items-center gap-2">
+                {slots[activePickerSlot]?.character && (
+                  <button
+                    onClick={() => removeCharacter(activePickerSlot)}
+                    className="hidden sm:inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-semibold px-2.5 py-1 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Kosongkan Slot</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setActivePickerSlot(null)}
+                  className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* In-Modal 5-Slot Switcher Navigation Bar */}
+            <div className="px-4 py-2.5 bg-muted/40 border-b border-border flex items-center gap-2 overflow-x-auto">
+              <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider shrink-0 mr-1 hidden sm:inline">
+                Pilih Slot:
+              </span>
+              {slots.map((s, idx) => (
+                <button
+                  key={s.slotNumber}
+                  onClick={() => setActivePickerSlot(idx)}
+                  className={`flex-1 min-w-[100px] py-1.5 px-2.5 rounded-2xl text-left border transition-all flex items-center gap-2 ${
+                    activePickerSlot === idx
+                      ? "bg-card border-pink-500 shadow-xs ring-2 ring-pink-500/20"
+                      : "bg-card/60 border-border/70 hover:bg-card hover:border-pink-300"
+                  }`}
+                >
+                  <div
+                    className={`h-7 w-7 rounded-xl flex items-center justify-center font-bold text-[11px] shrink-0 ${
+                      s.character
+                        ? `bg-gradient-to-tr ${s.character.avatarBg} text-white shadow-2xs`
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {s.character ? s.character.name.charAt(0) : "+"}
+                  </div>
+                  <div className="min-w-0 flex-1 leading-none">
+                    <span className="block text-[11px] font-bold truncate">
+                      {s.isCenter ? "★ Center" : `Slot ${s.slotNumber}`}
+                    </span>
+                    <span className="block text-[10px] text-muted-foreground truncate mt-0.5">
+                      {s.character ? s.character.name : "Kosong"}
+                    </span>
+                  </div>
+                </button>
+              ))}
             </div>
 
             {/* Filter & Search Bar inside Picker */}
-            <div className="p-4 bg-muted/30 border-b border-border space-y-3">
+            <div className="p-4 bg-muted/20 border-b border-border space-y-3">
+              {/* Search input */}
               <div className="relative">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type="text"
                   value={pickerSearch}
                   onChange={(e) => setPickerSearch(e.target.value)}
-                  placeholder="Cari nama karakter atau band..."
-                  className="w-full rounded-xl border border-input bg-card py-2 pl-10 pr-4 text-xs sm:text-sm focus:border-pink-500 focus:outline-none"
+                  placeholder="Cari nama karakter, band, role, atau skill..."
+                  className="w-full rounded-2xl border border-input bg-card py-2 pl-10 pr-10 text-xs sm:text-sm focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500/30"
                 />
+                {pickerSearch && (
+                  <button
+                    onClick={() => setPickerSearch("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
 
+              {/* Filter Row */}
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-muted-foreground font-semibold">Band:</span>
-                  <select
-                    value={pickerBand}
-                    onChange={(e) => setPickerBand(e.target.value)}
-                    className="rounded-lg border border-input bg-card px-2 py-1 text-xs"
-                  >
-                    <option value="all">Semua Band</option>
-                    {BANDS_DATA.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.name}
-                      </option>
-                    ))}
-                  </select>
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Band select */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground font-semibold">Band:</span>
+                    <select
+                      value={pickerBand}
+                      onChange={(e) => setPickerBand(e.target.value)}
+                      className="rounded-xl border border-input bg-card px-2.5 py-1 text-xs"
+                    >
+                      <option value="all">Semua Band</option>
+                      {BANDS_DATA.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Attribute select */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground font-semibold">Atribut:</span>
+                    <select
+                      value={pickerAttr}
+                      onChange={(e) => setPickerAttr(e.target.value)}
+                      className="rounded-xl border border-input bg-card px-2.5 py-1 text-xs"
+                    >
+                      <option value="all">Semua Atribut</option>
+                      <option value="Power">Power (🔥)</option>
+                      <option value="Pure">Pure (🌿)</option>
+                      <option value="Cool">Cool (❄️)</option>
+                      <option value="Happy">Happy (⭐)</option>
+                    </select>
+                  </div>
+
+                  {/* Role select */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground font-semibold">Role:</span>
+                    <select
+                      value={pickerRole}
+                      onChange={(e) => setPickerRole(e.target.value)}
+                      className="rounded-xl border border-input bg-card px-2.5 py-1 text-xs"
+                    >
+                      <option value="all">Semua Role</option>
+                      <option value="Vocal">Vocalist</option>
+                      <option value="Guitar">Guitarist</option>
+                      <option value="Bass">Bassist</option>
+                      <option value="Drum">Drummer</option>
+                      <option value="Keyboard">Keyboardist / DJ</option>
+                    </select>
+                  </div>
+
+                  {/* Rarity select */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground font-semibold">Bintang:</span>
+                    <select
+                      value={pickerRarity}
+                      onChange={(e) => setPickerRarity(e.target.value)}
+                      className="rounded-xl border border-input bg-card px-2.5 py-1 text-xs"
+                    >
+                      <option value="all">Semua Bintang</option>
+                      <option value="5">★5 (Bintang 5)</option>
+                      <option value="4">★4 (Bintang 4)</option>
+                    </select>
+                  </div>
+
+                  {/* Sort select */}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground font-semibold">Urutkan:</span>
+                    <select
+                      value={pickerSort}
+                      onChange={(e) => setPickerSort(e.target.value)}
+                      className="rounded-xl border border-input bg-card px-2.5 py-1 text-xs font-semibold text-pink-600"
+                    >
+                      <option value="bp-desc">BP Tertinggi</option>
+                      <option value="bp-asc">BP Terendah</option>
+                      <option value="perf-desc">Performance Tertinggi</option>
+                      <option value="tech-desc">Technique Tertinggi</option>
+                      <option value="vis-desc">Visual Tertinggi</option>
+                      <option value="rarity-desc">Bintang Tertinggi</option>
+                      <option value="name-asc">Nama (A-Z)</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-muted-foreground font-semibold">Atribut:</span>
-                  <select
-                    value={pickerAttr}
-                    onChange={(e) => setPickerAttr(e.target.value)}
-                    className="rounded-lg border border-input bg-card px-2 py-1 text-xs"
+                {/* Reset Filters button */}
+                {(pickerSearch ||
+                  pickerBand !== "all" ||
+                  pickerAttr !== "all" ||
+                  pickerRole !== "all" ||
+                  pickerRarity !== "all" ||
+                  pickerSort !== "bp-desc") && (
+                  <button
+                    onClick={() => {
+                      setPickerSearch("");
+                      setPickerBand("all");
+                      setPickerAttr("all");
+                      setPickerRole("all");
+                      setPickerRarity("all");
+                      setPickerSort("bp-desc");
+                    }}
+                    className="text-xs text-pink-600 hover:text-pink-700 font-semibold"
                   >
-                    <option value="all">Semua Atribut</option>
-                    <option value="Power">Power (🔥)</option>
-                    <option value="Pure">Pure (🌿)</option>
-                    <option value="Cool">Cool (❄️)</option>
-                    <option value="Happy">Happy (⭐)</option>
-                  </select>
-                </div>
+                    Reset Filter
+                  </button>
+                )}
+              </div>
+
+              {/* Counter status */}
+              <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                <span>
+                  Menampilkan <strong>{pickerCharacters.length}</strong> dari {CHARACTERS_DATA.length} karakter
+                </span>
+                {slots[activePickerSlot]?.isCenter && (
+                  <span className="text-pink-600 font-semibold flex items-center gap-1">
+                    <Crown className="h-3 w-3" />
+                    Center Slot: Skill karakter ini akan menjadi Leader Skill tim
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Characters Grid inside Picker */}
             <div className="p-4 sm:p-5 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-              {pickerCharacters.map((char) => {
-                const isAlreadySelected = slots.some((s) => s.character?.id === char.id);
-
-                return (
-                  <div
-                    key={char.id}
-                    onClick={() => assignCharacter(activePickerSlot, char)}
-                    className={`rounded-2xl border p-3.5 transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
-                      isAlreadySelected
-                        ? "border-pink-500/80 bg-pink-50/20 dark:bg-pink-950/20"
-                        : "border-border hover:border-pink-400 hover:shadow-xs bg-card"
-                    }`}
+              {pickerCharacters.length === 0 ? (
+                <div className="col-span-full py-12 text-center text-muted-foreground space-y-2">
+                  <p className="font-semibold text-sm">Tidak ada karakter yang cocok dengan kriteria pencarian.</p>
+                  <button
+                    onClick={() => {
+                      setPickerSearch("");
+                      setPickerBand("all");
+                      setPickerAttr("all");
+                      setPickerRole("all");
+                      setPickerRarity("all");
+                      setPickerSort("bp-desc");
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 font-bold text-xs"
                   >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`h-12 w-12 rounded-xl bg-gradient-to-tr ${char.avatarBg} text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-xs`}
-                      >
-                        {char.name.charAt(0)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                          <span>{char.bandName}</span>
-                          <span>•</span>
-                          <span>{char.role}</span>
-                        </div>
-                        <h4 className="font-bold text-xs sm:text-sm text-foreground truncate">
-                          {char.name}
-                        </h4>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className="text-[10px] font-semibold text-pink-600">
-                            {char.attribute}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground font-mono">
-                            {char.stats.total.toLocaleString()} BP
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    Reset Semua Filter
+                  </button>
+                </div>
+              ) : (
+                pickerCharacters.map((char) => {
+                  const existingSlot = slots.find((s) => s.character?.id === char.id);
+                  const isCurrentSlot = slots[activePickerSlot]?.character?.id === char.id;
+                  const synergyImpact = getSynergyImpact(char, activePickerSlot);
 
-                    <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[11px]">
-                      <span className="text-muted-foreground text-[10px] truncate max-w-[150px]">
-                        {char.skill.name}
-                      </span>
-                      <span className="font-bold text-pink-600">
-                        {isAlreadySelected ? "Ganti Posisi" : "Pilih"}
-                      </span>
+                  return (
+                    <div
+                      key={char.id}
+                      onClick={() => assignCharacter(activePickerSlot, char)}
+                      className={`group rounded-2xl border p-3.5 transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
+                        isCurrentSlot
+                          ? "border-pink-500 bg-pink-50/40 dark:bg-pink-950/30 ring-1 ring-pink-500"
+                          : existingSlot
+                          ? "border-amber-400/70 bg-amber-50/20 dark:bg-amber-950/20"
+                          : "border-border hover:border-pink-400 hover:shadow-xs bg-card"
+                      }`}
+                    >
+                      {/* Character Basic Info */}
+                      <div className="space-y-2.5">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`h-12 w-12 rounded-2xl bg-gradient-to-tr ${char.avatarBg} text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-xs relative overflow-hidden`}
+                          >
+                            <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/15 skew-x-12" />
+                            {char.name.charAt(0)}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                              <span className="truncate">{char.bandName}</span>
+                              <div className="flex text-amber-400">
+                                {Array.from({ length: char.rarity }).map((_, i) => (
+                                  <Star key={i} className="h-2 w-2 fill-amber-400" />
+                                ))}
+                              </div>
+                            </div>
+                            <h4 className="font-bold text-xs sm:text-sm text-foreground truncate group-hover:text-pink-600 transition-colors">
+                              {char.name}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground">
+                                {getAttrIcon(char.attribute)}
+                                {char.attribute}
+                              </span>
+                              <span className="text-[10px] font-mono font-bold text-foreground">
+                                {char.stats.total.toLocaleString()} BP
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Stat Breakdown Chips */}
+                        <div className="grid grid-cols-3 gap-1 text-[10px] bg-muted/30 p-1.5 rounded-xl text-center font-mono">
+                          <div>
+                            <span className="text-[9px] text-muted-foreground block">Perf</span>
+                            <span className="font-semibold">{char.stats.performance.toLocaleString()}</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-muted-foreground block">Tech</span>
+                            <span className="font-semibold">{char.stats.technique.toLocaleString()}</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-muted-foreground block">Vis</span>
+                            <span className="font-semibold">{char.stats.visual.toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        {/* Center Leader Skill Info (if center slot) */}
+                        {slots[activePickerSlot]?.isCenter && (
+                          <div className="p-2 rounded-xl bg-pink-100/60 dark:bg-pink-950/50 border border-pink-200 dark:border-pink-900/40 text-[10px] space-y-0.5">
+                            <span className="font-bold text-pink-700 dark:text-pink-300 block truncate">
+                              ★ Leader Skill: {char.skill.name}
+                            </span>
+                            <span className="text-muted-foreground block line-clamp-1">
+                              {char.skill.boostValue} ({char.skill.type})
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Prospective Synergy Badges */}
+                        <div className="flex flex-wrap gap-1">
+                          {synergyImpact.hasBandBuff && (
+                            <span className="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold text-[9px]">
+                              +{synergyImpact.bandBonus}% Sinergi Band ({synergyImpact.bandCount}/5)
+                            </span>
+                          )}
+                          {synergyImpact.hasAttrBuff && (
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold text-[9px]">
+                              +{synergyImpact.attrBonus}% Sinergi Atribut ({synergyImpact.attrCount}/5)
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Card Bottom Action */}
+                      <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[11px]">
+                        <span className="text-muted-foreground text-[10px] truncate max-w-[140px]">
+                          {char.role}
+                        </span>
+                        <div>
+                          {isCurrentSlot ? (
+                            <span className="font-bold text-pink-600 bg-pink-100 dark:bg-pink-950 px-2 py-0.5 rounded-md text-[10px]">
+                              Sedang Terpasang
+                            </span>
+                          ) : existingSlot ? (
+                            <span className="font-bold text-amber-600 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-md text-[10px]">
+                              Tukar dari Slot {existingSlot.slotNumber}
+                            </span>
+                          ) : (
+                            <span className="font-bold text-pink-600 group-hover:underline">
+                              + Pasang ke Slot {activePickerSlot + 1}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-border bg-muted/20 flex justify-end">
-              <button
-                onClick={() => setActivePickerSlot(null)}
-                className="px-4 py-2 rounded-xl bg-foreground text-background font-bold text-xs"
-              >
-                Tutup
-              </button>
+            <div className="p-4 border-t border-border bg-muted/20 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActivePickerSlot(Math.max(0, activePickerSlot - 1))}
+                  disabled={activePickerSlot === 0}
+                  className="px-3 py-2 rounded-xl border border-border bg-card hover:bg-muted text-xs font-bold transition-colors disabled:opacity-30 disabled:hover:bg-card"
+                >
+                  ← Slot Sebelumnya
+                </button>
+                <button
+                  onClick={() => setActivePickerSlot(Math.min(4, activePickerSlot + 1))}
+                  disabled={activePickerSlot === 4}
+                  className="px-3 py-2 rounded-xl border border-border bg-card hover:bg-muted text-xs font-bold transition-colors disabled:opacity-30 disabled:hover:bg-card"
+                >
+                  Slot Berikutnya →
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {slots[activePickerSlot]?.character && (
+                  <button
+                    onClick={() => removeCharacter(activePickerSlot)}
+                    className="sm:hidden px-3 py-2 rounded-xl bg-red-100 text-red-600 font-bold text-xs"
+                  >
+                    Kosongkan
+                  </button>
+                )}
+                <button
+                  onClick={() => setActivePickerSlot(null)}
+                  className="px-5 py-2 rounded-xl bg-foreground text-background font-bold text-xs hover:opacity-90 transition-opacity"
+                >
+                  Selesai
+                </button>
+              </div>
             </div>
           </div>
         </div>
