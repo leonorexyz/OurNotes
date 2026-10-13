@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "0fd98c5bb1013b44c195f909d47c3a10d20868d0",
+  "generatedForCommit": "ca1746335fd5f2ddffc40e6b4236a6440f1c18f1",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -82,7 +82,7 @@
     },
     {
       "path": "src/app/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16409
     },
@@ -94,9 +94,9 @@
     },
     {
       "path": "src/components/FaqAccordion.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 4606
+      "size": 11562
     },
     {
       "path": "src/components/Footer.tsx",
@@ -124,7 +124,7 @@
     },
     {
       "path": "src/components/PanduanEventSection.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 18233
     },
@@ -142,9 +142,9 @@
     },
     {
       "path": "src/data/guidesData.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 14783
+      "size": 16405
     },
     {
       "path": "tsconfig.json",

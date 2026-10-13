@@ -23,6 +23,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PanduanPemulaSection } from "@/components/PanduanPemulaSection";
 import { TipsTrikSection } from "@/components/TipsTrikSection";
 import { PanduanEventSection } from "@/components/PanduanEventSection";
+import { GameGlossary } from "@/components/GameGlossary";
 import { GUIDES_DATA, GUIDE_SECTIONS, FAQ_LIST } from "@/data/guidesData";
 
 export default function HomePage() {
@@ -300,8 +301,13 @@ export default function HomePage() {
             </div>
           )}
 
+          {/* Game Terms & Connected Links Glossary */}
+          <div id="glosarium" className="pt-6">
+            <GameGlossary />
+          </div>
+
           {/* Call-to-action banner to explore characters & team builder */}
-          <div className="mt-12 rounded-3xl bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-700 p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+          <div className="mt-8 rounded-3xl bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-700 p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/5 skew-x-12 pointer-events-none" />
             <div className="relative max-w-2xl space-y-4">
               <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm">
