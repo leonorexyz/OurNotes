@@ -141,6 +141,28 @@ function KarakterContent() {
     });
   }, [selectedBand, selectedAttribute, selectedRole, selectedRarity, searchQuery, sortBy, sortDirection]);
 
+  // Breakdown of attributes in active filtered results
+  const resultAttributeCounts = useMemo(() => {
+    const counts = { Power: 0, Pure: 0, Cool: 0, Happy: 0 };
+    filteredCharacters.forEach((c) => {
+      if (counts[c.attribute] !== undefined) {
+        counts[c.attribute]++;
+      }
+    });
+    return counts;
+  }, [filteredCharacters]);
+
+  // Count active criteria
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedBand !== "all") count++;
+    if (selectedAttribute !== "all") count++;
+    if (selectedRole !== "all") count++;
+    if (selectedRarity !== "all") count++;
+    if (searchQuery.trim().length > 0) count++;
+    return count;
+  }, [selectedBand, selectedAttribute, selectedRole, selectedRarity, searchQuery]);
+
   const comparedChars = CHARACTERS_DATA.filter((c) => compareList.includes(c.id));
 
   return (
@@ -431,16 +453,61 @@ function KarakterContent() {
         )}
       </div>
 
-      {/* Result Count Status */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-        <span>
-          Menampilkan <strong>{filteredCharacters.length}</strong> dari {CHARACTERS_DATA.length} karakter
-        </span>
-        {compareList.length > 0 && (
-          <span className="text-pink-600 font-semibold">
-            {compareList.length} karakter dipilih untuk perbandingan
+      {/* Result Count Status & Real-time Breakdown */}
+      <div
+        aria-live="polite"
+        className="rounded-2xl border border-border/70 bg-card/60 p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-2xs"
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-pink-100 dark:bg-pink-950/70 text-pink-700 dark:text-pink-300 font-bold">
+            <Users className="h-3.5 w-3.5" />
+            <span>
+              Ditemukan <strong>{filteredCharacters.length}</strong> dari {CHARACTERS_DATA.length} Karakter
+            </span>
+            <span className="text-[10px] font-normal opacity-80">
+              ({Math.round((filteredCharacters.length / CHARACTERS_DATA.length) * 100)}%)
+            </span>
+          </div>
+
+          {activeFiltersCount > 0 && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-semibold">
+              <Filter className="h-3 w-3" />
+              <span>{activeFiltersCount} Kriteria Aktif</span>
+            </span>
+          )}
+
+          {/* Mini Attribute Breakdown in Filtered Results */}
+          <div className="hidden sm:flex items-center gap-1.5 pl-1 text-[11px] font-semibold text-muted-foreground border-l border-border/60">
+            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400">
+              🔥 Power: {resultAttributeCounts.Power}
+            </span>
+            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+              🌿 Pure: {resultAttributeCounts.Pure}
+            </span>
+            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">
+              ❄️ Cool: {resultAttributeCounts.Cool}
+            </span>
+            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+              ⭐ Happy: {resultAttributeCounts.Happy}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 self-end md:self-auto text-muted-foreground">
+          <span className="text-[11px]">
+            Arah: <strong>{sortDirection === "desc" ? "Menurun (↓)" : "Menaik (↑)"}</strong>
           </span>
-        )}
+
+          {compareList.length > 0 && (
+            <button
+              onClick={() => setShowCompareModal(true)}
+              className="text-pink-600 hover:text-pink-700 font-bold flex items-center gap-1"
+            >
+              <Scale className="h-3.5 w-3.5" />
+              <span>{compareList.length} Dipilih</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Characters Cards Grid */}
