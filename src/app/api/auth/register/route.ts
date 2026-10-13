@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, userProfiles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const { name, email, avatarUrl } = body;
+    const { name, email, avatarUrl, favoriteBand } = body;
 
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
       avatarUrl ||
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
 
+    // 1. Insert into users table
     db.insert(users)
       .values({
         id: userId,
@@ -48,6 +49,25 @@ export async function POST(request: NextRequest) {
         email: emailTrimmed,
         avatarUrl: defaultAvatar,
         role: "user",
+      })
+      .run();
+
+    // 2. Insert into user_profiles table
+    const chosenBand = favoriteBand || "Poppin'Party";
+    db.insert(userProfiles)
+      .values({
+        id: `prof-${userId}`,
+        userId: userId,
+        title: "Produser Baru CiRCLE",
+        bio: `Produser musik baru di CiRCLE Live House. Band favorit: ${chosenBand}.`,
+        favoriteBand: chosenBand,
+        favoriteCharacterId: "char-kasumi-toyama",
+        favoriteAttribute: "Pure",
+        rank: 1,
+        noteSpeed: 10.0,
+        timingOffset: 0.0,
+        tapSoundEffect: "Tambourine",
+        showCutIn: 1,
       })
       .run();
 
@@ -63,17 +83,34 @@ export async function POST(request: NextRequest) {
       .where(eq(users.id, userId))
       .get();
 
+    const createdProfile = db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, userId))
+      .get();
+
     const response = NextResponse.json(
       {
         success: true,
-        message: `Pendaftaran berhasil! Selamat datang, ${name}`,
+        message: `Pendaftaran berhasil! Selamat datang di CiRCLE, ${name}`,
         user: createdUser,
+        profile: createdProfile,
       },
       { status: 201 }
     );
 
+    // Set cookies
     response.cookies.set({
       name: "our_notes_user_id",
+      value: userId,
+      path: "/",
+      httpOnly: false,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
+    response.cookies.set({
+      name: "auth_session",
       value: userId,
       path: "/",
       httpOnly: false,
