@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { resetPassword } from "@/services/passwordResetService";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,25 +13,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!newPassword || typeof newPassword !== "string" || newPassword.length < 6) {
+    if (!newPassword || typeof newPassword !== "string") {
       return NextResponse.json(
-        { success: false, error: "Kata sandi baru minimal harus 6 karakter." },
+        { success: false, error: "Kata sandi baru wajib dicantumkan." },
         { status: 400 }
       );
     }
 
-    const emailTrimmed = email.trim().toLowerCase();
-    const user = db
-      .select({ id: users.id, name: users.name, email: users.email })
-      .from(users)
-      .where(eq(users.email, emailTrimmed))
-      .get();
+    const result = await resetPassword(email, newPassword, verificationCode);
 
     return NextResponse.json({
       success: true,
-      message: "Kata sandi akun produser Anda berhasil diperbarui! Silakan masuk kembali.",
-      email: emailTrimmed,
-      userName: user ? user.name : "Produser",
+      message: result.message,
+      email: result.email,
+      userName: result.userName,
     });
   } catch (error: any) {
     if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
@@ -41,8 +34,8 @@ export async function POST(request: NextRequest) {
     }
     console.error("Error in /api/auth/reset-password:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal menyetel ulang kata sandi." },
-      { status: 500 }
+      { success: false, error: error?.message || "Gagal menyetel ulang kata sandi." },
+      { status: 400 }
     );
   }
 }

@@ -1,39 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { requestPasswordReset } from "@/services/passwordResetService";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
     const { email } = body;
 
-    if (!email || typeof email !== "string" || !email.includes("@")) {
+    if (!email || typeof email !== "string") {
       return NextResponse.json(
         { success: false, error: "Alamat email yang valid wajib diisi." },
         { status: 400 }
       );
     }
 
-    const emailTrimmed = email.trim().toLowerCase();
-    const user = db
-      .select({ id: users.id, name: users.name, email: users.email })
-      .from(users)
-      .where(eq(users.email, emailTrimmed))
-      .get();
-
-    // Generate a 6-digit verification code & temporary reset token
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const resetToken = `rst-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const result = await requestPasswordReset(email);
 
     return NextResponse.json({
       success: true,
-      message: `Tautan dan kode verifikasi pemulihan sandi telah dikirim ke ${emailTrimmed}.`,
-      foundUser: Boolean(user),
-      userName: user ? user.name : "Produser",
-      demoVerificationCode: verificationCode,
-      resetToken,
-      expiresInMinutes: 15,
+      message: result.message,
+      foundUser: result.userExists,
+      userName: result.userName,
+      demoVerificationCode: result.verificationCode,
+      resetToken: result.resetToken,
+      expiresInMinutes: result.expiresInMinutes,
     });
   } catch (error: any) {
     if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
@@ -41,8 +30,8 @@ export async function POST(request: NextRequest) {
     }
     console.error("Error in /api/auth/forgot-password:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal memproses permohonan lupa kata sandi." },
-      { status: 500 }
+      { success: false, error: error?.message || "Gagal memproses permohonan lupa kata sandi." },
+      { status: 400 }
     );
   }
 }

@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "1b0f087d2fa3ea4366bfa9e9093f71587c76f3b2",
+  "generatedForCommit": "6c751e5ee8bbc6600f78b9b9be7d26e880e5197c",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -250,9 +250,9 @@
     },
     {
       "path": "src/app/api/auth/profile/route.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 390
+      "size": 530
     },
     {
       "path": "src/app/api/auth/register/route.ts",
@@ -412,25 +412,25 @@
     },
     {
       "path": "src/app/api/favorit/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 318
     },
     {
       "path": "src/app/api/favorit/[id]/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 454
     },
     {
       "path": "src/app/api/favorites/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 2557
     },
     {
       "path": "src/app/api/favorites/[id]/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1924
     },
@@ -481,6 +481,18 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 905
+    },
+    {
+      "path": "src/app/api/profil/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 497
+    },
+    {
+      "path": "src/app/api/profile/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2177
     },
     {
       "path": "src/app/api/recommended-teams/route.ts",
@@ -814,7 +826,7 @@
     },
     {
       "path": "src/components/FavoriteButton.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 6372
     },
@@ -1036,7 +1048,7 @@
     },
     {
       "path": "src/services/favoriteService.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3793
     },
@@ -1057,6 +1069,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 13653
+    },
+    {
+      "path": "src/services/userProfileService.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 3983
     },
     {
       "path": "tsconfig.json",
