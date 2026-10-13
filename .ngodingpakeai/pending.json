@@ -1,6 +1,6 @@
 {
   "repo": "leonorexyz/OurNotes",
-  "generatedForCommit": "9154b20815717b460b64683fdea3943daae59241",
+  "generatedForCommit": "ea3034476f6dd921b44d0c507892e543d7a6c485",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -46,7 +46,7 @@
     },
     {
       "path": "drizzle/0001_bouncy_molecule_man.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 410
     },
@@ -58,13 +58,13 @@
     },
     {
       "path": "drizzle/meta/0001_snapshot.json",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "json",
       "size": 5072
     },
     {
       "path": "drizzle/meta/_journal.json",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "json",
       "size": 347
     },
@@ -106,7 +106,7 @@
     },
     {
       "path": "src/app/api/events/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1602
     },
@@ -148,9 +148,9 @@
     },
     {
       "path": "src/app/karakter/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 4577
+      "size": 20971
     },
     {
       "path": "src/app/layout.tsx",
@@ -243,6 +243,12 @@
       "size": 15628
     },
     {
+      "path": "src/data/charactersData.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 11668
+    },
+    {
       "path": "src/data/guidesData.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -262,13 +268,13 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 1613
     },
     {
       "path": "src/db/seed.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5636
     },

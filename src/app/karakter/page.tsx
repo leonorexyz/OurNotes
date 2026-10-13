@@ -21,6 +21,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { CHARACTERS_DATA, BANDS_DATA, Character } from "@/data/charactersData";
+import { CharacterCard } from "@/components/CharacterCard";
 
 export default function KarakterPage() {
   const [selectedBand, setSelectedBand] = useState<string>("all");
@@ -245,101 +246,14 @@ export default function KarakterPage() {
 
         {/* Characters Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredCharacters.map((char) => {
-            const isComparing = compareList.includes(char.id);
-
-            return (
-              <div
-                key={char.id}
-                id={char.name.toLowerCase().replace(/\s+/g, "-")}
-                className={`group rounded-3xl border transition-all duration-200 bg-card p-5 shadow-xs flex flex-col justify-between space-y-4 hover:shadow-md ${
-                  isComparing
-                    ? "border-pink-500 ring-2 ring-pink-500/20"
-                    : "border-border hover:border-pink-300"
-                }`}
-              >
-                <div className="space-y-3.5">
-                  {/* Top Bar: Band & Rarity */}
-                  <div className="flex items-center justify-between gap-2 text-xs">
-                    <span className="font-bold px-2.5 py-0.5 rounded-full bg-muted text-foreground text-[11px]">
-                      {char.bandName}
-                    </span>
-
-                    <div className="flex items-center text-amber-400">
-                      {Array.from({ length: char.rarity }).map((_, i) => (
-                        <Star key={i} className="h-3.5 w-3.5 fill-amber-400" />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Character Avatar Visual Representation */}
-                  <div className={`h-24 rounded-2xl bg-gradient-to-tr ${char.avatarBg} p-4 text-white flex flex-col justify-between shadow-xs relative overflow-hidden`}>
-                    <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/10 skew-x-12" />
-                    <div className="text-[11px] font-mono opacity-80">{char.japaneseName}</div>
-                    <div>
-                      <h3 className="font-extrabold text-lg tracking-tight leading-tight">{char.name}</h3>
-                      <span className="text-[11px] font-semibold opacity-90">{char.role}</span>
-                    </div>
-                  </div>
-
-                  {/* Attribute & Stat Pill */}
-                  <div className="flex items-center justify-between gap-2 text-xs">
-                    <span className={`px-2.5 py-0.5 rounded-full font-bold border text-[11px] ${attributeStyles[char.attribute]}`}>
-                      Atribut {char.attribute}
-                    </span>
-                    <span className="font-mono font-bold text-foreground">
-                      Total Power: {char.stats.total.toLocaleString()}
-                    </span>
-                  </div>
-
-                  {/* Skill Box */}
-                  <div className="p-3 rounded-2xl bg-muted/40 border border-border/60 text-xs space-y-1">
-                    <div className="flex items-center justify-between">
-                      <strong className="text-foreground font-semibold flex items-center gap-1.5 text-[11px]">
-                        <Zap className="h-3 w-3 text-pink-500" />
-                        {char.skill.name}
-                      </strong>
-                      <span className="text-[10px] font-bold text-pink-600 bg-pink-50 dark:bg-pink-950 px-1.5 py-0.5 rounded">
-                        {char.skill.boostValue}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
-                      {char.skill.description}
-                    </p>
-                  </div>
-
-                  {/* Bio brief */}
-                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                    {char.bio}
-                  </p>
-                </div>
-
-                {/* Card Action Controls */}
-                <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => toggleCompare(char.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all w-full justify-center ${
-                      isComparing
-                        ? "bg-pink-600 text-white shadow-xs"
-                        : "bg-muted/70 hover:bg-muted text-foreground"
-                    }`}
-                  >
-                    {isComparing ? (
-                      <>
-                        <Check className="h-3.5 w-3.5" />
-                        <span>Dipilih untuk Perbandingan</span>
-                      </>
-                    ) : (
-                      <>
-                        <Scale className="h-3.5 w-3.5 text-muted-foreground" />
-                        <span>Bandingkan Karakter</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          {filteredCharacters.map((char) => (
+            <CharacterCard
+              key={char.id}
+              character={char}
+              isComparing={compareList.includes(char.id)}
+              onToggleCompare={toggleCompare}
+            />
+          ))}
         </div>
 
         {/* COMPARISON MODAL (Adu Statistik Dua Karakter) */}
