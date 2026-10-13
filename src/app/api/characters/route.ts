@@ -203,3 +203,131 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const {
+      name,
+      japaneseName,
+      romaji,
+      bandId,
+      role,
+      instrument,
+      attribute,
+      rarity = 4,
+      birthday = "1 Januari",
+      seiyuu = "Cast Resmi",
+      bio = "",
+      avatarBg = "from-pink-500 to-rose-500",
+      cardTitle,
+      stats,
+      skill,
+    } = body || {};
+
+    if (!name || !bandId || !role || !attribute) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Field 'name', 'bandId', 'role', dan 'attribute' wajib diisi",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Generate slug id
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+    const charId = body.id || `char-${slug}-${Date.now().toString().slice(-4)}`;
+
+    // Insert character
+    db.insert(characters)
+      .values({
+        id: charId,
+        bandId,
+        name,
+        japaneseName: japaneseName || name,
+        romaji: romaji || name,
+        role,
+        instrument: instrument || role,
+        attribute,
+        rarity: Number(rarity) || 4,
+        birthday,
+        seiyuu,
+        bio,
+        avatarBg,
+        cardTitle: cardTitle || `[Panggung Utama] ${name}`,
+      })
+      .run();
+
+    // Insert stats
+    const perf = Number(stats?.performance) || 10000;
+    const tech = Number(stats?.technique) || 10000;
+    const vis = Number(stats?.visual) || 10000;
+    const total = Number(stats?.total) || (perf + tech + vis);
+    const hp = Number(stats?.hp) || 1000;
+
+    db.insert(characterStats)
+      .values({
+        id: `stat-${charId}`,
+        characterId: charId,
+        total,
+        performance: perf,
+        technique: tech,
+        visual: vis,
+        hp,
+        skillName: skill?.name || "Kira-Kira Harmony",
+        skillType: skill?.type || "Score Up",
+        skillBoostValue: skill?.boostValue || "+100% Score",
+        skillDescription: skill?.description || "Meningkatkan skor selama 7 detik",
+        skillDuration: Number(skill?.duration) || 7,
+      })
+      .run();
+
+    const created = db
+      .select({
+        id: characters.id,
+        name: characters.name,
+        bandId: characters.bandId,
+        role: characters.role,
+        attribute: characters.attribute,
+        rarity: characters.rarity,
+        stats: {
+          total: characterStats.total,
+          performance: characterStats.performance,
+          technique: characterStats.technique,
+          visual: characterStats.visual,
+          hp: characterStats.hp,
+        },
+        skill: {
+          name: characterStats.skillName,
+          type: characterStats.skillType,
+          boostValue: characterStats.skillBoostValue,
+        },
+      })
+      .from(characters)
+      .leftJoin(characterStats, eq(characters.id, characterStats.characterId))
+      .where(eq(characters.id, charId))
+      .get();
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Karakter '${name}' berhasil ditambahkan!`,
+        data: created,
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    if (error?.digest === "NEXT_PRERENDER_INTERRUPTED") {
+      throw error;
+    }
+    console.error("Error creating character:", error);
+    return NextResponse.json(
+      { success: false, error: "Gagal menyimpan data karakter ke database" },
+      { status: 500 }
+    );
+  }
+}
